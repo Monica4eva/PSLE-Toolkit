@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+doc-page:not(:defined){visibility:hidden}
+body{margin:0;font-family:'Plus Jakarta Sans',sans-serif;}
+*{box-sizing:border-box;}
+code{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:9pt;background:#F1F5F9;padding:1px 4px;border-radius:3px;color:#0F172A;}
+a{color:#00A88E;}
+a:hover{color:#00806B;}
+th,td{text-align:left;vertical-align:top;}
+</style>
+<script src="./doc-page.js"></script>
+</helmet>
+
+<doc-page margin="0.7in">
+
+  <div style="border-bottom:3px solid #0A1628;padding-bottom:15px;margin-bottom:20px">
+    <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:21pt;color:#0A1628;line-height:1.12">PSLE Prep Toolkit — Backend Specification &amp; Developer Handoff</div>
+    <div style="font-size:10pt;font-weight:700;color:#5A6A7A;margin-top:7px">What exists, what must be built before taking payment, and how to build it</div>
+  </div>
+
+  <div style="background:#FFF8F0;border:1.5px solid #F5C77E;border-radius:7px;padding:14px 16px;margin-bottom:22px;break-inside:avoid">
+    <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:11pt;color:#7C4A03;margin-bottom:7px">Read this first</div>
+    <div style="font-size:10pt;font-weight:600;color:#7C4A03;line-height:1.6">The front end is complete and working: six question banks (2,000+ questions), nine learner modules, a purchase flow, an access gate, an upgrade path and an admin dashboard. Every business rule is enforced <strong>in the browser only</strong>, with data in <code>localStorage</code>. That is why this document exists. The single blocking defect is that access state is per-device: the owner can verify a payment on her laptop and the parent's phone will never know. Nothing else on this list matters until that is fixed.</div>
+  </div>
+
+  <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:14pt;color:#0A1628;border-bottom:1.5px solid #00A88E;padding-bottom:5px;margin-bottom:12px">1 · What the front end already does</div>
+
+  <table style="width:100%;border-collapse:collapse;font-size:9.5pt;margin-bottom:20px">
+    <thead>
+      <tr style="background:#F5F7FA">
+        <th style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:800;width:31%">File</th>
+        <th style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:800">Responsibility</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>landing.html</code></td><td style="padding:7px 9px;border:1px solid #CBD5E1">Marketing site, pricing, FAQ, sticky nav.</td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>Get Access.dc.html</code></td><td style="padding:7px 9px;border:1px solid #CBD5E1">Purchase flow: package → subjects → parent details + password → payment method → order created with status <code>pending-verification</code>.</td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>Sign In.dc.html</code></td><td style="padding:7px 9px;border:1px solid #CBD5E1">Three routes in: parent email+password, learner access code, admin. Google button is a simulated placeholder.</td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>PSLE Toolkit App.dc.html</code></td><td style="padding:7px 9px;border:1px solid #CBD5E1">The learner app. Gate, subject locking, nine modules, progress, upgrade flow.</td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>Admin.dc.html</code></td><td style="padding:7px 9px;border:1px solid #CBD5E1">PIN-gated. Verify/revoke codes, issue manual codes, CSV export, view-as-learner.</td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>bank-*.js</code> (18 files)</td><td style="padding:7px 9px;border:1px solid #CBD5E1">Question banks, ES modules exporting arrays. Keep as static files — no database needed.</td></tr>
+    </tbody>
+  </table>
+
+  <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:14pt;color:#0A1628;border-bottom:1.5px solid #00A88E;padding-bottom:5px;margin-bottom:12px">2 · Security defects, in priority order</div>
+
+  <table style="width:100%;border-collapse:collapse;font-size:9.5pt;margin-bottom:20px">
+    <thead>
+      <tr style="background:#F5F7FA">
+        <th style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:800;width:7%">#</th>
+        <th style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:800;width:31%">Defect</th>
+        <th style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:800">Consequence &amp; fix</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:800;color:#B91C1C">1</td><td style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:700">Access state is per-device</td><td style="padding:7px 9px;border:1px solid #CBD5E1">A paying parent cannot be granted access remotely. <strong>Blocks launch entirely.</strong> Fix: server-side database as the single source of truth.</td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:800;color:#B91C1C">2</td><td style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:700">Gate is client-side</td><td style="padding:7px 9px;border:1px solid #CBD5E1">Dev tools can forge a <code>verified</code> record. Fix: server validates every session; questions served only to authorised sessions.</td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:800;color:#B91C1C">3</td><td style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:700">Plain-text passwords</td><td style="padding:7px 9px;border:1px solid #CBD5E1">Real parents' passwords readable in browser storage. Legally and ethically unacceptable. Fix: bcrypt/argon2 server-side; never store or transmit plain text.</td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:800;color:#B45309">4</td><td style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:700">Admin PIN in client code</td><td style="padding:7px 9px;border:1px solid #CBD5E1">Default <code>2026</code>, visible in source, no rate limiting. Fix: real admin account, server-authenticated, with an audit log.</td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:800;color:#B45309">5</td><td style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:700">Unlimited code sharing</td><td style="padding:7px 9px;border:1px solid #CBD5E1">One P300 code could serve a whole village over WhatsApp. Fix: bind each code to a device limit (3 suggested); count and refuse beyond it.</td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:800;color:#B45309">6</td><td style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:700">Manual payment verification</td><td style="padding:7px 9px;border:1px solid #CBD5E1">Owner must read every WhatsApp proof by hand; does not scale past ~30 parents. Fix: payment-provider webhooks that auto-verify on reference match.</td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:800;color:#5A6A7A">7</td><td style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:700">Google sign-in simulated</td><td style="padding:7px 9px;border:1px solid #CBD5E1">Labelled as a demo, so nobody is misled, but it is not real auth. Fix: Google OAuth 2.0 with server-side token exchange.</td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:800;color:#5A6A7A">8</td><td style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:700">Progress not backed up</td><td style="padding:7px 9px;border:1px solid #CBD5E1">Clearing the browser wipes a child's stars and history. Fix: sync progress per learner to the server.</td></tr>
+    </tbody>
+  </table>
+
+  <div style="break-before:page"></div>
+
+  <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:14pt;color:#0A1628;border-bottom:1.5px solid #00A88E;padding-bottom:5px;margin-bottom:12px">3 · Recommended architecture</div>
+
+  <div style="font-size:10pt;font-weight:600;color:#374151;line-height:1.65;margin-bottom:14px">The cheapest path that solves defects 1–3 is a managed backend-as-a-service rather than a custom server. <strong>Supabase</strong> (Postgres + hosted auth + row-level security, generous free tier) is the recommendation: it gives hashed passwords, Google OAuth and a shared database without writing an auth system. Firebase is an equivalent choice. A custom Node/Express + Postgres build is only worth it if the developer already has that stack running.</div>
+
+  <div style="background:#F5F7FA;border:1px solid #CBD5E1;border-radius:7px;padding:14px 16px;margin-bottom:20px;break-inside:avoid">
+    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:10.5pt;color:#0A1628;margin-bottom:8px">Keep the question banks as static files</div>
+    <div style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.6">The 18 <code>bank-*.js</code> files never change per user, so they do not belong in a database. Serve them from the CDN and gate the <em>app shell</em>, not each question. If protecting the content itself matters commercially, move them behind an authenticated endpoint later — but note that anything the browser can render, a determined user can copy. Do not spend the pilot budget on this.</div>
+  </div>
+
+  <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:14pt;color:#0A1628;border-bottom:1.5px solid #00A88E;padding-bottom:5px;margin-bottom:12px">4 · Data model</div>
+
+  <div style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.6;margin-bottom:10px">Five tables. Field names match the shapes the front end already builds, so the migration is mostly swapping <code>localStorage</code> reads for API calls.</div>
+
+  <table style="width:100%;border-collapse:collapse;font-size:9pt;margin-bottom:20px">
+    <thead>
+      <tr style="background:#F5F7FA">
+        <th style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:800;width:20%">Table</th>
+        <th style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:800">Columns</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>accounts</code></td><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>id</code>, <code>email</code> (unique), <code>password_hash</code>, <code>provider</code> (password|google), <code>parent_name</code>, <code>phone</code>, <code>role</code> (parent|admin), <code>created_at</code></td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>orders</code></td><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>id</code>, <code>account_id</code>, <code>plan</code> (single|bundle|full), <code>price</code>, <code>subjects</code> (array), <code>method</code>, <code>reference</code> (unique), <code>status</code> (pending-verification|verified|revoked), <code>verified_at</code>, <code>verified_by</code>, <code>created_at</code>, <code>expires_at</code></td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>access_codes</code></td><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>code</code> (PK, format <code>PSLE-XXXX-XXXX</code>), <code>order_id</code>, <code>learner_name</code>, <code>standard</code>, <code>device_limit</code> (default 3), <code>status</code></td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>devices</code></td><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>id</code>, <code>code</code>, <code>fingerprint</code>, <code>first_seen</code>, <code>last_seen</code> — enforces the device limit</td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>progress</code></td><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>id</code>, <code>code</code>, <code>subject</code>, <code>answered</code>, <code>correct</code>, <code>stars</code>, <code>checklist</code> (json), <code>updated_at</code></td></tr>
+    </tbody>
+  </table>
+
+  <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:14pt;color:#0A1628;border-bottom:1.5px solid #00A88E;padding-bottom:5px;margin-bottom:12px">5 · Endpoints</div>
+
+  <table style="width:100%;border-collapse:collapse;font-size:9pt;margin-bottom:20px">
+    <thead>
+      <tr style="background:#F5F7FA">
+        <th style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:800;width:36%">Endpoint</th>
+        <th style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:800">Behaviour</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>POST /orders</code></td><td style="padding:7px 9px;border:1px solid #CBD5E1">Creates account (if new) + order + access code. Status always <code>pending-verification</code>. Returns code and payment reference. Never returns a usable session.</td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>POST /auth/login</code></td><td style="padding:7px 9px;border:1px solid #CBD5E1">Email + password → session token. Rate-limit to 5 attempts per 15 min per IP.</td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>POST /auth/google</code></td><td style="padding:7px 9px;border:1px solid #CBD5E1">Real OAuth token exchange, server-side.</td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>POST /access/redeem</code></td><td style="padding:7px 9px;border:1px solid #CBD5E1">Body: code + device fingerprint. Returns <code>{authorised, subjects, learner}</code> only if status is <code>verified</code> and the device count is under the limit. <strong>This is the security boundary.</strong></td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>GET /access/session</code></td><td style="padding:7px 9px;border:1px solid #CBD5E1">Re-validates on every app load. Replaces the current client-side status re-check, so a revoked code loses access within one refresh.</td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>POST /admin/orders/:id/verify</code></td><td style="padding:7px 9px;border:1px solid #CBD5E1">Admin only. Sets <code>verified</code>, stamps who and when. Mirrors the existing "Mark paid" button.</td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>POST /admin/orders/:id/revoke</code></td><td style="padding:7px 9px;border:1px solid #CBD5E1">Admin only. Sets <code>revoked</code>; all sessions for that code die on next validation.</td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>POST /webhooks/payment</code></td><td style="padding:7px 9px;border:1px solid #CBD5E1">Provider callback. Verify signature, match on <code>reference</code>, auto-verify the order. Idempotent — the same event twice must not double-grant.</td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>PUT /progress</code></td><td style="padding:7px 9px;border:1px solid #CBD5E1">Upserts a learner's progress. Debounce client-side; this fires often.</td></tr>
+    </tbody>
+  </table>
+
+  <div style="break-before:page"></div>
+
+  <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:14pt;color:#0A1628;border-bottom:1.5px solid #00A88E;padding-bottom:5px;margin-bottom:12px">6 · Front-end changes required</div>
+
+  <div style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.6;margin-bottom:10px">The UI does not need redesigning. Each change below swaps a storage call for a network call; the screens, copy and states already exist.</div>
+
+  <table style="width:100%;border-collapse:collapse;font-size:9pt;margin-bottom:20px">
+    <thead>
+      <tr style="background:#F5F7FA">
+        <th style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:800;width:27%">File</th>
+        <th style="padding:7px 9px;border:1px solid #CBD5E1;font-weight:800">Change</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>Get Access</code></td><td style="padding:7px 9px;border:1px solid #CBD5E1">Replace the <code>localStorage</code> write in <code>submit()</code> with <code>POST /orders</code>. Stop writing the password to <code>psle-accounts</code> entirely. Keep the "Not active yet" screen exactly as it is.</td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>Sign In</code></td><td style="padding:7px 9px;border:1px solid #CBD5E1">Point the three routes at <code>/auth/login</code>, <code>/auth/google</code>, <code>/access/redeem</code>. Delete <code>masterCodes()</code> before launch — the demo bypass must not ship.</td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>Toolkit App</code></td><td style="padding:7px 9px;border:1px solid #CBD5E1">Gate calls <code>/access/redeem</code>; the mount re-check calls <code>/access/session</code>. Subject locking already reads a <code>subjects</code> array — feed it the server's. Sync progress via <code>PUT /progress</code>. Remove the <code>masterCode</code> prop.</td></tr>
+      <tr><td style="padding:7px 9px;border:1px solid #CBD5E1"><code>Admin</code></td><td style="padding:7px 9px;border:1px solid #CBD5E1">Replace the PIN gate with a real admin login. Point the order list and the verify/revoke/issue buttons at the admin endpoints. All the UI stays.</td></tr>
+    </tbody>
+  </table>
+
+  <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:14pt;color:#0A1628;border-bottom:1.5px solid #00A88E;padding-bottom:5px;margin-bottom:12px">7 · Build order</div>
+
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+    <div style="break-inside:avoid;border:1px solid #CBD5E1;border-left:4px solid #00A88E;border-radius:5px;padding:11px 14px">
+      <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:10.5pt;color:#0A1628">Phase 1 — Make a paid pilot possible <span style="font-weight:700;color:#5A6A7A">(defects 1–4)</span></div>
+      <div style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.55;margin-top:4px">Supabase project, the five tables, hashed-password auth, <code>/orders</code>, <code>/access/redeem</code>, <code>/access/session</code>, admin verify/revoke behind a real login. Payment stays manual — the owner confirms a WhatsApp proof and clicks Mark paid, but now it works on every device. <strong>This is the minimum to charge money.</strong></div>
+    </div>
+    <div style="break-inside:avoid;border:1px solid #CBD5E1;border-left:4px solid #38BDF8;border-radius:5px;padding:11px 14px">
+      <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:10.5pt;color:#0A1628">Phase 2 — Reduce the owner's workload <span style="font-weight:700;color:#5A6A7A">(defects 5, 6, 8)</span></div>
+      <div style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.55;margin-top:4px">Payment webhooks for auto-verification, device limits, progress sync. Needed once there are more parents than the owner can verify by hand.</div>
+    </div>
+    <div style="break-inside:avoid;border:1px solid #CBD5E1;border-left:4px solid #CBD5E1;border-radius:5px;padding:11px 14px">
+      <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:10.5pt;color:#0A1628">Phase 3 — Polish <span style="font-weight:700;color:#5A6A7A">(defect 7 and beyond)</span></div>
+      <div style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.55;margin-top:4px">Real Google OAuth, password reset by email, parent dashboard showing the child's progress, per-topic analytics for the owner.</div>
+    </div>
+  </div>
+
+  <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:14pt;color:#0A1628;border-bottom:1.5px solid #00A88E;padding-bottom:5px;margin-bottom:12px">8 · Non-negotiables for whoever builds this</div>
+
+  <ul style="margin:0 0 20px;padding-left:20px;display:flex;flex-direction:column;gap:6px">
+    <li style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.55">Never trust the client for authorisation. The browser may <em>request</em>; only the server decides.</li>
+    <li style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.55">Never store a password in plain text, anywhere, at any stage — including logs.</li>
+    <li style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.55">Remove the demo bypass (<code>PSLE-2026-DEMO</code>) and the default admin PIN before launch.</li>
+    <li style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.55">HTTPS everywhere; children's names and parents' phone numbers are personal data.</li>
+    <li style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.55">Make the payment webhook idempotent and signature-verified.</li>
+    <li style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.55">Collect only what is needed. Learner first name and standard is enough; no birth dates, no addresses, no photographs.</li>
+    <li style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.55">Keep an audit log of who verified or revoked which order — this is money.</li>
+  </ul>
+
+  <div style="margin-top:24px;padding-top:12px;border-top:2px solid #0A1628;font-size:8.5pt;font-weight:700;color:#5A6A7A;line-height:1.5">PSLE Prep Toolkit · backend specification and developer handoff · the front end referenced here is complete and testable today on a single device.</div>
+
+</doc-page>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}"></script>
+</body>
+</html>

@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The PSLE Exam Prep Toolkit — Botswana Standard 6 & 7</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0A1628;
+  --navy-mid:#0E2040;
+  --navy-light:#162C52;
+  --teal:#00C6A7;
+  --teal-light:#E0FAF5;
+  --teal-mid:#00A88E;
+  --amber:#FF8C00;
+  --amber-light:#FFF3E0;
+  --amber-pale:#FFF8F0;
+  --red:#E63946;
+  --sky:#38BDF8;
+  --sky-light:#E0F4FF;
+  --lime:#84CC16;
+  --text:#111827;
+  --muted:#5A6A7A;
+  --white:#fff;
+  --bg:#F5F7FA;
+  --radius:16px;
+  --shadow:0 6px 28px rgba(10,22,40,0.10);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+section[id]{scroll-margin-top:76px;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
+
+/* ─── HERO ─── */
+.hero{
+  background:var(--navy);
+  padding:64px 20px 80px;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.hero-grid-bg{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(0,198,167,0.07) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,198,167,0.07) 1px,transparent 1px);
+  background-size:48px 48px;
+  animation:gridshift 20s linear infinite;
+}
+@keyframes gridshift{0%{background-position:0 0;}100%{background-position:48px 48px;}}
+.hero-glow{
+  position:absolute;
+  width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(ellipse,rgba(0,198,167,0.18) 0%,transparent 70%);
+  top:-100px;left:50%;transform:translateX(-50%);
+  pointer-events:none;
+}
+.hero-glow-r{
+  position:absolute;width:350px;height:350px;border-radius:50%;
+  background:radial-gradient(ellipse,rgba(255,140,0,0.14) 0%,transparent 70%);
+  bottom:-80px;right:-60px;pointer-events:none;
+}
+.hero-inner{position:relative;max-width:820px;margin:0 auto;}
+
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,198,167,0.15);
+  border:1.5px solid rgba(0,198,167,0.4);
+  color:var(--teal);font-weight:800;font-size:0.78rem;letter-spacing:2px;text-transform:uppercase;
+  padding:7px 18px;border-radius:50px;margin-bottom:24px;
+}
+
+.hero h1{
+  font-family:'Syne',sans-serif;font-weight:900;
+  font-size:clamp(2.4rem,7.5vw,4.2rem);
+  color:#fff;line-height:1.1;
+  margin-bottom:20px;
+  letter-spacing:-1px;
+}
+.hero h1 .hl{
+  color:var(--teal);
+}
+.hero h1 .hl2{
+  color:var(--amber);
+}
+.hero-sub{
+  color:rgba(255,255,255,0.80);
+  font-size:1.08rem;font-weight:600;
+  line-height:1.75;max-width:620px;margin:0 auto 32px;
+}
+.hero-tags{
+  display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:40px;
+}
+.hero-tag{
+  background:rgba(255,255,255,0.08);
+  border:1.5px solid rgba(255,255,255,0.18);
+  color:rgba(255,255,255,0.9);
+  padding:7px 16px;border-radius:50px;
+  font-weight:700;font-size:0.84rem;
+  transition:all 0.2s;
+}
+.hero-tag:hover{background:rgba(0,198,167,0.15);border-color:var(--teal);color:var(--teal);}
+
+.cta-btn{
+  display:inline-block;padding:18px 52px;border-radius:50px;
+  background:linear-gradient(135deg,var(--teal),#00A88E);
+  color:var(--navy);font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;
+  text-decoration:none;
+  box-shadow:0 8px 32px rgba(0,198,167,0.35);
+  transition:all 0.25s ease;cursor:pointer;border:none;letter-spacing:0.3px;
+}
+.cta-btn:hover{transform:translateY(-4px) scale(1.04);box-shadow:0 14px 42px rgba(0,198,167,0.45);}
+.site-nav{
+  position:sticky;top:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:12px 26px;background:rgba(10,22,40,0.92);
+  backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.09);
+}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:900;font-size:1.02rem;color:#fff;text-decoration:none;letter-spacing:-0.2px;}
+.nav-logo span{color:var(--teal);}
+.nav-links{display:flex;align-items:center;gap:6px;flex-wrap:nowrap;}
+.nav-links a{white-space:nowrap;}
+.nav-links a{
+  padding:9px 14px;border-radius:50px;text-decoration:none;
+  font-weight:700;font-size:0.86rem;color:rgba(255,255,255,0.62);transition:all 0.18s;
+}
+.nav-links a:hover{color:#fff;background:rgba(255,255,255,0.07);}
+.nav-signin{border:1.5px solid rgba(255,255,255,0.22);color:#fff !important;}
+.nav-signin:hover{border-color:var(--teal);color:var(--teal) !important;}
+.nav-cta{
+  background:linear-gradient(135deg,var(--teal),#00A88E);
+  color:#0A1628 !important;font-weight:800 !important;
+}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,198,167,0.4);}
+.nav-admin{font-size:0.8rem !important;color:rgba(255,255,255,0.38) !important;}
+@media(max-width:980px){
+  .nav-hide{display:none;}
+}
+@media(max-width:720px){
+  .site-nav{padding:10px 14px;gap:10px;}
+  .nav-logo{font-size:0.92rem;}
+  .nav-links{gap:4px;}
+  .nav-links a{padding:8px 12px;font-size:0.8rem;}
+  .nav-admin{display:none;}
+}
+.cta-sub{color:rgba(255,255,255,0.55);font-size:0.86rem;font-weight:700;margin-top:14px;letter-spacing:0.2px;}
+
+/* ─── STATS ─── */
+.stats-strip{
+  background:var(--navy-mid);
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.stats-inner{
+  max-width:900px;margin:0 auto;
+  display:flex;flex-wrap:wrap;justify-content:center;
+}
+.stat{
+  flex:1;min-width:120px;text-align:center;
+  padding:24px 16px;
+  border-right:1px solid rgba(255,255,255,0.08);
+}
+.stat:last-child{border-right:none;}
+.stat-num{
+  font-family:'Syne',sans-serif;font-weight:900;
+  font-size:2rem;color:var(--teal);
+  line-height:1;
+}
+.stat-label{
+  font-size:0.75rem;font-weight:800;color:rgba(255,255,255,0.45);
+  text-transform:uppercase;letter-spacing:1px;margin-top:5px;
+}
+
+/* ─── SECTION ─── */
+section{padding:72px 20px;}
+.section-inner{max-width:880px;margin:0 auto;}
+.section-label{
+  display:inline-block;
+  background:var(--teal-light);color:var(--teal-mid);
+  font-weight:800;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;
+  padding:5px 14px;border-radius:50px;margin-bottom:14px;
+}
+.section-title{
+  font-family:'Syne',sans-serif;font-weight:900;
+  font-size:clamp(1.7rem,4vw,2.5rem);
+  color:var(--navy);line-height:1.15;
+  margin-bottom:10px;letter-spacing:-0.5px;
+}
+.section-sub{
+  font-weight:600;font-size:0.98rem;color:var(--muted);
+  margin-bottom:48px;line-height:1.65;max-width:560px;
+}
+
+/* ─── FEATURES ─── */
+.features-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;
+}
+.feature-card{
+  background:#fff;border-radius:var(--radius);padding:26px 22px;
+  box-shadow:var(--shadow);
+  border:1.5px solid #E5EAF0;
+  position:relative;overflow:hidden;
+  transition:transform 0.2s,box-shadow 0.2s;
+}
+.feature-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--teal),var(--sky));
+}
+.feature-card:nth-child(2)::before{background:linear-gradient(90deg,var(--amber),#FBBF24);}
+.feature-card:nth-child(3)::before{background:linear-gradient(90deg,var(--sky),#60A5FA);}
+.feature-card:nth-child(4)::before{background:linear-gradient(90deg,var(--lime),var(--teal));}
+.feature-card:nth-child(5)::before{background:linear-gradient(90deg,#A78BFA,var(--sky));}
+.feature-card:nth-child(6)::before{background:linear-gradient(90deg,var(--red),var(--amber));}
+.feature-card:nth-child(7)::before{background:linear-gradient(90deg,var(--teal),var(--lime));}
+.feature-card:nth-child(8)::before{background:linear-gradient(90deg,var(--amber),var(--red));}
+.feature-card:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(10,22,40,0.14);}
+.feature-icon{
+  width:44px;height:44px;border-radius:12px;
+  background:var(--teal-light);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;margin-bottom:14px;
+}
+.feature-title{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:1.02rem;color:var(--navy);margin-bottom:8px;
+}
+.feature-desc{font-size:0.9rem;font-weight:600;color:var(--muted);line-height:1.7;}
+
+/* ─── SUBJECTS BG ─── */
+.alt-bg{background:#EEF2F8;}
+
+.syllabus-badge{
+  background:linear-gradient(135deg,var(--navy),var(--navy-light));
+  color:#fff;border-radius:var(--radius);padding:22px 26px;
+  display:flex;align-items:center;gap:18px;margin-bottom:32px;
+  border:1px solid rgba(0,198,167,0.3);
+  box-shadow:0 6px 24px rgba(10,22,40,0.2);
+}
+.syllabus-badge .sb-icon{font-size:2rem;flex-shrink:0;}
+.syllabus-badge h3{font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;margin-bottom:4px;color:var(--teal);}
+.syllabus-badge p{font-size:0.88rem;font-weight:600;opacity:0.85;line-height:1.65;}
+
+.subj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:14px;}
+.subj-card{
+  background:#fff;border-radius:var(--radius);padding:22px 14px;
+  text-align:center;box-shadow:var(--shadow);
+  border:1.5px solid #E5EAF0;
+  transition:all 0.2s;
+  position:relative;overflow:hidden;
+}
+.subj-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--teal),var(--sky));
+  transform:scaleX(0);transform-origin:left;transition:transform 0.25s;
+}
+.subj-card:hover::after{transform:scaleX(1);}
+.subj-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(10,22,40,0.13);}
+.subj-emoji{font-size:2.2rem;margin-bottom:10px;}
+.subj-name{font-family:'Syne',sans-serif;font-weight:800;font-size:0.97rem;color:var(--navy);}
+.subj-detail{font-size:0.75rem;font-weight:600;color:var(--muted);margin-top:5px;line-height:1.5;}
+
+/* ─── HOW IT WORKS ─── */
+.steps-row{display:flex;flex-direction:column;gap:14px;}
+.step-item{
+  background:#fff;border-radius:var(--radius);padding:22px 24px;
+  display:flex;gap:20px;align-items:flex-start;
+  box-shadow:var(--shadow);border:1.5px solid #E5EAF0;
+  transition:transform 0.2s;
+}
+.step-item:hover{transform:translateX(5px);}
+.step-num{
+  background:linear-gradient(135deg,var(--navy),var(--navy-light));
+  color:var(--teal);border-radius:12px;
+  width:42px;height:42px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:900;font-size:1.15rem;
+  border:1.5px solid rgba(0,198,167,0.3);
+}
+.step-body h4{font-family:'Syne',sans-serif;font-weight:800;font-size:1.02rem;color:var(--navy);margin-bottom:5px;}
+.step-body p{font-size:0.9rem;font-weight:600;color:var(--muted);line-height:1.65;}
+
+/* ─── TESTIMONIALS ─── */
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;}
+.testi-card{
+  background:#fff;border-radius:var(--radius);padding:26px 22px;
+  box-shadow:var(--shadow);border:1.5px solid #E5EAF0;
+  position:relative;
+}
+.testi-stars{color:var(--amber);font-size:0.9rem;margin-bottom:12px;letter-spacing:2px;}
+.testi-text{font-weight:600;font-size:0.93rem;line-height:1.75;color:var(--text);}
+.testi-divider{height:1px;background:#E5EAF0;margin:16px 0;}
+.testi-name{font-weight:800;font-size:0.85rem;color:var(--navy);}
+.testi-role{font-size:0.78rem;color:var(--muted);font-weight:600;}
+
+/* ─── PRICING ─── */
+.pricing-bg{background:var(--navy);}
+.pricing-wrap{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:20px;max-width:820px;margin:0 auto;
+}
+.price-card{
+  background:rgba(255,255,255,0.06);
+  border:1.5px solid rgba(255,255,255,0.12);
+  border-radius:var(--radius);padding:32px 24px;text-align:center;color:#fff;
+  transition:all 0.25s;
+  position:relative;overflow:hidden;
+}
+.price-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--teal),var(--sky));
+  opacity:0;transition:opacity 0.25s;
+}
+.price-card:hover::before,.price-card.featured::before{opacity:1;}
+.price-card.featured{
+  background:rgba(0,198,167,0.1);
+  border-color:var(--teal);
+  transform:scale(1.04);
+}
+.price-card:hover{
+  background:rgba(255,255,255,0.1);
+  border-color:rgba(255,255,255,0.3);
+}
+.price-card.featured:hover{transform:scale(1.06);}
+
+.featured-label{
+  background:linear-gradient(135deg,var(--teal),var(--teal-mid));
+  color:var(--navy);font-weight:900;font-size:0.72rem;letter-spacing:1.5px;
+  padding:5px 14px;border-radius:50px;text-transform:uppercase;
+  display:inline-block;margin-bottom:16px;
+}
+.price-name{font-family:'Syne',sans-serif;font-weight:900;font-size:1.1rem;margin-bottom:12px;color:rgba(255,255,255,0.9);}
+.price-tag{font-family:'Syne',sans-serif;font-weight:900;font-size:2.8rem;color:var(--teal);margin:8px 0 4px;line-height:1;}
+.price-period{font-size:0.8rem;color:rgba(255,255,255,0.5);font-weight:700;margin-bottom:20px;}
+.price-features{list-style:none;text-align:left;margin:16px 0 24px;}
+.price-features li{
+  padding:7px 0;font-size:0.88rem;font-weight:700;
+  color:rgba(255,255,255,0.85);
+  display:flex;gap:10px;align-items:flex-start;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.price-features li:last-child{border-bottom:none;}
+.price-features li::before{content:'✓';color:var(--teal);font-weight:900;flex-shrink:0;}
+.price-btn{
+  display:block;width:100%;padding:14px;border-radius:50px;border:none;
+  background:linear-gradient(135deg,var(--teal),var(--teal-mid));
+  color:var(--navy);font-family:'Syne',sans-serif;font-weight:900;font-size:1rem;
+  cursor:pointer;transition:all 0.2s;letter-spacing:0.3px;
+}
+.price-btn:hover{transform:scale(1.04);box-shadow:0 6px 22px rgba(0,198,167,0.35);}
+.price-alt{
+  display:block;width:100%;margin-top:9px;padding:11px;border-radius:50px;
+  background:none;border:1.5px solid rgba(255,255,255,0.18);
+  color:rgba(255,255,255,0.6);font-family:'Plus Jakarta Sans',sans-serif;
+  font-weight:700;font-size:0.84rem;cursor:pointer;transition:all 0.2s;
+}
+.price-alt:hover{border-color:var(--teal);color:var(--teal);}
+
+/* ─── PAYMENT ─── */
+.payment-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;}
+.payment-card{
+  background:#fff;border-radius:var(--radius);padding:22px 18px;
+  border:1.5px solid #E5EAF0;text-align:center;
+  box-shadow:var(--shadow);
+  transition:transform 0.2s;
+}
+.payment-card:hover{transform:translateY(-3px);}
+.payment-icon{
+  width:48px;height:48px;border-radius:14px;
+  background:var(--teal-light);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;margin:0 auto 12px;
+}
+.payment-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--navy);margin-bottom:7px;}
+.payment-detail{font-size:0.86rem;font-weight:600;color:var(--muted);line-height:1.65;}
+
+/* ─── FAQ ─── */
+.faq-list{display:flex;flex-direction:column;gap:12px;}
+.faq-item{
+  background:#fff;border-radius:var(--radius);
+  border:1.5px solid #E5EAF0;overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.faq-q{
+  padding:18px 22px;font-weight:800;font-size:0.95rem;color:var(--navy);
+  cursor:pointer;display:flex;justify-content:space-between;align-items:center;
+  transition:background 0.2s;gap:12px;
+}
+.faq-q:hover{background:var(--teal-light);}
+.faq-q .arrow{
+  width:28px;height:28px;background:var(--teal-light);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  color:var(--teal-mid);font-size:0.8rem;flex-shrink:0;
+  transition:transform 0.25s,background 0.2s;
+}
+.faq-a{
+  padding:0 22px;max-height:0;overflow:hidden;
+  font-size:0.91rem;font-weight:600;color:var(--muted);line-height:1.75;
+  transition:max-height 0.35s ease,padding 0.25s ease;
+}
+.faq-item.open .faq-q{background:var(--teal-light);}
+.faq-item.open .faq-a{max-height:300px;padding:14px 22px 22px;}
+.faq-item.open .arrow{transform:rotate(180deg);background:var(--teal);color:#fff;}
+
+/* ─── FOOTER ─── */
+footer{
+  background:var(--navy);
+  color:rgba(255,255,255,0.6);
+  text-align:center;padding:44px 20px;
+  font-size:0.88rem;font-weight:700;line-height:2;
+  border-top:1px solid rgba(255,255,255,0.06);
+}
+.footer-title{font-family:'Syne',sans-serif;font-weight:900;font-size:1.3rem;color:#fff;margin-bottom:6px;}
+footer a{color:var(--teal);text-decoration:none;}
+
+/* ─── STICKY BAR ─── */
+.sticky-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  background:var(--navy-mid);
+  border-top:1px solid rgba(0,198,167,0.3);
+  padding:13px 20px;
+  display:flex;align-items:center;justify-content:center;gap:20px;
+  flex-wrap:wrap;
+  box-shadow:0 -4px 24px rgba(10,22,40,0.3);
+}
+.sticky-bar p{color:rgba(255,255,255,0.85);font-weight:700;font-size:0.92rem;}
+.sticky-bar a{
+  background:linear-gradient(135deg,var(--teal),var(--teal-mid));
+  color:var(--navy);padding:11px 28px;border-radius:50px;
+  font-family:'Syne',sans-serif;font-weight:900;font-size:0.92rem;
+  text-decoration:none;
+  box-shadow:0 4px 16px rgba(0,198,167,0.3);
+  transition:all 0.2s;
+}
+.sticky-bar a:hover{transform:scale(1.05);}
+
+/* ─── FINAL CTA ─── */
+.final-cta{
+  background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 50%,rgba(0,198,167,0.15) 100%);
+  text-align:center;padding:80px 20px;
+  border-top:1px solid rgba(0,198,167,0.2);
+  position:relative;overflow:hidden;
+}
+.final-cta::before{
+  content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(0,198,167,0.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,198,167,0.05) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+.final-cta-inner{position:relative;max-width:600px;margin:0 auto;}
+
+/* Shared heading style for dark sections */
+.dark-title{color:#fff!important;}
+.dark-sub{color:rgba(255,255,255,0.7)!important;}
+
+@media(max-width:600px){
+  .stat{min-width:100px;padding:18px 10px;}
+  .subj-grid{grid-template-columns:repeat(3,1fr);}
+  .sticky-bar p{font-size:0.8rem;}
+  .pricing-wrap{grid-template-columns:1fr;}
+  .price-card.featured{transform:none;}
+  .price-card.featured:hover{transform:scale(1.02);}
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="landing.html" class="nav-logo">PSLE Prep <span>Toolkit</span></a>
+  <div class="nav-links">
+    <a href="#features" class="nav-hide">Features</a>
+    <a href="#pricing" class="nav-hide">Pricing</a>
+    <a href="#faq" class="nav-hide">FAQ</a>
+    <a href="Admin.dc.html" class="nav-admin">Admin</a>
+    <a href="Sign In.dc.html" class="nav-signin">Sign in</a>
+    <a href="Get Access.dc.html" class="nav-cta">Get access</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow-r"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">🇧🇼 Botswana PSLE · October 2026 </div>
+    <h1>The <span class="hl">PSLE Exam</span><br>Prep <span class="hl2">Toolkit</span></h1>
+    <p class="hero-sub">
+      The complete online exam preparation system for Standard 6 and 7 learners —
+      built on the official Botswana PSLE syllabus. Practice MCQs, time yourself,
+      get tips, affirmations, checklists and more.
+    </p>
+    <div class="hero-tags">
+      <span class="hero-tag">✅ Multiple Choice Questions</span>
+      <span class="hero-tag">⏱️ Built-in Study Timer</span>
+      <span class="hero-tag">🧠 Calm &amp; Confidence Tools</span>
+      <span class="hero-tag">📋 Daily Checklists</span>
+      <span class="hero-tag">📚 All 6 Subjects</span>
+      <span class="hero-tag">🎯 Exam Tips &amp; Strategies</span>
+    </div>
+    <a href="Get Access.dc.html" class="cta-btn">🚀 Get Access Now</a>
+    <p class="cta-sub">Limited access available · Primarily designed for Standard 7 · October 2026 exams</p>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-num">6</div><div class="stat-label">Subjects Covered</div></div>
+    <div class="stat"><div class="stat-num">2 000+</div><div class="stat-label">MCQ Questions</div></div>
+    <div class="stat"><div class="stat-num">Std 6–7</div><div class="stat-label">Syllabus Aligned</div></div>
+    <div class="stat"><div class="stat-num">9</div><div class="stat-label">Learning Modules</div></div>
+    <div class="stat"><div class="stat-num">Oct</div><div class="stat-label">Exam Ready</div></div>
+  </div>
+</div>
+
+<!-- WHAT'S INSIDE -->
+<section id="features">
+  <div class="section-inner">
+    <div class="section-label">What's Inside</div>
+    <h2 class="section-title">Everything your child needs<br>to prepare</h2>
+    <p class="section-sub">One toolkit. All subjects. Built for Botswana's PSLE.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">✅</div>
+        <div class="feature-title">MCQ Question Banks</div>
+        <div class="feature-desc">Hundreds of multiple choice questions across all subjects — Easy, Medium and Hard difficulty — with instant feedback and full explanations.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⏱️</div>
+        <div class="feature-title">Built-in Study Timer</div>
+        <div class="feature-desc">Timed practice sessions so children learn to manage exam time. Set 10, 20, 30, 45 or 60 minutes and practice under real exam conditions.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💡</div>
+        <div class="feature-title">Exam Prep Tips</div>
+        <div class="feature-desc">Subject-by-subject strategies for Maths, English, Setswana, Science, Social Studies and Agriculture — written specifically for PSLE.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🧠</div>
+        <div class="feature-title">Affirmations &amp; Confidence</div>
+        <div class="feature-desc">Daily power affirmations, a breathing exercise for exam nerves, and motivational tools to keep your child calm, focused and believing in themselves.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📋</div>
+        <div class="feature-title">Daily Checklists</div>
+        <div class="feature-desc">A daily study checklist and weekly rotation plan. Children tick off tasks and watch their progress bar grow. Includes an exam day bag checklist.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">✍️</div>
+        <div class="feature-title">Writing &amp; Spelling Tools</div>
+        <div class="feature-desc">A guided composition planner, spelling challenge game, sentence builder game and vocabulary power words — all in one place.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">Progress Tracking</div>
+        <div class="feature-desc">Topic-by-topic progress bars, score tracking and star badges earned by completing activities — keeps children motivated throughout prep.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🗺️</div>
+        <div class="feature-title">Study Guide Posters</div>
+        <div class="feature-desc">Visual study posters covering key facts, diagrams, definitions and mnemonics for each subject — great for sticking on the bedroom wall.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUBJECTS -->
+<section class="alt-bg">
+  <div class="section-inner">
+    <div class="section-label">Subjects</div>
+    <h2 class="section-title">All 6 PSLE Subjects</h2>
+    <p class="section-sub">Every subject your child will sit in October — all in one toolkit.</p>
+
+    <div class="syllabus-badge">
+      <div class="sb-icon">📘</div>
+      <div>
+        <h3>Backed by the official Botswana PSLE syllabus</h3>
+        <p>All questions, tips and study guides are aligned to the Standard 6 and 7 primary school curriculum — with a primary focus on Standard 7 PSLE preparation. Nothing irrelevant. No filler.</p>
+      </div>
+    </div>
+
+    <div class="subj-grid">
+      <div class="subj-card">
+        <div class="subj-emoji">🔢</div>
+        <div class="subj-name">Maths</div>
+        <div class="subj-detail">Fractions, percentages, word problems, geometry, data</div>
+      </div>
+      <div class="subj-card">
+        <div class="subj-emoji">📖</div>
+        <div class="subj-name">English</div>
+        <div class="subj-detail">Comprehension, grammar, composition, spelling</div>
+      </div>
+      <div class="subj-card">
+        <div class="subj-emoji">🌍</div>
+        <div class="subj-name">Setswana</div>
+        <div class="subj-detail">Karabo ya tlhaloso, go bala, go kwala</div>
+      </div>
+      <div class="subj-card">
+        <div class="subj-emoji">🏛️</div>
+        <div class="subj-name">Social Studies</div>
+        <div class="subj-detail">Botswana geography, history, government, Africa</div>
+      </div>
+      <div class="subj-card">
+        <div class="subj-emoji">🔬</div>
+        <div class="subj-name">Science</div>
+        <div class="subj-detail">Life cycles, electricity, matter, water cycle, environment</div>
+      </div>
+      <div class="subj-card">
+        <div class="subj-emoji">🌱</div>
+        <div class="subj-name">Agriculture</div>
+        <div class="subj-detail">Soil, irrigation, crop rotation, pests, livestock</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">Getting Started</div>
+    <h2 class="section-title">How it works</h2>
+    <p class="section-sub">From payment to your child practising — in under 10 minutes.</p>
+    <div class="steps-row">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Choose your package &amp; pay</h4>
+          <p>Select a package below and pay via Orange Money, MyZaka or bank transfer. Access is limited so secure your spot early.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Send proof of payment via WhatsApp</h4>
+          <p>Screenshot your payment and send to our WhatsApp number. We confirm within a few hours.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Receive your private access link</h4>
+          <p>We send you a private link to the full toolkit. Works on any phone, tablet or computer — no app to download.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Your child starts practising today</h4>
+          <p>Open the link, pick a subject and go. No login, no passwords, just instant exam prep — right until October exams.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="alt-bg">
+  <div class="section-inner">
+    <div class="section-label">Parent Reviews</div>
+    <h2 class="section-title">What parents are saying</h2>
+    <p class="section-sub">Built by a parent, tested by a child — designed for every PSLE learner.</p>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-text">My daughter actually asks to use it. The spelling game and affirmations make it feel like a game, not revision. Her confidence has gone up so much.</div>
+        <div class="testi-divider"></div>
+        <div class="testi-name">Parent, Gaborone</div>
+        <div class="testi-role">Standard 7 learner</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-text">Everything is in one place. Maths, Science, Social Studies, even Setswana tips. I don't have to run around buying different books. Worth every thebe.</div>
+        <div class="testi-divider"></div>
+        <div class="testi-name">Parent, Francistown</div>
+        <div class="testi-role">Standard 6 learner</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-text">The timer feature is brilliant. My son now practices like it's a real exam. He's learned to manage his time instead of spending 20 minutes on one question.</div>
+        <div class="testi-divider"></div>
+        <div class="testi-name">Parent, Gaborone</div>
+        <div class="testi-role">Standard 7 learner</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-bg" id="pricing">
+  <div class="section-inner">
+    <div style="text-align:center;margin-bottom:8px;">
+      <div style="display:inline-block;background:rgba(0,198,167,0.15);border:1.5px solid rgba(0,198,167,0.3);color:var(--teal);font-weight:800;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:50px;">Pricing</div>
+    </div>
+    <h2 class="section-title dark-title" style="text-align:center;">Choose Your Package</h2>
+    <p class="section-sub dark-sub" style="margin:10px auto 44px;text-align:center;">Access runs until the October 2026 exams. Limited access — secure your spot today.</p>
+    <div class="pricing-wrap">
+
+      <div class="price-card">
+        <div class="price-name">Single Subject</div>
+        <div class="price-tag">P75</div>
+        <div class="price-period">per subject · until October</div>
+        <ul class="price-features">
+          <li>Full MCQ bank for 1 subject</li>
+          <li>Study tips &amp; strategies</li>
+          <li>Progress tracking</li>
+          <li>Study timer</li>
+        </ul>
+        <a class="price-btn" href="Get Access.dc.html" style="text-align:center;text-decoration:none;">Get access now</a>
+        <button class="price-alt" onclick="openWhatsApp('Single Subject — P75')">or pay via WhatsApp</button>
+      </div>
+
+      <div class="price-card featured">
+        <div class="featured-label">⭐ Best Value</div>
+        <div class="price-name">Full Toolkit Access</div>
+        <div class="price-tag">P300</div>
+        <div class="price-period">all 6 subjects · until October</div>
+        <ul class="price-features">
+          <li>All 6 subject question banks</li>
+          <li>2 000+ MCQ questions</li>
+          <li>Writing &amp; spelling tools</li>
+          <li>Timer, checklists &amp; planner</li>
+          <li>Affirmations &amp; calm tools</li>
+          <li>Study guide posters</li>
+          <li>Works on any device</li>
+        </ul>
+        <a class="price-btn" href="Get Access.dc.html" style="text-align:center;text-decoration:none;">Get access now</a>
+        <button class="price-alt" onclick="openWhatsApp('Full Toolkit — P300')">or pay via WhatsApp</button>
+      </div>
+
+      <div class="price-card">
+        <div class="price-name">3-Subject Bundle</div>
+        <div class="price-tag">P160</div>
+        <div class="price-period">choose any 3 · until October</div>
+        <ul class="price-features">
+          <li>MCQ banks for 3 subjects</li>
+          <li>Study tips for chosen subjects</li>
+          <li>Progress tracking</li>
+          <li>Study timer &amp; checklists</li>
+          <li>Affirmations &amp; calm tools</li>
+        </ul>
+        <a class="price-btn" href="Get Access.dc.html" style="text-align:center;text-decoration:none;">Get access now</a>
+        <button class="price-alt" onclick="openWhatsApp('3-Subject Bundle — P160')">or pay via WhatsApp</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- HOW TO PAY -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">Payment Methods</div>
+    <h2 class="section-title">How to Pay</h2>
+    <p class="section-sub">We accept the most convenient payment methods for Botswana families.</p>
+    <div class="payment-grid">
+      <div class="payment-card">
+        <div class="payment-icon">📱</div>
+        <div class="payment-title">Orange Money</div>
+        <div class="payment-detail">Send payment to our Orange Money number. Screenshot and WhatsApp us your confirmation.</div>
+      </div>
+      <div class="payment-card">
+        <div class="payment-icon">💳</div>
+        <div class="payment-title">MyZaka</div>
+        <div class="payment-detail">Transfer via MyZaka. Send us your confirmation message via WhatsApp.</div>
+      </div>
+      <div class="payment-card">
+        <div class="payment-icon">🏦</div>
+        <div class="payment-title">Bank Transfer</div>
+        <div class="payment-detail">EFT to our bank account. Send us proof of payment via WhatsApp to activate access.</div>
+      </div>
+      <div class="payment-card">
+        <div class="payment-icon">💬</div>
+        <div class="payment-title">WhatsApp Us</div>
+        <div class="payment-detail">Message us on WhatsApp: <strong>75562568</strong> to ask questions, arrange payment or confirm your spot.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="alt-bg" id="faq">
+  <div class="section-inner">
+    <div class="section-label">FAQ</div>
+    <h2 class="section-title">Common Questions</h2>
+    <p class="section-sub">Everything parents ask us before signing up.</p>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">What standard is this for? <span class="arrow">▼</span></div>
+        <div class="faq-a">The toolkit is aligned to the Botswana PSLE syllabus for Standard 6 and 7 learners, with a primary focus on Standard 7 learners preparing for the October PSLE exams. Standard 6 learners will also benefit from the question banks and study guides as excellent preparation for their upcoming year.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Does my child need a computer? <span class="arrow">▼</span></div>
+        <div class="faq-a">No. The toolkit works on any smartphone, tablet or computer — no app to download, no account to create. Just open the link in any browser and start practising immediately.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">How do I get access after paying? <span class="arrow">▼</span></div>
+        <div class="faq-a">After payment, send us your proof of payment via WhatsApp on 75562568. We will send you the private access link within a few hours. Your child can start that same day.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">How long does access last? <span class="arrow">▼</span></div>
+        <div class="faq-a">Access lasts from the day you join right through to the October 2026 PSLE exams. That's several months of unlimited practice for your child.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Can more than one child in my family use it? <span class="arrow">▼</span></div>
+        <div class="faq-a">Yes. One payment covers all children in your household. Share the link with all your Standard 6 and 7 learners.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Why is access limited? <span class="arrow">▼</span></div>
+        <div class="faq-a">We keep access limited so we can give each family personal attention, answer questions quickly, and make sure every child gets real value from the toolkit. We want quality over quantity. Secure your spot before it closes.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="final-cta-inner">
+    <h2 style="font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(1.9rem,5vw,3rem);color:#fff;margin-bottom:14px;letter-spacing:-0.5px;line-height:1.15;">Ready to give your child<br>the advantage?</h2>
+    <p style="color:rgba(255,255,255,0.75);font-weight:600;font-size:1.02rem;margin-bottom:34px;line-height:1.7;">October exams come fast. Every week of preparation makes a difference. Secure your child's spot today.</p>
+    <a href="Get Access.dc.html" class="cta-btn">🎯 Get Access — From P75</a>
+    <p style="color:rgba(255,255,255,0.5);font-weight:700;font-size:0.84rem;margin-top:16px;">Limited access available · Pay via Orange Money, MyZaka or Bank Transfer · WhatsApp: 75562568</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-title">The PSLE Exam Prep Toolkit</div>
+  <p>Botswana Standard 6 &amp; 7 · Aligned to the PSLE syllabus · October exams</p>
+  <p style="margin-top:8px;">Questions? WhatsApp us on <a href="https://wa.me/26775562568">75562568</a> or email us anytime.</p>
+  <p style="margin-top:8px;">Already paid? <a href="Sign In.dc.html">Sign in</a> to open the toolkit.</p>
+  <p style="margin-top:16px;opacity:0.35;font-size:0.72rem;"><a href="Admin.dc.html" style="color:rgba(255,255,255,0.4);">Admin sign in</a></p>
+  <p style="margin-top:16px;opacity:0.4;font-size:0.76rem;">© 2026 The PSLE Exam Prep Toolkit · Botswana</p>
+</footer>
+
+<!-- STICKY BAR -->
+<div class="sticky-bar">
+  <p>🚀 Limited access · Get ready for October PSLE</p>
+  <a href="Get Access.dc.html">Get Access from P75</a>
+</div>
+
+<script>
+function toggleFaq(el) {
+  const item = el.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+function openWhatsApp(pkg) {
+  const msg = encodeURIComponent(`Hi! I'd like to sign up for The PSLE Exam Prep Toolkit.\n\nPackage: ${pkg}\n\nPlease send me payment details. Thank you!`);
+  window.open(`https://wa.me/26775562568?text=${msg}`, '_blank');
+}
+</script>
+</body>
+</html>

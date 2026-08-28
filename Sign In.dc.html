@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Plus Jakarta Sans',sans-serif;background:#0A1628;color:#fff;}
+*{box-sizing:border-box;}
+@keyframes pop{0%{transform:scale(.97);opacity:0}100%{transform:scale(1);opacity:1}}
+a{color:#00C6A7;text-decoration:none;}
+a:hover{color:#7BF3DE;}
+</style>
+</helmet>
+
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 22px 70px;background:radial-gradient(circle at 50% 0%,#16305A 0%,#0A1628 60%)">
+  <div style="width:100%;max-width:440px">
+
+    <div style="text-align:center;margin-bottom:26px">
+      <a href="landing.html" style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.44rem;color:#fff">PSLE Prep <span style="color:#00C6A7">Toolkit</span></a>
+      <div style="margin-top:8px;font-size:0.7rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4)">Sign in to continue</div>
+    </div>
+
+    <div style="display:flex;gap:6px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.12);border-radius:14px;padding:6px;margin-bottom:20px">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+        <button onClick="{{ t.pick }}" style="flex:1;padding:11px 8px;border-radius:10px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.84rem;border:none;background:{{ t.bg }};color:{{ t.color }}">{{ t.label }}</button>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{ onParent }}" hint-placeholder-val="{{ true }}">
+      <div style="background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.14);border-radius:20px;padding:28px 26px;animation:pop .18s ease-out">
+        <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.2rem;margin-bottom:5px">Parent sign in</div>
+        <div style="font-size:0.87rem;font-weight:600;color:rgba(255,255,255,0.55);line-height:1.6;margin-bottom:20px">Use the email and password you created when you bought your access.</div>
+
+        <sc-if value="{{ googleOn }}">
+          <div>
+            <button onClick="{{ confirmGoogle }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:11px;padding:14px;border-radius:12px;background:#fff;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.92rem;color:#1F2937" style-hover="background:#F1F5F9">
+              <span style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.05rem;color:#4285F4">G</span>
+              <span>Continue with Google</span>
+            </button>
+            <div style="display:flex;align-items:center;gap:12px;margin:20px 0">
+              <span style="flex:1;height:1px;background:rgba(255,255,255,0.12)"></span>
+              <span style="font-size:0.72rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,0.35)">or</span>
+              <span style="flex:1;height:1px;background:rgba(255,255,255,0.12)"></span>
+            </div>
+          </div>
+        </sc-if>
+
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div>
+            <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:7px">Email</div>
+            <input onChange="{{ onEmail }}" value="{{ email }}" placeholder="you@example.com" style="width:100%;padding:14px 16px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.16);background:rgba(10,22,40,0.7);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.94rem" style-focus="outline:none;border-color:#00C6A7">
+          </div>
+          <div>
+            <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:7px">Password</div>
+            <input onChange="{{ onPassword }}" onKeyDown="{{ onLoginKey }}" value="{{ password }}" type="password" placeholder="••••••" style="width:100%;padding:14px 16px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.16);background:rgba(10,22,40,0.7);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.94rem" style-focus="outline:none;border-color:#00C6A7">
+          </div>
+        </div>
+
+        <sc-if value="{{ error }}">
+          <div style="margin-top:15px;background:rgba(230,57,70,0.14);border:1.5px solid rgba(230,57,70,0.4);color:#FFB3B8;border-radius:11px;padding:12px 15px;font-size:0.86rem;font-weight:700;line-height:1.55">{{ error }}</div>
+        </sc-if>
+
+        <button onClick="{{ signIn }}" style="width:100%;margin-top:17px;padding:15px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:1rem;cursor:pointer;box-shadow:0 8px 26px rgba(0,198,167,0.3)">{{ signInLabel }}</button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ onCode }}">
+      <div style="background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.14);border-radius:20px;padding:28px 26px;animation:pop .18s ease-out">
+        <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.2rem;margin-bottom:5px">Learner access code</div>
+        <div style="font-size:0.87rem;font-weight:600;color:rgba(255,255,255,0.55);line-height:1.6;margin-bottom:20px">Quickest way in for your child — no email or password needed.</div>
+        <input onChange="{{ onCodeInput }}" onKeyDown="{{ onCodeKey }}" value="{{ codeInput }}" placeholder="PSLE-••••-••••" style="width:100%;padding:16px;border-radius:13px;border:1.5px solid rgba(255,255,255,0.18);background:rgba(10,22,40,0.7);color:#fff;font-family:'Syne',sans-serif;font-weight:900;font-size:1.14rem;letter-spacing:2px;text-align:center;text-transform:uppercase" style-focus="outline:none;border-color:#00C6A7">
+        <sc-if value="{{ error }}">
+          <div style="margin-top:15px;background:rgba(230,57,70,0.14);border:1.5px solid rgba(230,57,70,0.4);color:#FFB3B8;border-radius:11px;padding:12px 15px;font-size:0.86rem;font-weight:700;line-height:1.55">{{ error }}</div>
+        </sc-if>
+        <button onClick="{{ useCode }}" style="width:100%;margin-top:17px;padding:15px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:1rem;cursor:pointer;box-shadow:0 8px 26px rgba(0,198,167,0.3)">{{ codeLabel }}</button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ onAdmin }}">
+      <div style="background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.14);border-radius:20px;padding:28px 26px;animation:pop .18s ease-out">
+        <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.2rem;margin-bottom:5px">Admin sign in</div>
+        <div style="font-size:0.87rem;font-weight:600;color:rgba(255,255,255,0.55);line-height:1.6;margin-bottom:20px">For the toolkit owner — verify payments, issue codes and manage access.</div>
+        <a href="Admin.dc.html" style="display:block;width:100%;padding:15px;border-radius:50px;background:#fff;color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.98rem;text-align:center">Open the admin dashboard →</a>
+        <div style="margin-top:14px;font-size:0.8rem;font-weight:600;color:rgba(255,255,255,0.42);line-height:1.65">{{ adminHint }}</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ signedIn }}">
+      <div style="margin-top:18px;background:rgba(0,198,167,0.1);border:1.5px solid rgba(0,198,167,0.4);border-radius:16px;padding:22px;text-align:center;animation:pop .2s ease-out">
+        <div style="font-size:1.7rem;margin-bottom:8px">✓</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.1rem;margin-bottom:6px">{{ welcomeLine }}</div>
+        <div style="font-size:0.86rem;font-weight:600;color:rgba(255,255,255,0.6);line-height:1.6;margin-bottom:16px">{{ unlockedLine }}</div>
+        <a href="PSLE Toolkit App.dc.html" style="display:inline-block;padding:14px 30px;border-radius:50px;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.96rem">Open the toolkit →</a>
+      </div>
+    </sc-if>
+
+    <div style="margin-top:22px;text-align:center;font-size:0.86rem;font-weight:600;color:rgba(255,255,255,0.45);line-height:1.8">
+      No access yet? <a href="Get Access.dc.html" style="font-weight:800">Get access here</a><br>
+      Lost your code or password? WhatsApp <a href="https://wa.me/26775562568" style="font-weight:800">75562568</a>
+    </div>
+
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:560,&quot;height&quot;:880}}">
+const GRANTS_KEY = 'psle-access-grants';
+const ACCOUNTS_KEY = 'psle-accounts';
+const UNLOCK_KEY = 'psle-unlocked';
+
+const SUBJECTS = {maths:'Maths', english:'English', setswana:'Setswana', social:'Social Studies', science:'Science', agric:'Agriculture'};
+
+class Component extends DCLogic {
+  state = {
+    tab:'parent', email:'', password:'', codeInput:'', error:'', busy:false,
+    signedIn:false, grant:null, googleOn:false, live:false
+  };
+
+  // If Google bounced the parent back here already signed in, finish the job.
+  async componentDidMount(){
+    const db = await this.db();
+    if(!db) return;
+    this.setState({live: db.isLive()});
+    try{
+      const on = await db.googleAvailable();
+      if(on) this.setState({googleOn:true});
+    }catch(e){}
+    try{
+      const user = await db.currentUser();
+      if(user) this.loginWithEmail(user.email, null);
+    }catch(e){}
+  }
+
+  async db(){
+    if(!this._db){ try{ this._db = await import('./db.js'); }catch(e){ this._db = null; } }
+    return this._db;
+  }
+
+  // Writes the session the toolkit app reads, from a server-approved result.
+  storeSession(info){
+    try{
+      localStorage.setItem(UNLOCK_KEY, JSON.stringify({
+        code: info.code, learner: info.learner || '',
+        subjects: (Array.isArray(info.subjects) && info.subjects.length && info.subjects.length < 6) ? info.subjects : null,
+        planName: info.planName || '', price: info.price || 0
+      }));
+    }catch(e){}
+    this.setState({signedIn:true, grant:info, error:'', busy:false});
+  }
+
+  async redeem(code){
+    const db = await this.db();
+    if(!db) return this.setState({busy:false, error:'The sign-in system is unavailable. Please WhatsApp 75562568.'});
+    try{
+      const res = await db.redeemCode(code);
+      if(!res || !res.authorised){
+        return this.setState({busy:false, error:db.reasonMessage(res ? res.reason : 'not-found', res)});
+      }
+      this.storeSession(res);
+    }catch(e){
+      this.setState({busy:false, error:'Something went wrong checking that code: ' + (e.message || 'unknown error')});
+    }
+  }
+
+  // Signs in, then finds a usable code on that account.
+  async loginWithEmail(email, password){
+    const db = await this.db();
+    if(!db) return this.setState({busy:false, error:'The sign-in system is unavailable. Please WhatsApp 75562568.'});
+    try{
+      if(password) await db.signIn(email, password);
+      const orders = await db.myOrders();
+      if(!orders.length){
+        return this.setState({busy:false, error:'You are signed in, but we cannot find an order on this account. If you have an access code, use the Access code tab.'});
+      }
+      const usable = orders.find(o => o.status === 'verified');
+      if(!usable){
+        const pending = orders.find(o => o.status === 'pending-verification');
+        return this.setState({busy:false, error: pending
+          ? 'Your payment is not confirmed yet, so the toolkit is still locked. Send your proof of payment to WhatsApp 75562568 and we will activate it — usually within a few hours.'
+          : 'That access has been switched off. Please WhatsApp 75562568.'});
+      }
+      await this.redeem(usable.code);
+    }catch(e){
+      this.setState({busy:false, error:e.message || 'That email and password do not match.'});
+    }
+  }
+
+  renderVals(){
+    const st = this.state;
+    const teal = '#00C6A7';
+    const g = st.grant;
+
+    const tab = (id, label) => ({
+      label,
+      bg: st.tab === id ? teal : 'transparent',
+      color: st.tab === id ? '#0A1628' : 'rgba(255,255,255,0.6)',
+      pick: () => this.setState({tab:id, error:'', signedIn:false})
+    });
+
+    const subjectLine = g && Array.isArray(g.subjects) && g.subjects.length && g.subjects.length < 6
+      ? g.subjects.map(id => SUBJECTS[id]).filter(Boolean).join(' · ')
+      : 'All six subjects';
+
+    return {
+      tabs: [tab('parent','Parent'), tab('code','Access code'), tab('admin','Admin')],
+      onParent: st.tab === 'parent', onCode: st.tab === 'code', onAdmin: st.tab === 'admin',
+
+      email: st.email, password: st.password, error: st.error,
+      onEmail: (e) => this.setState({email:e.target.value, error:''}),
+      onPassword: (e) => this.setState({password:e.target.value, error:''}),
+      onLoginKey: (e) => { if(e.key === 'Enter') this.signIn(); },
+      signIn: () => this.signIn(),
+
+      confirmGoogle: async () => {
+        const db = await this.db();
+        if(!db) return this.setState({error:'The sign-in system is unavailable. Please WhatsApp 75562568.'});
+        try{
+          this.setState({busy:true, error:''});
+          await db.signInWithGoogle();     // redirects to Google, returns here after
+        }catch(e){
+          this.setState({busy:false, error:e.message || 'Google sign-in is not available yet.'});
+        }
+      },
+
+      codeInput: st.codeInput,
+      onCodeInput: (e) => this.setState({codeInput:e.target.value, error:''}),
+      onCodeKey: (e) => { if(e.key === 'Enter') this.useCode(); },
+      useCode: () => this.useCode(),
+
+      googleOn: st.googleOn,
+      adminHint: st.live
+        ? 'You will be asked for your admin email and password on the next screen.'
+        : 'You will be asked for your admin PIN on the next screen.',
+      signInLabel: st.busy ? 'Signing in…' : 'Sign in →',
+      codeLabel: st.busy ? 'Checking…' : 'Unlock the toolkit →',
+      signedIn: st.signedIn,
+      welcomeLine: g ? 'Welcome back' + (g.learner ? ', ' + g.learner : '') + '!' : 'You are signed in',
+      unlockedLine: g ? (g.planName || 'Your package') + ' · ' + subjectLine : ''
+    };
+  }
+
+  signIn(){
+    const email = this.state.email.trim();
+    if(!email || email.indexOf('@') < 0) return this.setState({error:'Please enter your email address.'});
+    if(!this.state.password) return this.setState({error:'Please enter your password.'});
+    this.setState({busy:true, error:''});
+    this.loginWithEmail(email, this.state.password);
+  }
+
+  useCode(){
+    const entered = this.state.codeInput.trim().toUpperCase().replace(/\s+/g,'');
+    if(!entered) return this.setState({error:'Please type the access code.'});
+    this.setState({busy:true, error:''});
+    this.redeem(entered);
+  }
+}
+
+</script>
+</body>
+</html>

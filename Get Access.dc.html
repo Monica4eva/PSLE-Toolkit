@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Plus Jakarta Sans',sans-serif;background:#0A1628;color:#fff;}
+*{box-sizing:border-box;}
+@keyframes pop{0%{transform:scale(.96);opacity:0}100%{transform:scale(1);opacity:1}}
+a{color:#00C6A7;text-decoration:none;}
+a:hover{color:#7BF3DE;}
+</style>
+</helmet>
+
+<div style="min-height:100vh;padding:48px 24px 80px;display:flex;flex-direction:column;align-items:center;background:radial-gradient(circle at 50% 0%,#16305A 0%,#0A1628 55%)">
+
+  <div style="width:100%;max-width:920px">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:34px">
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.16rem;color:#fff;line-height:1.2">PSLE Prep <span style="color:#00C6A7">Toolkit</span></div>
+        <div style="margin-top:6px;font-size:0.7rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4)">Secure your child's access</div>
+      </div>
+      <div style="display:flex;gap:16px;align-items:center">
+        <a href="Sign In.dc.html" style="font-size:0.84rem;font-weight:700;color:rgba(255,255,255,0.55)">Already have access? Sign in</a>
+        <a href="landing.html" style="font-size:0.84rem;font-weight:700;color:rgba(255,255,255,0.55)">← Website</a>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-bottom:32px;flex-wrap:wrap">
+      <sc-for list="{{ steps }}" as="s" hint-placeholder-count="4">
+        <div style="flex:1;min-width:130px;padding:12px 14px;border-radius:12px;border:{{ s.border }};background:{{ s.bg }}">
+          <div style="font-size:0.66rem;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:{{ s.numColor }}">Step {{ s.num }}</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.92rem;color:{{ s.color }};margin-top:3px">{{ s.label }}</div>
+        </div>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{ onPlan }}" hint-placeholder-val="{{ true }}">
+      <div>
+        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2.1rem;letter-spacing:-0.5px;margin:0 0 8px">Choose your package</h1>
+        <p style="font-weight:600;color:rgba(255,255,255,0.6);font-size:0.98rem;margin:0 0 26px;line-height:1.6;max-width:600px;text-wrap:pretty">Access runs from the day you join until the October 2026 PSLE exams. One payment, no subscription.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:16px">
+          <sc-for list="{{ plans }}" as="p" hint-placeholder-count="3">
+            <button onClick="{{ p.pick }}" style="text-align:left;cursor:pointer;padding:26px 24px 24px;border-radius:18px;font-family:'Plus Jakarta Sans',sans-serif;background:{{ p.bg }};border:{{ p.border }};position:relative;transition:transform .18s" style-hover="transform:translateY(-4px)">
+              <sc-if value="{{ p.badge }}">
+                <div style="position:absolute;top:-11px;left:24px;background:#00C6A7;color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.66rem;letter-spacing:1.2px;text-transform:uppercase;padding:5px 12px;border-radius:50px">{{ p.badge }}</div>
+              </sc-if>
+              <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.1rem;color:#fff">{{ p.name }}</div>
+              <div style="display:flex;align-items:baseline;gap:6px;margin:12px 0 4px">
+                <span style="font-family:'Syne',sans-serif;font-weight:900;font-size:2.5rem;color:#00C6A7;line-height:1">P{{ p.price }}</span>
+                <span style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.45)">once off</span>
+              </div>
+              <div style="font-size:0.84rem;font-weight:600;color:rgba(255,255,255,0.55);margin-bottom:16px">{{ p.tag }}</div>
+              <div style="display:flex;flex-direction:column;gap:7px">
+                <sc-for list="{{ p.features }}" as="f" hint-placeholder-count="4">
+                  <div style="display:flex;gap:9px;font-size:0.86rem;font-weight:600;color:rgba(255,255,255,0.78);line-height:1.5">
+                    <span style="color:#00C6A7;font-weight:900">✓</span><span>{{ f }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ onSubjects }}">
+      <div style="max-width:700px">
+        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2rem;letter-spacing:-0.5px;margin:0 0 8px">{{ subjectHeading }}</h1>
+        <p style="font-weight:600;color:rgba(255,255,255,0.6);font-size:0.95rem;margin:0 0 8px;line-height:1.6;text-wrap:pretty">{{ subjectSub }}</p>
+        <div style="font-size:0.78rem;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:#00C6A7;margin-bottom:20px">{{ subjectCount }}</div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:20px">
+          <sc-for list="{{ subjectPicks }}" as="s" hint-placeholder-count="6">
+            <button onClick="{{ s.pick }}" style="display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer;padding:18px 18px;border-radius:14px;font-family:'Plus Jakarta Sans',sans-serif;background:{{ s.bg }};border:{{ s.border }};opacity:{{ s.opacity }};transition:all .16s">
+              <span style="font-size:1.5rem">{{ s.emoji }}</span>
+              <span style="flex:1;font-family:'Syne',sans-serif;font-weight:800;font-size:0.98rem;color:#fff">{{ s.name }}</span>
+              <span style="width:24px;height:24px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:900;color:#0A1628;flex-shrink:0;background:{{ s.tagBg }}">{{ s.mark }}</span>
+            </button>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ subjectError }}">
+          <div style="background:rgba(230,57,70,0.14);border:1.5px solid rgba(230,57,70,0.4);color:#FFB3B8;border-radius:11px;padding:12px 15px;font-size:0.86rem;font-weight:700;margin-bottom:16px">{{ subjectError }}</div>
+        </sc-if>
+
+        <div style="display:flex;gap:11px;max-width:520px">
+          <button onClick="{{ backToPlan }}" style="padding:14px 22px;border-radius:50px;background:none;border:1.5px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.75);font-family:'Syne',sans-serif;font-weight:900;font-size:0.92rem;cursor:pointer" style-hover="border-color:#00C6A7;color:#fff">Back</button>
+          <button onClick="{{ toDetails }}" style="flex:1;padding:14px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.98rem;cursor:pointer;box-shadow:0 8px 26px rgba(0,198,167,0.3)">Continue →</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ onDetails }}">
+      <div style="max-width:560px">
+        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2rem;letter-spacing:-0.5px;margin:0 0 8px">Who is this for?</h1>
+        <p style="font-weight:600;color:rgba(255,255,255,0.6);font-size:0.95rem;margin:0 0 24px">We send the private access link to the parent, and the learner's name greets them inside the app.</p>
+        <div style="display:flex;flex-direction:column;gap:16px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.12);border-radius:18px;padding:26px">
+          <sc-for list="{{ fields }}" as="fd" hint-placeholder-count="4">
+            <div>
+              <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:7px">{{ fd.label }}</div>
+              <input onChange="{{ fd.onChange }}" value="{{ fd.value }}" placeholder="{{ fd.placeholder }}" style="width:100%;padding:14px 16px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.16);background:rgba(10,22,40,0.6);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.95rem" style-focus="outline:none;border-color:#00C6A7">
+            </div>
+          </sc-for>
+          <div>
+            <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:7px">Standard</div>
+            <div style="display:flex;gap:9px">
+              <sc-for list="{{ stdPicks }}" as="s" hint-placeholder-count="2">
+                <button onClick="{{ s.pick }}" style="flex:1;padding:12px;border-radius:11px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.88rem;background:{{ s.bg }};color:{{ s.color }};border:{{ s.border }}">{{ s.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <sc-if value="{{ detailsError }}">
+            <div style="background:rgba(230,57,70,0.14);border:1.5px solid rgba(230,57,70,0.4);color:#FFB3B8;border-radius:11px;padding:12px 15px;font-size:0.86rem;font-weight:700">{{ detailsError }}</div>
+          </sc-if>
+          <div style="display:flex;gap:11px;margin-top:4px">
+            <button onClick="{{ backFromDetails }}" style="padding:14px 22px;border-radius:50px;background:none;border:1.5px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.75);font-family:'Syne',sans-serif;font-weight:900;font-size:0.92rem;cursor:pointer" style-hover="border-color:#00C6A7;color:#fff">Back</button>
+            <button onClick="{{ toPayment }}" style="flex:1;padding:14px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.98rem;cursor:pointer;box-shadow:0 8px 26px rgba(0,198,167,0.3)">Continue to payment →</button>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ onPayment }}">
+      <div style="max-width:600px">
+        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2rem;letter-spacing:-0.5px;margin:0 0 8px">How would you like to pay?</h1>
+        <p style="font-weight:600;color:rgba(255,255,255,0.6);font-size:0.95rem;margin:0 0 22px">{{ orderLine }}</p>
+
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
+          <sc-for list="{{ methods }}" as="m" hint-placeholder-count="3">
+            <button onClick="{{ m.pick }}" style="display:flex;align-items:center;gap:15px;text-align:left;cursor:pointer;padding:18px 20px;border-radius:14px;font-family:'Plus Jakarta Sans',sans-serif;background:{{ m.bg }};border:{{ m.border }}">
+              <span style="font-size:1.5rem">{{ m.icon }}</span>
+              <span style="flex:1">
+                <span style="display:block;font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#fff">{{ m.name }}</span>
+                <span style="display:block;font-size:0.82rem;font-weight:600;color:rgba(255,255,255,0.55);margin-top:2px">{{ m.detail }}</span>
+              </span>
+              <span style="font-family:'Syne',sans-serif;font-weight:900;font-size:0.9rem;color:{{ m.tick }}">{{ m.mark }}</span>
+            </button>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ payInstruction }}">
+          <div style="background:rgba(0,198,167,0.09);border:1.5px solid rgba(0,198,167,0.3);border-radius:14px;padding:20px;margin-bottom:20px;animation:pop .2s ease-out">
+            <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:#00C6A7;margin-bottom:10px">How to pay</div>
+            <div style="font-size:0.92rem;font-weight:600;color:rgba(255,255,255,0.82);line-height:1.75;text-wrap:pretty">{{ payInstruction }}</div>
+            <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap">
+              <span style="font-size:0.84rem;font-weight:700;color:rgba(255,255,255,0.55)">Reference to use</span>
+              <span style="font-family:'Syne',sans-serif;font-weight:900;font-size:0.96rem;color:#fff;letter-spacing:1px">{{ reference }}</span>
+            </div>
+          </div>
+        </sc-if>
+
+        <div style="background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.12);border-radius:16px;padding:20px 22px;margin-bottom:18px">
+          <div style="display:flex;justify-content:space-between;font-size:0.9rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:9px">
+            <span>{{ planName }}</span><span>P{{ planPrice }}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;gap:16px;font-size:0.9rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:9px">
+            <span style="flex-shrink:0">Subjects</span><span style="text-align:right;color:#00C6A7">{{ subjectLine }}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:0.9rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:13px">
+            <span>Access until</span><span>October 2026</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding-top:13px;border-top:1px solid rgba(255,255,255,0.12);font-family:'Syne',sans-serif;font-weight:900;font-size:1.16rem;color:#fff">
+            <span>Total</span><span style="color:#00C6A7">P{{ planPrice }}</span>
+          </div>
+        </div>
+
+        <sc-if value="{{ payError }}">
+          <div style="background:rgba(230,57,70,0.14);border:1.5px solid rgba(230,57,70,0.4);color:#FFB3B8;border-radius:11px;padding:12px 15px;font-size:0.86rem;font-weight:700;margin-bottom:14px">{{ payError }}</div>
+        </sc-if>
+
+        <div style="display:flex;gap:11px">
+          <button onClick="{{ backToDetails }}" style="padding:15px 22px;border-radius:50px;background:none;border:1.5px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.75);font-family:'Syne',sans-serif;font-weight:900;font-size:0.92rem;cursor:pointer" style-hover="border-color:#00C6A7;color:#fff">Back</button>
+          <button onClick="{{ confirmPayment }}" style="flex:1;padding:15px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:1rem;cursor:pointer;box-shadow:0 8px 26px rgba(0,198,167,0.3)">{{ confirmLabel }}</button>
+        </div>
+        <div style="margin-top:14px;font-size:0.8rem;font-weight:600;color:rgba(255,255,255,0.42);line-height:1.6">Once we confirm your payment your access code is activated. Payments are verified by a person, usually within a few hours during the day.</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ onDone }}">
+      <div style="max-width:600px;text-align:center;background:rgba(255,255,255,0.05);border:1.5px solid rgba(0,198,167,0.32);border-radius:20px;padding:44px 32px;animation:pop .25s ease-out">
+        <div style="font-size:3rem;margin-bottom:12px">{{ doneEmoji }}</div>
+        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.9rem;margin:0 0 10px">{{ doneTitle }}</h1>
+        <p style="font-weight:600;color:rgba(255,255,255,0.65);font-size:0.96rem;margin:0 0 22px;line-height:1.65;text-wrap:pretty">{{ doneLine }}</p>
+
+        <sc-if value="{{ awaitingPayment }}">
+          <div style="background:rgba(255,180,60,0.1);border:1.5px solid rgba(255,180,60,0.4);border-radius:14px;padding:18px 20px;margin-bottom:22px;text-align:left">
+            <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:0.94rem;color:#FFC463;margin-bottom:7px">⏳ Not active yet</div>
+            <div style="font-size:0.88rem;font-weight:600;color:rgba(255,255,255,0.72);line-height:1.65;text-wrap:pretty">This code stays locked until we confirm your payment. Send your proof of payment to WhatsApp <strong style="color:#fff">75562568</strong> and we will switch it on — usually within a few hours.</div>
+          </div>
+        </sc-if>
+
+        <div style="background:#0A1628;border:1.5px dashed rgba(0,198,167,0.5);border-radius:16px;padding:26px 22px;margin-bottom:22px">
+          <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:rgba(255,255,255,0.45)">{{ learnerName }}'s access code</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.9rem;color:#00C6A7;letter-spacing:3px;margin:12px 0 4px;word-break:break-all">{{ accessCode }}</div>
+          <div style="font-size:0.8rem;font-weight:600;color:rgba(255,255,255,0.45)">{{ codeNote }}</div>
+          <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.1);font-size:0.82rem;font-weight:700;color:rgba(255,255,255,0.6)">Unlocks: <span style="color:#00C6A7">{{ subjectLine }}</span></div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px;text-align:left;margin-bottom:26px">
+          <sc-for list="{{ nextSteps }}" as="n" hint-placeholder-count="3">
+            <div style="display:flex;gap:12px;padding:14px 16px;border-radius:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1)">
+              <span style="font-family:'Syne',sans-serif;font-weight:900;color:#00C6A7">{{ n.num }}</span>
+              <span style="font-size:0.9rem;font-weight:600;color:rgba(255,255,255,0.78);line-height:1.6">{{ n.text }}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display:flex;gap:11px;justify-content:center;flex-wrap:wrap">
+          <a href="Sign In.dc.html" style="padding:15px 32px;border-radius:50px;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.98rem;box-shadow:0 8px 26px rgba(0,198,167,0.3)">Sign in and start →</a>
+          <button onClick="{{ startOver }}" style="padding:15px 26px;border-radius:50px;background:none;border:1.5px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.75);font-family:'Syne',sans-serif;font-weight:900;font-size:0.98rem;cursor:pointer" style-hover="border-color:#00C6A7;color:#fff">Add another child</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ onPlan }}">
+      <div style="margin-top:38px;padding-top:26px;border-top:1px solid rgba(255,255,255,0.1);display:flex;gap:26px;flex-wrap:wrap">
+        <sc-for list="{{ assurances }}" as="a" hint-placeholder-count="3">
+          <div style="flex:1;min-width:200px">
+            <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.92rem;color:#00C6A7;margin-bottom:5px">{{ a.title }}</div>
+            <div style="font-size:0.85rem;font-weight:600;color:rgba(255,255,255,0.55);line-height:1.6">{{ a.text }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1000,&quot;height&quot;:760}}">
+const GRANTS_KEY = 'psle-access-grants';
+const ACCOUNTS_KEY = 'psle-accounts';
+
+const PLANS = [
+  {id:'single', name:'Single Subject', price:75, tag:'One subject, until October.', features:['Full MCQ bank for 1 subject','Study tips & strategies','Progress tracking','Study timer']},
+  {id:'full', name:'Full Toolkit Access', price:300, tag:'All 6 subjects, until October.', badge:'Best value', features:['All 6 subject question banks','2 000+ MCQ questions','Writing & spelling tools','Timer, checklists & planner','Affirmations & calm tools','Study guide posters','Works on any device']},
+  {id:'bundle', name:'3-Subject Bundle', price:160, tag:'Choose any three subjects.', features:['MCQ banks for 3 subjects','Study tips for chosen subjects','Progress tracking','Study timer & checklists','Affirmations & calm tools']}
+];
+
+const SUBJECTS = [
+  {id:'maths', name:'Maths', emoji:'🔢'},
+  {id:'english', name:'English', emoji:'📖'},
+  {id:'setswana', name:'Setswana', emoji:'🌍'},
+  {id:'social', name:'Social Studies', emoji:'🏛️'},
+  {id:'science', name:'Science', emoji:'🔬'},
+  {id:'agric', name:'Agriculture', emoji:'🌱'}
+];
+
+const ALL_SUBJECTS = SUBJECTS.map(s => s.id);
+
+const METHODS = [
+  {id:'orange', name:'Orange Money', icon:'📱', detail:'Pay from your Orange Money wallet',
+   how:'Dial *145# on your Orange line, choose "Send Money", enter merchant number 75562568, enter the amount, and use the reference below so we can match your payment.'},
+  {id:'myzaka', name:'MyZaka (Mascom)', icon:'💳', detail:'Pay from your Mascom MyZaka wallet',
+   how:'Dial *167# on your Mascom line, choose "Pay Bill", enter 75562568 as the recipient, enter the amount, then confirm with your PIN. Add the reference below.'},
+  {id:'bank', name:'Bank transfer / EFT', icon:'🏦', detail:'FNB Botswana · Acc 62812345678',
+   how:'Transfer the total to FNB Botswana, account 62812345678, branch code 281267, name "PSLE Prep Toolkit". Use the reference below as the payment description and WhatsApp us the proof.'}
+];
+
+function makeCode(){
+  const set = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let a = '', b = '';
+  for(let i=0;i<4;i++) a += set[Math.floor(Math.random()*set.length)];
+  for(let i=0;i<4;i++) b += set[Math.floor(Math.random()*set.length)];
+  return 'PSLE-' + a + '-' + b;
+}
+
+class Component extends DCLogic {
+  state = {
+    step:'plan', plan:'full', method:null, subjects:[], subjectError:'',
+    parent:'', phone:'', email:'', password:'', learner:'', std:'Standard 7',
+    detailsError:'', payError:'', code:'', submitting:false
+  };
+
+  planObj(){ return PLANS.find(p => p.id === this.state.plan) || PLANS[0]; }
+
+  quota(){ return this.state.plan === 'single' ? 1 : this.state.plan === 'bundle' ? 3 : 6; }
+
+  needsSubjectChoice(){ return this.state.plan !== 'full'; }
+
+  chosenSubjects(){ return this.state.plan === 'full' ? ALL_SUBJECTS : this.state.subjects; }
+
+  reference(){
+    const n = (this.state.learner || this.state.parent || 'PSLE').replace(/[^A-Za-z]/g,'').toUpperCase().slice(0,6);
+    return (n || 'PSLE') + '-' + this.planObj().price;
+  }
+
+  async grant(){
+    const st = this.state;
+    const plan = this.planObj();
+    let db = null;
+    try{ db = await import('./db.js'); }catch(e){}
+
+    if(db){
+      try{
+        // Create the sign-in account first, so the parent can log in later.
+        if(st.email.trim() && st.password){
+          try{
+            await db.signUp(st.email.trim(), st.password, {parent_name:st.parent.trim(), phone:st.phone.trim()});
+          }catch(e){
+            // Existing email is fine — they already have an account.
+            if(!/already|registered|exists/i.test(e.message || '')) throw e;
+          }
+        }
+        const res = await db.createOrder({
+          plan:st.plan, planName:plan.name, price:plan.price,
+          parent:st.parent.trim(), phone:st.phone.trim(), email:st.email.trim(),
+          learner:st.learner.trim(), std:st.std, subjects:this.chosenSubjects(),
+          method:st.method, reference:this.reference()
+        });
+        return this.setState({code:res.code, step:'done', submitting:false, payError:''});
+      }catch(e){
+        return this.setState({submitting:false, payError:'We could not save your order: ' + (e.message || 'unknown error') + '. Please try again, or WhatsApp 75562568.'});
+      }
+    }
+
+    this.setState({submitting:false, payError:'The ordering system is not available right now. Please WhatsApp 75562568 and we will set you up by hand.'});
+  }
+
+  renderVals(){
+    const st = this.state;
+    const teal = '#00C6A7';
+    const order = this.needsSubjectChoice() ? ['plan','subjects','details','payment','done'] : ['plan','details','payment','done'];
+    const at = order.indexOf(st.step);
+    const chosen = this.chosenSubjects();
+    const subjectNames = chosen.map(id => (SUBJECTS.find(s => s.id === id) || {}).name).filter(Boolean);
+
+    const stepCard = (i, label) => {
+      const done = i < at, now = i === at;
+      return {
+        num: i + 1, label,
+        bg: now ? 'rgba(0,198,167,0.12)' : 'rgba(255,255,255,0.04)',
+        border: now ? '1.5px solid rgba(0,198,167,0.45)' : '1.5px solid rgba(255,255,255,0.1)',
+        color: now || done ? '#fff' : 'rgba(255,255,255,0.45)',
+        numColor: now ? teal : 'rgba(255,255,255,0.35)'
+      };
+    };
+
+    const field = (key, label, placeholder) => ({
+      label, placeholder, value: st[key],
+      onChange: (e) => { const p = {}; p[key] = e.target.value; p.detailsError = ''; this.setState(p); }
+    });
+
+    const pill = (on) => ({
+      bg: on ? teal : 'rgba(255,255,255,0.05)',
+      color: on ? '#0A1628' : 'rgba(255,255,255,0.7)',
+      border: on ? '1.5px solid ' + teal : '1.5px solid rgba(255,255,255,0.16)'
+    });
+
+    const method = METHODS.find(m => m.id === st.method);
+    const plan = this.planObj();
+    const parentFirst = (st.parent.trim().split(/\s+/)[0]) || 'there';
+
+    return {
+      steps: this.needsSubjectChoice()
+        ? [stepCard(0,'Package'), stepCard(1,'Subjects'), stepCard(2,'Details'), stepCard(3,'Payment'), stepCard(4,'Access code')]
+        : [stepCard(0,'Package'), stepCard(1,'Details'), stepCard(2,'Payment'), stepCard(3,'Access code')],
+      onPlan: st.step === 'plan', onDetails: st.step === 'details',
+      onPayment: st.step === 'payment', onDone: st.step === 'done',
+      onSubjects: st.step === 'subjects',
+
+      subjectHeading: st.plan === 'single' ? 'Which subject?' : 'Choose any three subjects',
+      subjectSub: st.plan === 'single'
+        ? 'Your child gets the full question bank and study tips for the one subject you choose. You can add more later.'
+        : 'Pick the three subjects your child most needs. The other three stay locked until you upgrade.',
+      subjectCount: st.subjects.length + ' of ' + this.quota() + ' chosen',
+      subjectError: st.subjectError,
+      subjectPicks: SUBJECTS.map(s => {
+        const on = st.subjects.indexOf(s.id) >= 0;
+        const full = st.subjects.length >= this.quota();
+        return {
+          name:s.name, emoji:s.emoji,
+          mark: on ? '✓' : '',
+          bg: on ? 'rgba(0,198,167,0.12)' : 'rgba(255,255,255,0.05)',
+          border: on ? '2px solid ' + teal : '1.5px solid rgba(255,255,255,0.12)',
+          tagBg: on ? teal : 'rgba(255,255,255,0.18)',
+          opacity: !on && full ? '0.45' : '1',
+          pick: () => {
+            const list = st.subjects.slice();
+            const i = list.indexOf(s.id);
+            if(i >= 0) list.splice(i, 1);
+            else if(list.length < this.quota()) list.push(s.id);
+            else return;
+            this.setState({subjects:list, subjectError:''});
+          }
+        };
+      }),
+      toDetails: () => {
+        if(st.subjects.length !== this.quota()){
+          return this.setState({subjectError: st.plan === 'single' ? 'Please choose one subject.' : 'Please choose exactly three subjects.'});
+        }
+        this.setState({step:'details', subjectError:''});
+      },
+
+      plans: PLANS.map(p => ({
+        name:p.name, price:p.price, tag:p.tag, features:p.features, badge:p.badge || '',
+        bg: st.plan === p.id ? 'rgba(0,198,167,0.10)' : 'rgba(255,255,255,0.05)',
+        border: st.plan === p.id ? '2px solid ' + teal : '1.5px solid rgba(255,255,255,0.12)',
+        pick: () => this.setState({
+          plan:p.id,
+          step: p.id === 'full' ? 'details' : 'subjects',
+          subjects: p.id === 'full' ? [] : st.subjects.slice(0, p.id === 'single' ? 1 : 3),
+          subjectError:''
+        })
+      })),
+
+      assurances: [
+        {title:'No subscription', text:'One payment covers you until the October 2026 exams. Nothing renews automatically.'},
+        {title:'Works on any device', text:'Your access code opens the toolkit on a phone, tablet or school computer.'},
+        {title:'We are here to help', text:'WhatsApp 75562568 if a payment or code does not go through.'}
+      ],
+
+      fields: [
+        field('parent','Parent or guardian name','e.g. Kelebogile Moloi'),
+        field('phone','WhatsApp number','e.g. 71234567'),
+        field('email','Email (for signing in)','e.g. kelebogile@gmail.com'),
+        field('password','Create a password','At least 6 characters'),
+        field('learner','Learner\'s first name','e.g. Neo')
+      ],
+      stdPicks: ['Standard 6','Standard 7'].map(s => Object.assign({
+        label:s, pick: () => this.setState({std:s})
+      }, pill(st.std === s))),
+      detailsError: st.detailsError,
+      backToPlan: () => this.setState({step:'plan'}),
+      backFromDetails: () => this.setState({step: this.needsSubjectChoice() ? 'subjects' : 'plan'}),
+      subjectLine: subjectNames.length === 6 ? 'All six subjects' : subjectNames.join(' · '),
+      toPayment: () => {
+        if(!st.parent.trim()) return this.setState({detailsError:'Please enter the parent or guardian name.'});
+        if(!st.phone.trim()) return this.setState({detailsError:'We need a WhatsApp number to send the access link.'});
+        if(!st.email.trim() || st.email.indexOf('@') < 0) return this.setState({detailsError:'Please enter a valid email so you can sign in later.'});
+        if(st.password.length < 6) return this.setState({detailsError:'Please create a password of at least 6 characters.'});
+        if(!st.learner.trim()) return this.setState({detailsError:'Please enter the learner\'s first name.'});
+        this.setState({step:'payment', detailsError:''});
+      },
+
+      methods: METHODS.map(m => ({
+        name:m.name, icon:m.icon, detail:m.detail,
+        bg: st.method === m.id ? 'rgba(0,198,167,0.10)' : 'rgba(255,255,255,0.05)',
+        border: st.method === m.id ? '2px solid ' + teal : '1.5px solid rgba(255,255,255,0.12)',
+        mark: st.method === m.id ? '✓' : '',
+        tick: teal,
+        pick: () => this.setState({method:m.id, payError:''})
+      })),
+      payInstruction: method ? method.how : '',
+      reference: this.reference(),
+      orderLine: plan.name + ' for ' + (st.learner.trim() || 'your learner') + ' · ' + st.std,
+      planName: plan.name, planPrice: plan.price,
+      payError: st.payError,
+      confirmLabel: st.submitting ? 'Placing your order…' : 'Place my order →',
+      backToDetails: () => this.setState({step:'details'}),
+      confirmPayment: () => {
+        if(!st.method) return this.setState({payError:'Please choose how you paid.'});
+        if(st.submitting) return;
+        this.setState({submitting:true, payError:''});
+        setTimeout(() => this.grant(), 700);
+      },
+
+      accessCode: st.code,
+      learnerName: st.learner.trim() || 'Your learner',
+      parentFirst,
+      doneEmoji: '📝',
+      doneTitle: 'Order received, ' + parentFirst + '!',
+      awaitingPayment: true,
+      codeNote: 'Keep this safe. It unlocks the toolkit on any device once your payment is confirmed.',
+      doneLine: 'We have your ' + plan.name.toLowerCase() + ' order for ' + (st.learner.trim() || 'your learner') + ', reference ' + this.reference() + '.',
+      nextSteps: [
+        {num:'1', text:'Pay P' + plan.price + ' using the details on the previous screen, quoting reference ' + this.reference() + '.'},
+        {num:'2', text:'WhatsApp your proof of payment to 75562568 with that reference. We activate the code as soon as we see it — usually within a few hours.'},
+        {num:'3', text:'Once we confirm, sign in with the access code above and your child can start straight away.'}
+      ],
+      startOver: () => this.setState({step:'plan', method:null, subjects:[], subjectError:'', parent:'', phone:'', email:'', learner:'', code:'', detailsError:'', payError:''})
+    };
+  }
+}
+
+</script>
+</body>
+</html>

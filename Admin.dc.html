@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Plus Jakarta Sans',sans-serif;background:#F5F7FA;color:#111827;}
+*{box-sizing:border-box;}
+@keyframes pop{0%{transform:scale(.97);opacity:0}100%{transform:scale(1);opacity:1}}
+a{color:#00A88E;text-decoration:none;}
+a:hover{color:#00C6A7;}
+</style>
+</helmet>
+
+<sc-if value="{{ locked }}" hint-placeholder-val="{{ true }}">
+  <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px;background:radial-gradient(circle at 50% 0%,#16305A 0%,#0A1628 60%)">
+    <div style="width:100%;max-width:380px">
+      <div style="text-align:center;margin-bottom:26px">
+        <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.4rem;color:#fff">Toolkit <span style="color:#00C6A7">Admin</span></div>
+        <div style="margin-top:7px;font-size:0.7rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4)">Orders &amp; access codes</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.14);border-radius:18px;padding:26px">
+        <sc-if value="{{ live }}">
+          <div>
+            <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:9px">Admin email</div>
+            <input onChange="{{ onEmail }}" value="{{ email }}" placeholder="you@example.com" style="width:100%;padding:14px 16px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.18);background:rgba(10,22,40,0.7);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.94rem;margin-bottom:14px" style-focus="outline:none;border-color:#00C6A7">
+          </div>
+        </sc-if>
+        <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:9px">{{ passwordLabel }}</div>
+        <input onChange="{{ onPin }}" onKeyDown="{{ onPinKey }}" value="{{ pinInput }}" type="password" placeholder="••••••" style="width:100%;padding:14px 16px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.18);background:rgba(10,22,40,0.7);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.94rem" style-focus="outline:none;border-color:#00C6A7">
+        <sc-if value="{{ pinError }}">
+          <div style="margin-top:13px;background:rgba(230,57,70,0.14);border:1.5px solid rgba(230,57,70,0.4);color:#FFB3B8;border-radius:10px;padding:11px 14px;font-size:0.85rem;font-weight:700">{{ pinError }}</div>
+        </sc-if>
+        <button onClick="{{ submitPin }}" style="width:100%;margin-top:15px;padding:14px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.98rem;cursor:pointer">{{ signInLabel }}</button>
+        <sc-if value="{{ offline }}">
+          <div style="margin-top:13px;font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.4);line-height:1.6">{{ offlineNote }}</div>
+        </sc-if>
+      </div>
+      <div style="margin-top:18px;text-align:center;font-size:0.84rem;font-weight:600;color:rgba(255,255,255,0.42)">
+        <a href="landing.html" style="color:rgba(255,255,255,0.55)">← Back to the website</a>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ unlocked }}">
+<div style="min-height:100vh;padding:30px 34px 70px;max-width:1240px">
+
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:26px">
+    <div>
+      <div style="display:inline-block;background:#E0FAF5;color:#00A88E;font-weight:800;font-size:0.68rem;letter-spacing:1.8px;text-transform:uppercase;padding:5px 13px;border-radius:50px;margin-bottom:11px">Admin</div>
+      <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2rem;color:#0A1628;letter-spacing:-0.5px;margin:0">Orders &amp; access</h1>
+      <p style="font-weight:600;color:#5A6A7A;font-size:0.93rem;margin:7px 0 0">Verify payments, issue codes and manage who can open the toolkit.</p>
+    </div>
+    <div style="display:flex;gap:9px">
+      <sc-if value="{{ showNotifyBtn }}">
+        <button onClick="{{ enableNotify }}" style="padding:11px 20px;border-radius:50px;background:#fff;border:1.5px solid #E5EAF0;color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.84rem;cursor:pointer" style-hover="border-color:#00C6A7">🔔 Turn on alerts</button>
+      </sc-if>
+      <button onClick="{{ refreshNow }}" style="padding:11px 20px;border-radius:50px;background:#fff;border:1.5px solid #E5EAF0;color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.84rem;cursor:pointer" style-hover="border-color:#00C6A7">↻ Refresh</button>
+      <button onClick="{{ openToolkit }}" style="padding:11px 20px;border-radius:50px;background:linear-gradient(135deg,#00C6A7,#00A88E);border:none;color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.84rem;cursor:pointer;box-shadow:0 6px 20px rgba(0,198,167,0.28)">📚 Open the toolkit</button>
+      <button onClick="{{ exportCsv }}" style="padding:11px 20px;border-radius:50px;background:#fff;border:1.5px solid #E5EAF0;color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.84rem;cursor:pointer" style-hover="border-color:#00C6A7">⬇ Export CSV</button>
+      <button onClick="{{ lockAdmin }}" style="padding:11px 20px;border-radius:50px;background:#0A1628;border:none;color:#00C6A7;font-family:'Syne',sans-serif;font-weight:900;font-size:0.84rem;cursor:pointer" style-hover="background:#162C52">🔒 Lock</button>
+    </div>
+  </div>
+
+  <sc-if value="{{ fresh }}">
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:#E0FAF5;border:1.5px solid rgba(0,198,167,0.5);border-radius:14px;padding:14px 18px;margin-bottom:18px;animation:pop .2s ease-out">
+      <span style="font-size:1.1rem">🔔</span>
+      <span style="flex:1;min-width:200px;font-family:'Syne',sans-serif;font-weight:900;font-size:0.98rem;color:#00806B">{{ freshLine }}</span>
+      <button onClick="{{ dismissFresh }}" style="padding:8px 16px;border-radius:50px;background:#fff;border:1.5px solid rgba(0,198,167,0.4);color:#00806B;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.8rem;cursor:pointer">Dismiss</button>
+    </div>
+  </sc-if>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));gap:14px;margin-bottom:24px">
+    <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+      <div style="background:{{ s.bg }};border:1.5px solid {{ s.border }};border-radius:16px;padding:18px 20px">
+        <div style="font-size:0.66rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:{{ s.labelColor }}">{{ s.label }}</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.8rem;color:{{ s.color }};line-height:1.1;margin-top:5px">{{ s.value }}</div>
+        <div style="font-size:0.78rem;font-weight:700;color:{{ s.labelColor }};margin-top:2px">{{ s.note }}</div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:18px 20px;margin-bottom:18px;box-shadow:0 6px 28px rgba(10,22,40,0.06);display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <sc-for list="{{ filters }}" as="f" hint-placeholder-count="4">
+        <button onClick="{{ f.pick }}" style="padding:9px 17px;border-radius:50px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.83rem;background:{{ f.bg }};color:{{ f.color }};border:{{ f.border }}">{{ f.label }}</button>
+      </sc-for>
+    </div>
+    <input onChange="{{ onSearch }}" value="{{ search }}" placeholder="Search name, code, phone…" style="flex:1;min-width:210px;padding:11px 15px;border-radius:11px;border:1.5px solid #E5EAF0;background:#FAFBFD;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:0.9rem;color:#111827" style-focus="outline:none;border-color:#00C6A7;background:#fff">
+  </div>
+
+  <sc-if value="{{ showIssue }}">
+    <div style="background:#0A1628;border-radius:16px;padding:22px 24px;margin-bottom:18px;animation:pop .2s ease-out">
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.02rem;color:#00C6A7;margin-bottom:14px">Issue a code manually (cash or bank deposit)</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:11px;margin-bottom:14px">
+        <sc-for list="{{ issueFields }}" as="f" hint-placeholder-count="3">
+          <div>
+            <div style="font-size:0.64rem;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px">{{ f.label }}</div>
+            <input onChange="{{ f.onChange }}" value="{{ f.value }}" placeholder="{{ f.placeholder }}" style="width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid rgba(255,255,255,0.16);background:rgba(255,255,255,0.06);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.9rem" style-focus="outline:none;border-color:#00C6A7">
+          </div>
+        </sc-for>
+      </div>
+      <div style="font-size:0.64rem;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:8px">Package</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+        <sc-for list="{{ issuePlans }}" as="p" hint-placeholder-count="3">
+          <button onClick="{{ p.pick }}" style="padding:10px 18px;border-radius:50px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.84rem;background:{{ p.bg }};color:{{ p.color }};border:{{ p.border }}">{{ p.label }}</button>
+        </sc-for>
+      </div>
+      <sc-if value="{{ issueNeedsSubjects }}">
+        <div>
+          <div style="font-size:0.64rem;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:8px">{{ issueSlots }}</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+            <sc-for list="{{ issueSubjects }}" as="s" hint-placeholder-count="6">
+              <button onClick="{{ s.pick }}" style="padding:10px 16px;border-radius:50px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.84rem;background:{{ s.bg }};color:{{ s.color }};border:{{ s.border }}">{{ s.emoji }} {{ s.name }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ issueError }}">
+        <div style="background:rgba(230,57,70,0.14);border:1.5px solid rgba(230,57,70,0.4);color:#FFB3B8;border-radius:10px;padding:11px 14px;font-size:0.85rem;font-weight:700;margin-bottom:13px">{{ issueError }}</div>
+      </sc-if>
+      <div style="display:flex;gap:10px">
+        <button onClick="{{ cancelIssue }}" style="padding:12px 22px;border-radius:50px;background:none;border:1.5px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);font-family:'Syne',sans-serif;font-weight:900;font-size:0.88rem;cursor:pointer" style-hover="border-color:#00C6A7;color:#fff">Cancel</button>
+        <button onClick="{{ createCode }}" style="padding:12px 26px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.92rem;cursor:pointer">Create code</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ hideIssue }}">
+    <button onClick="{{ openIssue }}" style="width:100%;padding:15px;border-radius:14px;background:#fff;border:1.5px dashed #CBD5E1;color:#5A6A7A;font-family:'Syne',sans-serif;font-weight:900;font-size:0.92rem;cursor:pointer;margin-bottom:18px" style-hover="border-color:#00C6A7;color:#00A88E">+ Issue a code manually</button>
+  </sc-if>
+
+  <sc-if value="{{ hasOrders }}">
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <sc-for list="{{ orders }}" as="o" hint-placeholder-count="3">
+        <div style="background:#fff;border:1.5px solid {{ o.cardBorder }};border-radius:16px;padding:20px 22px;box-shadow:0 6px 28px rgba(10,22,40,0.06)">
+          <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-start">
+            <div style="flex:1;min-width:240px">
+              <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px">
+                <span style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.06rem;color:#0A1628;letter-spacing:1px">{{ o.code }}</span>
+                <span style="font-size:0.66rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;padding:4px 11px;border-radius:50px;background:{{ o.statusBg }};color:{{ o.statusColor }}">{{ o.statusLabel }}</span>
+              </div>
+              <div style="font-size:0.94rem;font-weight:700;color:#0A1628">{{ o.learner }} · {{ o.std }}</div>
+              <div style="font-size:0.86rem;font-weight:600;color:#5A6A7A;margin-top:3px">{{ o.parent }} · {{ o.phone }}</div>
+              <div style="font-size:0.84rem;font-weight:700;color:#00A88E;margin-top:7px">{{ o.subjectLine }}</div>
+              <sc-if value="{{ o.upgradeLine }}">
+                <div style="margin-top:8px;font-size:0.8rem;font-weight:700;color:#7C4A03;background:#FFF8F0;border:1px solid #FFE0B2;border-radius:9px;padding:8px 11px;display:inline-block">{{ o.upgradeLine }}</div>
+              </sc-if>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.5rem;color:#0A1628;line-height:1">P{{ o.price }}</div>
+              <div style="font-size:0.78rem;font-weight:700;color:#5A6A7A;margin-top:3px">{{ o.plan }}</div>
+              <div style="font-size:0.76rem;font-weight:600;color:#9AA5B1;margin-top:5px">{{ o.method }} · {{ o.reference }}</div>
+              <div style="font-size:0.76rem;font-weight:600;color:#9AA5B1;margin-top:2px">{{ o.date }}</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;padding-top:15px;border-top:1px solid #EEF2F8">
+            <sc-for list="{{ o.actions }}" as="a" hint-placeholder-count="3">
+              <button onClick="{{ a.run }}" style="padding:9px 17px;border-radius:50px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.82rem;background:{{ a.bg }};color:{{ a.color }};border:{{ a.border }}">{{ a.label }}</button>
+            </sc-for>
+            <a href="{{ o.whatsapp }}" target="_blank" style="padding:9px 17px;border-radius:50px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.82rem;background:#fff;color:#0A1628;border:1.5px solid #E5EAF0">💬 WhatsApp</a>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ noOrders }}">
+    <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:18px;padding:52px 30px;text-align:center;box-shadow:0 6px 28px rgba(10,22,40,0.06)">
+      <div style="font-size:2.4rem;margin-bottom:12px">📋</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.24rem;color:#0A1628;margin-bottom:8px">{{ emptyTitle }}</div>
+      <div style="font-weight:600;color:#5A6A7A;font-size:0.93rem;line-height:1.65;max-width:420px;margin:0 auto">{{ emptyLine }}</div>
+    </div>
+  </sc-if>
+
+  <div style="margin-top:26px;font-size:0.82rem;font-weight:600;color:#9AA5B1;line-height:1.7;max-width:640px">Orders are stored in this browser only. Verifying or revoking here affects codes on this device — once a shared backend exists, this same view will manage every parent's access.</div>
+
+</div>
+</sc-if>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1240,&quot;height&quot;:840},&quot;adminPin&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;2026&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Access&quot;}}">
+const GRANTS_KEY = 'psle-access-grants';
+const ADMIN_KEY = 'psle-admin-open';
+const UNLOCK_KEY = 'psle-unlocked';
+
+const SUBJECTS = [
+  {id:'maths', name:'Maths', emoji:'🔢'},
+  {id:'english', name:'English', emoji:'📖'},
+  {id:'setswana', name:'Setswana', emoji:'🌍'},
+  {id:'social', name:'Social Studies', emoji:'🏛️'},
+  {id:'science', name:'Science', emoji:'🔬'},
+  {id:'agric', name:'Agriculture', emoji:'🌱'}
+];
+
+const PLANS = [
+  {id:'single', name:'Single Subject', price:75, quota:1},
+  {id:'bundle', name:'3-Subject Bundle', price:160, quota:3},
+  {id:'full', name:'Full Toolkit Access', price:300, quota:6}
+];
+
+const METHOD_NAMES = {orange:'Orange Money', myzaka:'MyZaka', bank:'Bank transfer', cash:'Cash / manual'};
+
+function makeCode(){
+  const set = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let a = '', b = '';
+  for(let i=0;i<4;i++) a += set[Math.floor(Math.random()*set.length)];
+  for(let i=0;i<4;i++) b += set[Math.floor(Math.random()*set.length)];
+  return 'PSLE-' + a + '-' + b;
+}
+
+class Component extends DCLogic {
+  state = {
+    locked:true, pinInput:'', pinError:'', email:'', busy:false, live:null,
+    fresh:0, notifyOn:false,
+    grants:[], filter:'All', search:'', notice:'',
+    showIssue:false, iParent:'', iPhone:'', iLearner:'', iPlan:'full', iSubjects:[], issueError:''
+  };
+
+  async componentDidMount(){
+    // Check for new orders once a minute while this tab is open.
+    this._poll = setInterval(() => { if(!this.state.locked) this.load(); }, 60000);
+    try{
+      if(window.Notification && Notification.permission === 'granted') this.setState({notifyOn:true});
+    }catch(e){}
+    const db = await this.db();
+    const live = !!(db && db.isLive());
+    this.setState({live});
+
+    if(live){
+      try{
+        const admin = await db.isAdmin();
+        if(admin){ this.setState({locked:false}); this.load(); }
+      }catch(e){}
+      return;   // not signed in — show the login
+    }
+    // Offline: the PIN still guards this screen so local test orders stay reachable.
+    try{
+      if(sessionStorage.getItem(ADMIN_KEY) === '1'){ this.setState({locked:false}); this.load(); }
+    }catch(e){}
+  }
+
+  async db(){
+    if(!this._db){ try{ this._db = await import('./db.js'); }catch(e){ this._db = null; } }
+    return this._db;
+  }
+
+  async load(){
+    const db = await this.db();
+    if(!db) return this.setState({grants:[]});
+    try{
+      const rows = await db.listOrders();
+      const pending = rows.filter(r => (r.status || 'pending-verification') === 'pending-verification').length;
+      const prev = this._pending;
+      this._pending = pending;
+      try{ document.title = (pending ? '(' + pending + ') ' : '') + 'Orders — PSLE Admin'; }catch(e){}
+      if(prev !== undefined && pending > prev) this.alertNewOrders(pending - prev);
+      this.setState({grants:rows, notice:''});
+    }catch(e){
+      this.setState({grants:[], notice:'Could not load orders: ' + (e.message || 'unknown error')});
+    }
+  }
+
+  alertNewOrders(n){
+    this.setState({fresh:n});
+    try{
+      if(window.Notification && Notification.permission === 'granted'){
+        new Notification(n + (n === 1 ? ' new order' : ' new orders'), {
+          body:'Someone has signed up and is waiting for you to confirm payment.'
+        });
+      }
+    }catch(e){}
+  }
+
+  componentWillUnmount(){ clearInterval(this._poll); }
+
+  async setStatus(code, status){
+    const db = await this.db();
+    if(!db) return;
+    try{
+      await db.setOrderStatus(code, status);
+      this.load();
+    }catch(e){
+      this.setState({notice:'Could not update ' + code + ': ' + (e.message || 'unknown error')});
+    }
+  }
+
+  planQuota(id){ const p = PLANS.find(x => x.id === id); return p ? p.quota : 6; }
+
+  async issue(){
+    const st = this.state;
+    if(!st.iLearner.trim()) return this.setState({issueError:'Enter the learner\'s name.'});
+    if(!st.iParent.trim()) return this.setState({issueError:'Enter the parent\'s name.'});
+    const quota = this.planQuota(st.iPlan);
+    const subjects = quota >= 6 ? SUBJECTS.map(s => s.id) : st.iSubjects;
+    if(subjects.length !== quota) return this.setState({issueError:'Choose exactly ' + quota + ' subject' + (quota === 1 ? '' : 's') + '.'});
+    const plan = PLANS.find(p => p.id === st.iPlan);
+    const code = makeCode();
+    const record = {
+      code, plan:plan.id, planName:plan.name, price:plan.price,
+      parent:st.iParent.trim(), phone:st.iPhone.trim(), email:'',
+      learner:st.iLearner.trim(), std:'Standard 7', subjects,
+      method:'cash', reference:'MANUAL',
+      created:new Date().toISOString(), expires:'2026-10-31',
+      status:'verified', verifiedAt:new Date().toISOString()
+    };
+    const db = await this.db();
+    if(!db) return this.setState({issueError:'The admin system is unavailable.'});
+    try{
+      await db.createOrder({
+        code,
+        plan:plan.id, planName:plan.name + ' (manual)', price:plan.price,
+        parent:record.parent, phone:record.phone, email:'',
+        learner:record.learner, std:record.std, subjects,
+        method:'cash', reference:'MANUAL-' + code.slice(-4)
+      });
+      await db.setOrderStatus(code, 'verified');
+      this.setState({showIssue:false, iParent:'', iPhone:'', iLearner:'', iSubjects:[], issueError:'', notice:'Issued ' + code});
+      this.load();
+    }catch(e){
+      this.setState({issueError:'Could not issue the code: ' + (e.message || 'unknown error')});
+    }
+  }
+
+  openAs(grant){
+    try{
+      localStorage.setItem(UNLOCK_KEY, JSON.stringify(grant
+        ? {code:grant.code, learner:grant.learner || '', subjects:(Array.isArray(grant.subjects) && grant.subjects.length ? grant.subjects : null), planName:grant.planName || ' (admin)', price:grant.price || 0, admin:true}
+        : {code:'PSLE-2026-DEMO', learner:'Admin preview', subjects:null, planName:'Full Toolkit Access (admin)', price:0, admin:true}
+      ));
+    }catch(e){}
+    window.location.href = 'PSLE Toolkit App.dc.html';
+  }
+
+  waLink(phone){
+    const digits = (phone || '').replace(/[^0-9]/g,'');
+    if(!digits) return 'https://wa.me/26775562568';
+    return 'https://wa.me/' + (digits.length <= 8 ? '267' + digits : digits);
+  }
+
+  fmtDate(iso){
+    try{
+      const d = new Date(iso);
+      return d.toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'numeric'});
+    }catch(e){ return ''; }
+  }
+
+  subjectNames(ids){
+    if(!Array.isArray(ids) || !ids.length) return 'All six subjects';
+    if(ids.length >= 6) return 'All six subjects';
+    return ids.map(id => (SUBJECTS.find(s => s.id === id) || {}).name).filter(Boolean).join(' · ');
+  }
+
+  renderVals(){
+    const st = this.state;
+    const teal = '#00C6A7';
+    const pin = String(this.props.adminPin ?? '2026');
+
+    const pill = (on) => ({
+      bg: on ? teal : '#fff',
+      color: on ? '#0A1628' : '#5A6A7A',
+      border: on ? '1.5px solid ' + teal : '1.5px solid #E5EAF0'
+    });
+    const darkPill = (on) => ({
+      bg: on ? teal : 'rgba(255,255,255,0.07)',
+      color: on ? '#0A1628' : 'rgba(255,255,255,0.72)',
+      border: on ? '1.5px solid ' + teal : '1.5px solid rgba(255,255,255,0.16)'
+    });
+
+    const all = st.grants.slice().reverse();
+    const statusOf = (g) => g.status || 'pending-verification';
+    const pending = all.filter(g => statusOf(g) === 'pending-verification');
+    const verified = all.filter(g => statusOf(g) === 'verified');
+    const revoked = all.filter(g => statusOf(g) === 'revoked');
+    const sum = (list) => list.reduce((t, g) => t + (g.price || 0), 0);
+
+    const q = st.search.trim().toLowerCase();
+    let shown = st.filter === 'Pending' ? pending
+      : st.filter === 'Verified' ? verified
+      : st.filter === 'Revoked' ? revoked
+      : all;
+    if(q){
+      shown = shown.filter(g => [g.code, g.learner, g.parent, g.phone, g.reference]
+        .some(v => (v || '').toLowerCase().indexOf(q) >= 0));
+    }
+
+    const statusStyle = (s) => s === 'verified'
+      ? {statusBg:'#E0FAF5', statusColor:'#00806B', statusLabel:'Verified', cardBorder:'rgba(0,198,167,0.4)'}
+      : s === 'revoked'
+      ? {statusBg:'#FEF2F2', statusColor:'#B91C1C', statusLabel:'Revoked', cardBorder:'rgba(230,57,70,0.3)'}
+      : {statusBg:'#FFF8F0', statusColor:'#B45309', statusLabel:'Awaiting payment', cardBorder:'#FFE0B2'};
+
+    const issueField = (key, label, placeholder) => ({
+      label, placeholder, value: st[key],
+      onChange: (e) => { const p = {}; p[key] = e.target.value; p.issueError = ''; this.setState(p); }
+    });
+
+    const iQuota = this.planQuota(st.iPlan);
+
+    return {
+      locked: st.locked, unlocked: !st.locked,
+      pinInput: st.pinInput, pinError: st.pinError,
+      email: st.email,
+      live: st.live === true,
+      offline: st.live === false,          // never true while still unknown
+      passwordLabel: st.live === false ? 'Admin PIN' : 'Password',
+      offlineNote: 'Not connected to the database yet — this is the temporary PIN. Paste your Supabase keys into supabase-config.js to switch to a real admin login.',
+      onEmail: (e) => this.setState({email:e.target.value, pinError:''}),
+      onPin: (e) => this.setState({pinInput:e.target.value, pinError:''}),
+      onPinKey: (e) => { if(e.key === 'Enter') this.signIn(); },
+      submitPin: () => this.signIn(),
+      signInLabel: st.busy ? 'Signing in…' : 'Open admin →',
+      lockAdmin: async () => {
+        try{ sessionStorage.removeItem(ADMIN_KEY); }catch(e){}
+        const db = await this.db();
+        if(db) { try{ await db.signOut(); }catch(e){} }
+        this.setState({locked:true, pinInput:'', email:'', grants:[]});
+      },
+
+      stats: [
+        {label:'Total orders', value:all.length, note: st.notice || 'All time', bg:'#fff', border:'#E5EAF0', color:'#0A1628', labelColor:'#5A6A7A'},
+        {label:'Awaiting payment', value:pending.length, note:'P' + sum(pending) + ' unconfirmed', bg:'#FFF8F0', border:'#FFE0B2', color:'#B45309', labelColor:'#9A6B24'},
+        {label:'Verified', value:verified.length, note:'P' + sum(verified) + ' confirmed', bg:'#E0FAF5', border:'rgba(0,198,167,0.4)', color:'#00806B', labelColor:'#3E8478'},
+        {label:'Active codes', value:all.length - revoked.length, note:revoked.length + ' revoked', bg:'#0A1628', border:'rgba(0,198,167,0.3)', color:'#00C6A7', labelColor:'rgba(255,255,255,0.5)'}
+      ],
+
+      filters: ['All','Pending','Verified','Revoked'].map(f => Object.assign({
+        label: f + ' (' + (f === 'All' ? all.length : f === 'Pending' ? pending.length : f === 'Verified' ? verified.length : revoked.length) + ')',
+        pick: () => this.setState({filter:f})
+      }, pill(st.filter === f))),
+      search: st.search,
+      onSearch: (e) => this.setState({search:e.target.value}),
+
+      showIssue: st.showIssue, hideIssue: !st.showIssue,
+      openIssue: () => this.setState({showIssue:true, issueError:''}),
+      cancelIssue: () => this.setState({showIssue:false, issueError:''}),
+      issueFields: [
+        issueField('iLearner','Learner name','e.g. Neo'),
+        issueField('iParent','Parent name','e.g. K. Moloi'),
+        issueField('iPhone','WhatsApp number','e.g. 71234567')
+      ],
+      issuePlans: PLANS.map(p => Object.assign({
+        label: p.name + ' · P' + p.price,
+        pick: () => this.setState({iPlan:p.id, iSubjects:[], issueError:''})
+      }, darkPill(st.iPlan === p.id))),
+      issueNeedsSubjects: iQuota < 6,
+      issueSlots: 'Choose ' + iQuota + ' subject' + (iQuota === 1 ? '' : 's') + ' · ' + st.iSubjects.length + ' of ' + iQuota + ' chosen',
+      issueSubjects: SUBJECTS.map(s => {
+        const on = st.iSubjects.indexOf(s.id) >= 0;
+        return Object.assign({
+          name:s.name, emoji:s.emoji,
+          pick: () => {
+            const list = st.iSubjects.slice();
+            const i = list.indexOf(s.id);
+            if(i >= 0) list.splice(i, 1);
+            else if(list.length < iQuota) list.push(s.id);
+            else return;
+            this.setState({iSubjects:list, issueError:''});
+          }
+        }, darkPill(on));
+      }),
+      issueError: st.issueError,
+      createCode: () => this.issue(),
+
+      hasOrders: shown.length > 0,
+      noOrders: shown.length === 0,
+      emptyTitle: all.length === 0 ? 'No orders yet' : 'Nothing matches that',
+      emptyLine: all.length === 0
+        ? 'Orders appear here as soon as a parent completes the Get Access flow. You can also issue a code manually above for cash payments.'
+        : 'Try a different filter or clear the search box.',
+
+      orders: shown.map(g => {
+        const s = statusOf(g);
+        const style = statusStyle(s);
+        const ups = (g.upgrades || []);
+        const actions = [];
+        if(s !== 'verified'){
+          actions.push(Object.assign({label:'✓ Mark paid', run: () => this.setStatus(g.code, 'verified')},
+            {bg:'#00C6A7', color:'#0A1628', border:'1.5px solid #00C6A7'}));
+        }
+        if(s !== 'revoked'){
+          actions.push({label:'Revoke', run: () => this.setStatus(g.code, 'revoked'),
+            bg:'#fff', color:'#B91C1C', border:'1.5px solid rgba(230,57,70,0.35)'});
+        } else {
+          actions.push({label:'Restore', run: () => this.setStatus(g.code, 'verified'),
+            bg:'#fff', color:'#00806B', border:'1.5px solid rgba(0,198,167,0.4)'});
+        }
+        actions.push({label:'Copy code', run: () => {
+          try{ navigator.clipboard.writeText(g.code); this.setState({notice:'Copied ' + g.code}); }catch(e){}
+        }, bg:'#fff', color:'#0A1628', border:'1.5px solid #E5EAF0'});
+        actions.push({label:'👁 View as learner', run: () => this.openAs(g),
+          bg:'#fff', color:'#0A1628', border:'1.5px solid #E5EAF0'});
+
+        return Object.assign({
+          code:g.code || '—',
+          learner:g.learner || 'Unnamed learner',
+          std:g.std || 'Standard 7',
+          parent:g.parent || '—',
+          phone:g.phone || 'no number',
+          plan:g.planName || '—',
+          price:g.price || 0,
+          method:METHOD_NAMES[g.method] || 'Unknown',
+          reference:g.reference || '—',
+          date:this.fmtDate(g.created),
+          subjectLine:this.subjectNames(g.subjects),
+          upgradeLine: ups.length
+            ? 'Upgraded ' + ups.length + '× · last top-up P' + (ups[ups.length-1].paid || 0) + ' (' + (ups[ups.length-1].status || 'pending') + ')'
+            : '',
+          whatsapp:this.waLink(g.phone),
+          actions
+        }, style);
+      }),
+
+      openToolkit: () => this.openAs(null),
+
+      fresh: st.fresh > 0,
+      freshLine: st.fresh === 1 ? '1 new order just came in' : st.fresh + ' new orders just came in',
+      dismissFresh: () => this.setState({fresh:0}),
+      showNotifyBtn: !st.notifyOn,
+      enableNotify: async () => {
+        try{
+          const p = await Notification.requestPermission();
+          this.setState({notifyOn: p === 'granted', notice: p === 'granted' ? 'Desktop alerts on' : 'Alerts were blocked in your browser'});
+        }catch(e){ this.setState({notice:'This browser cannot show desktop alerts'}); }
+      },
+      refreshNow: () => this.load(),
+
+      exportCsv: () => {
+        const head = ['Code','Status','Learner','Standard','Parent','Phone','Package','Price','Subjects','Method','Reference','Created'];
+        const rows = all.map(g => [
+          g.code, statusOf(g), g.learner, g.std, g.parent, g.phone, g.planName, g.price,
+          (g.subjects || []).join('|'), g.method, g.reference, g.created
+        ].map(v => '"' + String(v == null ? '' : v).replace(/"/g,'""') + '"').join(','));
+        const csv = [head.join(',')].concat(rows).join('\n');
+        try{
+          const blob = new Blob([csv], {type:'text/csv'});
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'psle-orders.csv';
+          a.click();
+          this.setState({notice:'Exported ' + all.length + ' orders'});
+        }catch(e){}
+      }
+    };
+  }
+
+  async signIn(){
+    const db = await this.db();
+    if(!db) return this.setState({pinError:'The admin system is unavailable.'});
+
+    // Not connected to Supabase yet — fall back to the PIN.
+    if(!db.isLive()) return this.checkPinLegacy(String(this.props.adminPin ?? '2026'));
+
+    const email = this.state.email.trim();
+    if(!email || email.indexOf('@') < 0) return this.setState({pinError:'Enter your admin email.'});
+    if(!this.state.pinInput) return this.setState({pinError:'Enter your password.'});
+    this.setState({pinError:'', busy:true});
+    try{
+      await db.signIn(email, this.state.pinInput);
+      const admin = await db.isAdmin();
+      if(!admin){
+        await db.signOut();
+        return this.setState({busy:false, pinError:'That account is not an admin. Run the is_admin step in the setup guide.'});
+      }
+      this.setState({locked:false, pinInput:'', pinError:'', busy:false});
+      this.load();
+    }catch(e){
+      this.setState({busy:false, pinError:e.message || 'That email and password do not match.'});
+    }
+  }
+
+  checkPinLegacy(pin){
+    if(this.state.pinInput.trim() === pin){
+      try{ sessionStorage.setItem(ADMIN_KEY, '1'); }catch(e){}
+      this.load();
+      this.setState({locked:false, pinInput:'', pinError:''});
+    } else {
+      this.setState({pinError:'That PIN is not right.'});
+    }
+  }
+}
+
+</script>
+</body>
+</html>

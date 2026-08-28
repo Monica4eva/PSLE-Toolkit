@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+doc-page:not(:defined){visibility:hidden}
+body{margin:0;font-family:'Plus Jakarta Sans',sans-serif;}
+*{box-sizing:border-box;}
+a{color:#00A88E;}
+a:hover{color:#00806B;}
+@media print{ .no-print{display:none !important;} }
+</style>
+<script src="./doc-page.js"></script>
+</helmet>
+
+<div class="no-print" style="position:sticky;top:0;z-index:300;background:#0A1628;padding:14px 22px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+  <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:0.98rem;color:#fff">Content QA <span style="color:#00C6A7">Review Sheet</span></div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;flex:1">
+    <sc-for list="{{ picks }}" as="p" hint-placeholder-count="7">
+      <button onClick="{{ p.pick }}" style="padding:8px 15px;border-radius:50px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.8rem;background:{{ p.bg }};color:{{ p.color }};border:{{ p.border }}">{{ p.label }}</button>
+    </sc-for>
+  </div>
+  <a href="landing.html" style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.5)">← Website</a>
+</div>
+
+<doc-page margin="0.6in">
+
+  <div style="border-bottom:3px solid #0A1628;padding-bottom:14px;margin-bottom:8px">
+    <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:20pt;color:#0A1628;line-height:1.15">{{ docTitle }}</div>
+    <div style="font-size:9.5pt;font-weight:700;color:#5A6A7A;margin-top:6px">{{ docSub }}</div>
+  </div>
+
+  <div style="background:#F5F7FA;border:1px solid #CBD5E1;border-radius:6px;padding:12px 14px;margin-bottom:18px;break-inside:avoid">
+    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:10.5pt;color:#0A1628;margin-bottom:6px">How to mark this sheet</div>
+    <div style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.55">The marked answer is shown in bold with a ✓. Read the question, confirm the ✓ is on the right option, and check the explanation teaches correctly. Ring anything wrong and write the correction in the right-hand margin. Note the question number — that is what we use to fix it.</div>
+  </div>
+
+  <sc-for list="{{ groups }}" as="g" hint-placeholder-count="4">
+    <div style="break-inside:avoid;margin-top:20px;margin-bottom:9px;border-bottom:1.5px solid #00A88E;padding-bottom:5px">
+      <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:12pt;color:#00806B">{{ g.topic }}</div>
+      <div style="font-size:8.5pt;font-weight:700;color:#5A6A7A;margin-top:2px">{{ g.meta }}</div>
+    </div>
+    <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="6">
+      <div style="break-inside:avoid;margin-bottom:11px;padding-bottom:9px;border-bottom:1px dotted #CBD5E1">
+        <div style="display:flex;gap:9px;align-items:baseline">
+          <span style="font-family:'Syne',sans-serif;font-weight:900;font-size:9.5pt;color:#00A88E;min-width:38px">{{ it.num }}</span>
+          <span style="font-size:10.5pt;font-weight:700;color:#111827;line-height:1.45;flex:1">{{ it.q }}</span>
+          <span style="font-size:7.5pt;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;color:#5A6A7A;border:1px solid #CBD5E1;border-radius:20px;padding:2px 7px;white-space:nowrap">{{ it.level }}</span>
+        </div>
+        <div style="margin:5px 0 0 47px;display:flex;flex-direction:column;gap:2px">
+          <sc-for list="{{ it.opts }}" as="o" hint-placeholder-count="4">
+            <div style="font-size:9.5pt;line-height:1.4;color:{{ o.color }};font-weight:{{ o.weight }}">{{ o.text }}</div>
+          </sc-for>
+        </div>
+        <div style="margin:5px 0 0 47px;font-size:9pt;font-weight:600;color:#475569;line-height:1.45;font-style:italic">Why: {{ it.exp }}</div>
+      </div>
+    </sc-for>
+  </sc-for>
+
+  <div style="margin-top:26px;padding-top:12px;border-top:2px solid #0A1628;font-size:8.5pt;font-weight:700;color:#5A6A7A">{{ footerLine }}</div>
+
+</doc-page>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+const PARTS = {
+  science: ['./bank-science.js','./bank-science-p2.js','./bank-science-p3.js'],
+  maths: ['./bank-maths.js','./bank-maths-p2.js','./bank-maths-p3.js'],
+  english: ['./bank-english.js','./bank-english-p2.js','./bank-english-p3.js','./bank-english-p4.js'],
+  setswana: ['./bank-setswana.js','./bank-setswana-p2.js','./bank-setswana-p3.js','./bank-setswana-p4.js'],
+  social: ['./bank-social.js','./bank-social-p2.js','./bank-social-p3.js'],
+  agric: ['./bank-agriculture.js','./bank-agriculture-p2.js','./bank-agriculture-p3.js','./bank-agriculture-p4.js']
+};
+
+const NAMES = {
+  setswana:'Setswana', maths:'Maths', english:'English',
+  social:'Social Studies', science:'Science', agric:'Agriculture'
+};
+
+const ORDER = ['setswana','maths','english','science','social','agric'];
+
+class Component extends DCLogic {
+  state = { subject:'setswana', rows:[], loading:true };
+
+  componentDidMount(){ this.loadSubject(this.state.subject); }
+
+  async loadSubject(id){
+    this.setState({loading:true, subject:id, rows:[]});
+    let rows = [];
+    for(const p of (PARTS[id] || [])){
+      try{
+        const mod = await import(p);
+        const data = mod.default || [];
+        rows = rows.concat(data.map(r => ({
+          q:r.q, opts:r.o || [], a:r.a, exp:r.e, level:r.l, topic:r.t, std:r.s, file:p.replace('./','')
+        })));
+      }catch(e){}
+    }
+    this.setState({rows, loading:false});
+  }
+
+  renderVals(){
+    const st = this.state;
+    const teal = '#00C6A7';
+    const prefix = {setswana:'SET', maths:'MAT', english:'ENG', social:'SOC', science:'SCI', agric:'AGR'}[st.subject] || 'Q';
+
+    const picks = ORDER.map(id => {
+      const on = st.subject === id;
+      return {
+        label: NAMES[id],
+        bg: on ? teal : 'rgba(255,255,255,0.08)',
+        color: on ? '#0A1628' : 'rgba(255,255,255,0.75)',
+        border: on ? '1.5px solid ' + teal : '1.5px solid rgba(255,255,255,0.18)',
+        pick: () => this.loadSubject(id)
+      };
+    });
+
+    const byTopic = [];
+    const index = {};
+    st.rows.forEach((r, i) => {
+      const key = r.topic || 'Unsorted';
+      if(index[key] === undefined){ index[key] = byTopic.length; byTopic.push({topic:key, items:[], stds:{}, levels:{}}); }
+      const grp = byTopic[index[key]];
+      grp.stds[r.std || '—'] = true;
+      grp.levels[r.level || '—'] = (grp.levels[r.level || '—'] || 0) + 1;
+      grp.items.push({
+        num: prefix + '-' + String(i + 1).padStart(3, '0'),
+        q: r.q || '(missing question text)',
+        level: r.level || '—',
+        exp: r.exp || '(no explanation — needs writing)',
+        opts: (r.opts || []).map((t, k) => ({
+          text: (k === r.a ? '✓  ' : '     ') + 'ABCD'[k] + '.  ' + t,
+          color: k === r.a ? '#00806B' : '#374151',
+          weight: k === r.a ? '800' : '500'
+        }))
+      });
+    });
+
+    const groups = byTopic.map(g => {
+      const lv = ['Easy','Medium','Hard'].map(l => g.levels[l] ? l + ' ' + g.levels[l] : null).filter(Boolean).join(' · ');
+      return {
+        topic: g.topic,
+        meta: g.items.length + ' questions · ' + Object.keys(g.stds).join(', ') + (lv ? ' · ' + lv : ''),
+        items: g.items
+      };
+    });
+
+    const missing = st.rows.filter(r => !r.exp || !r.q || !(r.opts || []).length || r.a == null).length;
+
+    return {
+      picks,
+      docTitle: NAMES[st.subject] + ' — Question Bank Review',
+      docSub: st.loading
+        ? 'Loading…'
+        : st.rows.length + ' questions across ' + groups.length + ' topics · PSLE Prep Toolkit · reviewer: ______________________  date: ____________',
+      groups,
+      footerLine: st.loading ? '' : NAMES[st.subject] + ': ' + st.rows.length + ' questions reviewed on this sheet'
+        + (missing ? ' · ' + missing + ' have missing fields — check these first' : '')
+        + ' · return marked sheets to the toolkit owner.'
+    };
+  }
+}
+
+</script>
+</body>
+</html>

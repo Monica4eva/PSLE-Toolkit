@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+doc-page:not(:defined){visibility:hidden}
+body{margin:0;font-family:'Plus Jakarta Sans',sans-serif;}
+*{box-sizing:border-box;}
+code{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:9pt;background:#F1F5F9;padding:1px 5px;border-radius:3px;color:#0F172A;}
+a{color:#00A88E;}
+a:hover{color:#00806B;}
+</style>
+<script src="./doc-page.js"></script>
+</helmet>
+
+<doc-page margin="0.7in">
+
+  <div style="border-bottom:3px solid #0A1628;padding-bottom:15px;margin-bottom:18px">
+    <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:21pt;color:#0A1628;line-height:1.12">Setting up the database — do it yourself, free</div>
+    <div style="font-size:10pt;font-weight:700;color:#5A6A7A;margin-top:7px">No developer, no server, no monthly cost. About an hour, mostly waiting.</div>
+  </div>
+
+  <div style="background:#E0FAF5;border:1.5px solid #7BD8C8;border-radius:7px;padding:14px 16px;margin-bottom:20px;break-inside:avoid">
+    <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:11pt;color:#00806B;margin-bottom:7px">Why this works without a developer</div>
+    <div style="font-size:10pt;font-weight:600;color:#134E48;line-height:1.6">Normally "you need a backend" means someone writes and runs server software. Supabase gives you the two hard parts already built — a shared database and proper sign-in with hashed passwords — and your website talks to it directly. The security lives in rules stored <em>in the database</em>, which is why nobody can cheat it from the browser. Your job is to create the project and paste in the rules. That is genuinely all.</div>
+  </div>
+
+  <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:14pt;color:#0A1628;border-bottom:1.5px solid #00A88E;padding-bottom:5px;margin-bottom:14px">Step 1 · Create the project (10 minutes)</div>
+
+  <ol style="margin:0 0 20px;padding-left:22px;display:flex;flex-direction:column;gap:7px">
+    <li style="font-size:10pt;font-weight:600;color:#374151;line-height:1.55">Go to <strong>supabase.com</strong> and sign up. The free tier is enough for hundreds of parents — no card needed.</li>
+    <li style="font-size:10pt;font-weight:600;color:#374151;line-height:1.55">Click <strong>New project</strong>. Name it <code>psle-toolkit</code>.</li>
+    <li style="font-size:10pt;font-weight:600;color:#374151;line-height:1.55">Set a database password. <strong>Write it down somewhere safe</strong> — you cannot recover it, only reset it.</li>
+    <li style="font-size:10pt;font-weight:600;color:#374151;line-height:1.55">Choose the region closest to Botswana — likely <strong>eu-west</strong> or <strong>South Africa</strong> if offered. Closer means a faster app.</li>
+    <li style="font-size:10pt;font-weight:600;color:#374151;line-height:1.55">Click create, then wait. It takes a couple of minutes to build.</li>
+  </ol>
+
+  <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:14pt;color:#0A1628;border-bottom:1.5px solid #00A88E;padding-bottom:5px;margin-bottom:14px">Step 2 · Paste in the rules (5 minutes)</div>
+
+  <ol style="margin:0 0 14px;padding-left:22px;display:flex;flex-direction:column;gap:7px">
+    <li style="font-size:10pt;font-weight:600;color:#374151;line-height:1.55">In your project, click <strong>SQL Editor</strong> in the left sidebar, then <strong>New query</strong>.</li>
+    <li style="font-size:10pt;font-weight:600;color:#374151;line-height:1.55">Open the file <code>supabase-setup.sql</code> from this project. Select all of it, copy it, paste it into the editor.</li>
+    <li style="font-size:10pt;font-weight:600;color:#374151;line-height:1.55">Click <strong>Run</strong>. You should see "Success. No rows returned" — that is what success looks like here.</li>
+  </ol>
+
+  <div style="background:#FFF8F0;border:1.5px solid #F5C77E;border-radius:7px;padding:13px 15px;margin-bottom:16px;break-inside:avoid">
+    <div style="font-size:9.5pt;font-weight:600;color:#7C4A03;line-height:1.6"><strong>Two common trips.</strong> Copy the file's <em>contents</em>, not its name — pasting <code>supabase-setup.sql</code> gives a "syntax error at or near supabase". And if the file is ever updated, paste the new version and run it again: it is written to be safe to re-run as many times as you like.</div>
+  </div>
+
+  <div style="background:#F5F7FA;border:1px solid #CBD5E1;border-radius:7px;padding:13px 15px;margin-bottom:20px;break-inside:avoid">
+    <div style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.6">That one file created five tables and — more importantly — the rules that make this safe: a visitor can <em>place</em> an order but can never mark one as paid, and cannot read the orders list at all. Only you, signed in as admin, can verify a payment.</div>
+  </div>
+
+  <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:14pt;color:#0A1628;border-bottom:1.5px solid #00A88E;padding-bottom:5px;margin-bottom:14px">Step 3 · Connect the website (2 minutes)</div>
+
+  <ol style="margin:0 0 14px;padding-left:22px;display:flex;flex-direction:column;gap:7px">
+    <li style="font-size:10pt;font-weight:600;color:#374151;line-height:1.55">In Supabase go to <strong>Settings → API</strong>.</li>
+    <li style="font-size:10pt;font-weight:600;color:#374151;line-height:1.55">Copy the <strong>Project URL</strong> and the <strong>anon public</strong> key.</li>
+    <li style="font-size:10pt;font-weight:600;color:#374151;line-height:1.55">Open <code>supabase-config.js</code> in this project and paste them between the quotes. Save.</li>
+    <li style="font-size:10pt;font-weight:600;color:#374151;line-height:1.55">Now go to <strong>Authentication → Providers → Email</strong> and switch <strong>Confirm email</strong> OFF. See the box below for why.</li>
+  </ol>
+
+  <div style="background:#F5F7FA;border:1px solid #CBD5E1;border-radius:7px;padding:13px 15px;margin-bottom:16px;break-inside:avoid">
+    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:10.5pt;color:#0A1628;margin-bottom:6px">Why switch off email confirmation</div>
+    <div style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.6">Supabase starts with it on, which means nobody can sign in until they click a link in an email. For your parents that is one more thing to go wrong, and your main way in is the access code anyway — not email. Leaving it on also blocks Step 4: your own account will not exist in the system until you click the email, and the admin command will report <em>0 rows</em>, which looks like the SQL failed. Turn it off now; you can revisit it later if you ever need email verification.</div>
+  </div>
+
+  <div style="background:#FFF8F0;border:1.5px solid #F5C77E;border-radius:7px;padding:13px 15px;margin-bottom:20px;break-inside:avoid">
+    <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:10.5pt;color:#7C4A03;margin-bottom:6px">The one thing you must not get wrong</div>
+    <div style="font-size:9.5pt;font-weight:600;color:#7C4A03;line-height:1.6">There are two keys on that page. The <strong>anon public</strong> key is safe in your website — it is designed to be seen by every visitor, and the database rules stop it doing any harm. The <strong>service_role</strong> key ignores every rule you just set up. Never put it in the website, never paste it into a chat, never email it. If it ever leaks, click <em>Reset</em> on that page immediately.</div>
+  </div>
+
+  <div style="break-before:page"></div>
+
+  <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:14pt;color:#0A1628;border-bottom:1.5px solid #00A88E;padding-bottom:5px;margin-bottom:14px">Step 4 · Make yourself the admin (5 minutes)</div>
+
+  <ol style="margin:0 0 20px;padding-left:22px;display:flex;flex-direction:column;gap:7px">
+    <li style="font-size:10pt;font-weight:600;color:#374151;line-height:1.55">Open your own website and go through <strong>Get access</strong> once, using your real email and a password you will remember. This creates your account.</li>
+    <li style="font-size:10pt;font-weight:600;color:#374151;line-height:1.55">Back in Supabase, open <strong>SQL Editor → New query</strong> and run this, with your email in place of the example:</li>
+  </ol>
+
+  <div style="background:#0A1628;border-radius:7px;padding:14px 16px;margin-bottom:14px;break-inside:avoid">
+    <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:9pt;color:#7BF3DE;line-height:1.7">insert into profiles (id, is_admin)<br>select id, true from auth.users<br>&nbsp;where email = 'you@example.com'<br>on conflict (id) do update set is_admin = true;</div>
+  </div>
+
+  <div style="font-size:10pt;font-weight:600;color:#374151;line-height:1.55;margin-bottom:20px">Check it worked by running <code>select u.email, p.is_admin from profiles p join auth.users u on u.id = p.id;</code> — your row should say <code>true</code>. From now on the admin dashboard recognises you by your login, not a PIN anyone could guess.</div>
+
+  <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:14pt;color:#0A1628;border-bottom:1.5px solid #00A88E;padding-bottom:5px;margin-bottom:6px">Step 4b · "Sign in with Google" <span style="font-size:11pt;color:#5A6A7A">— optional, skip for the pilot</span></div>
+
+  <div style="font-size:10pt;font-weight:600;color:#374151;line-height:1.6;margin-bottom:12px">Google sign-in is <strong>switched off</strong>, and the button stays hidden until you turn it on — so nobody sees a control that cannot work. You do not need it: parents sign in with email and password, and children use the access code. Only do this if parents ask for it.</div>
+
+  <ol style="margin:0 0 12px;padding-left:22px;display:flex;flex-direction:column;gap:6px">
+    <li style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.5">At <strong>console.cloud.google.com</strong>, create a project (free).</li>
+    <li style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.5">Open <strong>APIs &amp; Services → OAuth consent screen</strong>. Choose External, fill in the app name and your email, save.</li>
+    <li style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.5">Go to <strong>Credentials → Create credentials → OAuth client ID</strong>, type <strong>Web application</strong>.</li>
+    <li style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.5">Under <strong>Authorised redirect URIs</strong> add exactly this, then create:</li>
+  </ol>
+
+  <div style="background:#0A1628;border-radius:6px;padding:11px 14px;margin-bottom:12px;break-inside:avoid">
+    <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:8.5pt;color:#7BF3DE;word-break:break-all">https://ovoioaarepuiczsprvlx.supabase.co/auth/v1/callback</div>
+  </div>
+
+  <ol start="5" style="margin:0 0 20px;padding-left:22px;display:flex;flex-direction:column;gap:6px">
+    <li style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.5">Copy the <strong>Client ID</strong> and <strong>Client secret</strong>.</li>
+    <li style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.5">In Supabase go to <strong>Authentication → Providers → Google</strong>, switch it on, paste both, save.</li>
+    <li style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.5">Reload your sign-in page. The Google button appears on its own — nothing to edit in the site.</li>
+  </ol>
+
+  <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:14pt;color:#0A1628;border-bottom:1.5px solid #00A88E;padding-bottom:5px;margin-bottom:14px">Step 5 · Put the site online (20 minutes)</div>
+
+  <div style="font-size:10pt;font-weight:600;color:#374151;line-height:1.6;margin-bottom:12px">Parents cannot use files sitting on your laptop. Free hosting, no card:</div>
+
+  <ol style="margin:0 0 20px;padding-left:22px;display:flex;flex-direction:column;gap:7px">
+    <li style="font-size:10pt;font-weight:600;color:#374151;line-height:1.55">Download this project as a folder.</li>
+    <li style="font-size:10pt;font-weight:600;color:#374151;line-height:1.55">Go to <strong>netlify.com</strong>, sign up, and choose <strong>Deploy manually</strong> — literally drag the folder onto the page.</li>
+    <li style="font-size:10pt;font-weight:600;color:#374151;line-height:1.55">You get a web address like <code>psle-toolkit.netlify.app</code>. Share that with parents. HTTPS is automatic, which matters because you are handling children's names and parents' numbers.</li>
+    <li style="font-size:10pt;font-weight:600;color:#374151;line-height:1.55">To update the site later, drag the folder again. Nothing else to do.</li>
+  </ol>
+
+  <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:14pt;color:#0A1628;border-bottom:1.5px solid #00A88E;padding-bottom:5px;margin-bottom:14px">Step 6 · Test it properly before charging anyone</div>
+
+  <div style="font-size:10pt;font-weight:600;color:#374151;line-height:1.6;margin-bottom:10px">Use two devices — your laptop and your phone. This is the test that proves the whole thing works:</div>
+
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+    <div style="break-inside:avoid;border:1px solid #CBD5E1;border-left:4px solid #00A88E;border-radius:5px;padding:11px 14px">
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:10pt;color:#0A1628">On your phone</div>
+      <div style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.55;margin-top:3px">Buy a package. Write down the code. Try to sign in with it — <strong>it must refuse you</strong>, saying the payment is not confirmed. If it lets you in, stop and tell me.</div>
+    </div>
+    <div style="break-inside:avoid;border:1px solid #CBD5E1;border-left:4px solid #00A88E;border-radius:5px;padding:11px 14px">
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:10pt;color:#0A1628">On your laptop</div>
+      <div style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.55;margin-top:3px">Open the admin dashboard. The order from your phone <strong>must appear</strong> — this is the thing that was broken before. Click Mark paid.</div>
+    </div>
+    <div style="break-inside:avoid;border:1px solid #CBD5E1;border-left:4px solid #00A88E;border-radius:5px;padding:11px 14px">
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:10pt;color:#0A1628">Back on your phone</div>
+      <div style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.55;margin-top:3px">Enter the code again. It should now let you in, showing only the subjects that package covers. Then revoke it on the laptop, reload the phone — access should disappear.</div>
+    </div>
+  </div>
+
+  <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:14pt;color:#0A1628;border-bottom:1.5px solid #00A88E;padding-bottom:5px;margin-bottom:14px">What this still does not do</div>
+
+  <ul style="margin:0 0 20px;padding-left:20px;display:flex;flex-direction:column;gap:6px">
+    <li style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.55"><strong>Payments are still confirmed by hand.</strong> A parent pays by Orange Money or MyZaka, WhatsApps you the proof, you click Mark paid. That is fine up to roughly thirty parents and costs nothing.</li>
+    <li style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.55"><strong>The question banks are public files.</strong> Anyone determined can download them. Protecting them properly is possible later, but it is a commercial nicety, not a safety problem — do not spend money on it now.</li>
+    <li style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.55"><strong>Password reset needs email set up</strong> in Supabase (Authentication → Email templates). Until then, reset a forgotten password yourself from the dashboard.</li>
+    <li style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.55"><strong>Free tier pauses an unused project</strong> after a week of no activity. One visit wakes it. Once real parents are using it daily this stops happening.</li>
+  </ul>
+
+  <div style="background:#F5F7FA;border:1px solid #CBD5E1;border-radius:7px;padding:14px 16px;break-inside:avoid">
+    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:10.5pt;color:#0A1628;margin-bottom:7px">If something goes wrong</div>
+    <div style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.6">Leave <code>supabase-config.js</code> blank and everything reverts to working on one device, exactly as before — so you can never break the site beyond repair. In Supabase, <strong>Logs</strong> in the sidebar shows every failed request and why. Bring me the error text and I will fix it.</div>
+  </div>
+
+  <div style="margin-top:24px;padding-top:12px;border-top:2px solid #0A1628;font-size:8.5pt;font-weight:700;color:#5A6A7A;line-height:1.5">PSLE Prep Toolkit · self-setup guide · total cost: nothing · files referenced: supabase-setup.sql, supabase-config.js, db.js</div>
+
+</doc-page>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}"></script>
+</body>
+</html>
