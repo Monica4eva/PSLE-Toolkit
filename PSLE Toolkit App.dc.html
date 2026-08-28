@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Plus Jakarta Sans',sans-serif;background:#F5F7FA;color:#111827;}
+*{box-sizing:border-box;}
+@keyframes breathe{0%,100%{transform:scale(0.72);opacity:.75}45%,55%{transform:scale(1.12);opacity:1}}
+@keyframes pop{0%{transform:scale(.94);opacity:0}100%{transform:scale(1);opacity:1}}
+a{color:#00A88E;text-decoration:none;}
+a:hover{color:#00C6A7;}
+</style>
+</helmet>
+
+<sc-if value="{{ locked }}">
+  <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px;background:radial-gradient(circle at 50% 0%,#16305A 0%,#0A1628 60%)">
+    <div style="width:100%;max-width:430px">
+      <div style="text-align:center;margin-bottom:28px">
+        <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.5rem;color:#fff;line-height:1.2">PSLE Prep <span style="color:#00C6A7">Toolkit</span></div>
+        <div style="margin-top:8px;font-size:0.7rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4)">Standard 6 &amp; 7 · Botswana</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.14);border-radius:20px;padding:30px 28px">
+        <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.24rem;color:#fff;margin-bottom:6px">Enter your access code</div>
+        <div style="font-size:0.88rem;font-weight:600;color:rgba(255,255,255,0.55);line-height:1.6;margin-bottom:20px;text-wrap:pretty">The code was sent to your parent's WhatsApp when they joined. It looks like PSLE-XXXX-XXXX.</div>
+        <input onChange="{{ onCodeInput }}" onKeyDown="{{ onCodeKey }}" value="{{ codeInput }}" placeholder="PSLE-••••-••••" style="width:100%;padding:16px;border-radius:13px;border:1.5px solid rgba(255,255,255,0.18);background:rgba(10,22,40,0.7);color:#fff;font-family:'Syne',sans-serif;font-weight:900;font-size:1.16rem;letter-spacing:2px;text-align:center;text-transform:uppercase" style-focus="outline:none;border-color:#00C6A7">
+        <button onClick="{{ toggleRemember }}" style="display:flex;align-items:center;gap:10px;width:100%;margin-top:14px;padding:11px 13px;border-radius:11px;background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.12);cursor:pointer;text-align:left;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.86rem;color:rgba(255,255,255,0.78)" style-hover="border-color:#00C6A7">
+          <span style="width:20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:900;color:#0A1628;flex-shrink:0;background:{{ rememberBg }}">{{ rememberMark }}</span>
+          <span>Remember this device</span>
+        </button>
+        <sc-if value="{{ codeError }}">
+          <div style="margin-top:14px;background:rgba(230,57,70,0.14);border:1.5px solid rgba(230,57,70,0.4);color:#FFB3B8;border-radius:11px;padding:12px 15px;font-size:0.86rem;font-weight:700;line-height:1.55">{{ codeError }}</div>
+        </sc-if>
+        <button onClick="{{ submitCode }}" style="width:100%;margin-top:16px;padding:15px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:1rem;cursor:pointer;box-shadow:0 8px 26px rgba(0,198,167,0.3)">Unlock my toolkit →</button>
+      </div>
+      <div style="margin-top:20px;text-align:center;font-size:0.86rem;font-weight:600;color:rgba(255,255,255,0.45);line-height:1.8">
+        Signing in with an email instead? <a href="Sign In.dc.html" style="color:#00C6A7;font-weight:800">Use the sign-in page</a><br>
+        No code yet? <a href="Get Access.dc.html" style="color:#00C6A7;font-weight:800">Get access here</a><br>
+        Lost your code? WhatsApp <a href="https://wa.me/26775562568" style="color:#00C6A7;font-weight:800">75562568</a>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ unlocked }}">
+<div style="display:flex;min-height:100vh;align-items:stretch;background:#F5F7FA">
+
+  <aside style="width:262px;flex-shrink:0;background:#0A1628;padding:26px 18px 30px;display:flex;flex-direction:column;gap:26px;position:sticky;top:0;height:100vh;overflow-y:auto">
+    <div>
+      <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.12rem;color:#fff;line-height:1.2">PSLE Prep<br><span style="color:#00C6A7">Toolkit</span></div>
+      <div style="margin-top:10px;font-size:0.7rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,0.38)">Standard 6 &amp; 7 · Botswana</div>
+    </div>
+
+    <nav style="display:flex;flex-direction:column;gap:5px">
+      <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="9">
+        <button onClick="{{ item.go }}" style="display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:11px 13px;border-radius:11px;border:1.5px solid transparent;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.9rem;transition:all .18s;background:{{ item.bg }};border-color:{{ item.border }};color:{{ item.color }}" style-hover="background:rgba(255,255,255,0.09)">
+          <span style="font-size:1.05rem;width:20px;text-align:center">{{ item.icon }}</span>
+          <span>{{ item.label }}</span>
+        </button>
+      </sc-for>
+    </nav>
+
+    <div style="margin-top:auto;background:rgba(0,198,167,0.10);border:1.5px solid rgba(0,198,167,0.28);border-radius:14px;padding:16px">
+      <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,0.45)">Days to PSLE</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:2rem;color:#00C6A7;line-height:1.1;margin-top:4px">{{ daysLeft }}</div>
+      <div style="font-size:0.78rem;font-weight:700;color:rgba(255,255,255,0.55);margin-top:2px">{{ examLabel }}</div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:7px">
+      <a href="landing.html" style="display:flex;align-items:center;gap:9px;padding:10px 13px;border-radius:11px;border:1.5px solid rgba(255,255,255,0.12);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.82rem;color:rgba(255,255,255,0.5)" style-hover="border-color:rgba(255,255,255,0.3);color:rgba(255,255,255,0.85)">
+        <span>🏠</span><span>Back to website</span>
+      </a>
+      <button onClick="{{ lockApp }}" style="display:flex;align-items:center;gap:9px;width:100%;padding:10px 13px;border-radius:11px;background:none;border:1.5px solid rgba(255,255,255,0.12);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.82rem;color:rgba(255,255,255,0.5)" style-hover="border-color:rgba(255,255,255,0.3);color:rgba(255,255,255,0.8)">
+        <span>🔒</span><span>Sign out of this device</span>
+      </button>
+    </div>
+  </aside>
+
+  <main style="flex:1;min-width:0;padding:34px 40px 70px;max-width:1180px">
+
+    <sc-if value="{{ adminPreview }}">
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:#0A1628;border:1.5px solid rgba(0,198,167,0.35);border-radius:14px;padding:13px 18px;margin-bottom:22px">
+        <span style="font-size:1.05rem">👁</span>
+        <span style="flex:1;min-width:200px;font-size:0.86rem;font-weight:700;color:#00C6A7">{{ previewLabel }}</span>
+        <a href="Admin.dc.html" style="padding:9px 18px;border-radius:50px;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);color:#fff;font-family:'Syne',sans-serif;font-weight:900;font-size:0.8rem">← Back to admin</a>
+      </div>
+    </sc-if>
+
+
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:26px">
+          <div>
+            <div style="display:inline-block;background:#E0FAF5;color:#00A88E;font-weight:800;font-size:0.68rem;letter-spacing:1.8px;text-transform:uppercase;padding:5px 13px;border-radius:50px;margin-bottom:12px">Your dashboard</div>
+            <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2.3rem;color:#0A1628;line-height:1.14;letter-spacing:-0.6px;margin:0">Dumela, {{ learner }} 👋</h1>
+            <p style="font-weight:600;color:#5A6A7A;font-size:0.98rem;margin:8px 0 0;line-height:1.6;max-width:520px;text-wrap:pretty">{{ homeLine }}</p>
+          </div>
+          <div style="background:#0A1628;border-radius:16px;padding:18px 24px;text-align:center;border:1.5px solid rgba(0,198,167,0.3)">
+            <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.9rem;color:#00C6A7;line-height:1">{{ stars }}★</div>
+            <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-top:4px">Stars earned</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));gap:16px;margin-bottom:30px">
+          <sc-for list="{{ subjectProgress }}" as="s" hint-placeholder-count="6">
+            <button onClick="{{ s.go }}" style="background:{{ s.cardBg }};opacity:{{ s.cardOpacity }};border:1.5px solid #E5EAF0;border-radius:16px;padding:18px 18px 16px;text-align:left;cursor:pointer;box-shadow:0 6px 28px rgba(10,22,40,0.08);transition:transform .18s,box-shadow .18s;font-family:'Plus Jakarta Sans',sans-serif" style-hover="transform:translateY(-4px);box-shadow:0 14px 34px rgba(10,22,40,0.13)">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+                <span style="font-size:1.5rem">{{ s.emoji }}</span>
+                <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#0A1628">{{ s.name }}</span>
+              </div>
+              <div style="height:8px;border-radius:50px;background:#EEF2F8;overflow:hidden">
+                <div style="height:100%;border-radius:50px;background:linear-gradient(90deg,#00C6A7,#38BDF8);width:{{ s.pct }}"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-top:9px;font-size:0.76rem;font-weight:700;color:#5A6A7A">
+                <span>{{ s.answeredLabel }}</span>
+                <span>{{ s.scoreLabel }}</span>
+              </div>
+            </button>
+          </sc-for>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1.35fr 1fr;gap:18px;align-items:start">
+          <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:24px;box-shadow:0 6px 28px rgba(10,22,40,0.08)">
+            <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.06rem;color:#0A1628;margin-bottom:4px">Today's plan</div>
+            <div style="font-size:0.86rem;font-weight:600;color:#5A6A7A;margin-bottom:16px">{{ checklistLine }}</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ todayTasks }}" as="t" hint-placeholder-count="4">
+                <button onClick="{{ t.toggle }}" style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:12px;border:1.5px solid #E5EAF0;background:#FAFBFD;cursor:pointer;text-align:left;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.89rem" style-hover="border-color:#00C6A7">
+                  <span style="width:22px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:900;flex-shrink:0;color:#fff;background:{{ t.boxBg }}">{{ t.mark }}</span>
+                  <span style="color:{{ t.textColor }}">{{ t.text }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="background:linear-gradient(135deg,#0A1628,#162C52);border-radius:16px;padding:24px;color:#fff;border:1.5px solid rgba(0,198,167,0.28)">
+            <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:#00C6A7">Affirmation of the day</div>
+            <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.24rem;line-height:1.45;margin:14px 0 18px;text-wrap:pretty">“{{ affirmation }}”</div>
+            <button onClick="{{ nextAffirmation }}" style="background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.22);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.84rem;padding:10px 20px;border-radius:50px;cursor:pointer" style-hover="background:rgba(0,198,167,0.2);border-color:#00C6A7">Next one →</button>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isPractice }}">
+      <div>
+        <div style="display:inline-block;background:#E0FAF5;color:#00A88E;font-weight:800;font-size:0.68rem;letter-spacing:1.8px;text-transform:uppercase;padding:5px 13px;border-radius:50px;margin-bottom:12px">Practice</div>
+        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2.1rem;color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">MCQ Question Banks</h1>
+        <p style="font-weight:600;color:#5A6A7A;font-size:0.95rem;margin:0 0 26px">Pick a subject and a difficulty. Instant feedback and a full explanation on every question.</p>
+
+        <sc-if value="{{ quizIdle }}" hint-placeholder-val="{{ true }}">
+          <div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));gap:14px;margin-bottom:26px">
+              <sc-for list="{{ subjectPicks }}" as="s" hint-placeholder-count="6">
+                <button onClick="{{ s.pick }}" style="border-radius:16px;padding:20px 16px;text-align:center;cursor:pointer;background:{{ s.bg }};opacity:{{ s.opacity }};box-shadow:0 6px 28px rgba(10,22,40,0.08);font-family:'Plus Jakarta Sans',sans-serif;transition:transform .18s;border:{{ s.border }}" style-hover="transform:translateY(-4px)">
+                  <div style="font-size:2rem;margin-bottom:8px">{{ s.emoji }}</div>
+                  <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.98rem;color:#0A1628">{{ s.name }}</div>
+                  <div style="font-size:0.75rem;font-weight:700;color:#5A6A7A;margin-top:4px">{{ s.count }}</div>
+                </button>
+              </sc-for>
+            </div>
+
+            <sc-if value="{{ hasLocked }}">
+              <div style="background:#FFF8F0;border:1.5px solid #FFE0B2;border-radius:14px;padding:16px 18px;margin-bottom:16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+                <span style="font-size:1.2rem">🔒</span>
+                <span style="flex:1;min-width:220px;font-size:0.88rem;font-weight:700;color:#7C4A03;line-height:1.6">{{ lockedLine }}</span>
+                <button onClick="{{ goUpgrade }}" style="padding:11px 22px;border-radius:50px;border:none;background:#0A1628;color:#00C6A7;font-family:'Syne',sans-serif;font-weight:900;font-size:0.86rem;cursor:pointer" style-hover="background:#162C52">Add subjects →</button>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ hasTopics }}">
+              <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:22px;box-shadow:0 6px 28px rgba(10,22,40,0.08);margin-bottom:16px">
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px">
+                  <sc-for list="{{ stdPicks }}" as="s" hint-placeholder-count="3">
+                    <button onClick="{{ s.pick }}" style="padding:8px 16px;border-radius:50px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.8rem;background:{{ s.bg }};color:{{ s.color }};border:{{ s.border }}">{{ s.label }}</button>
+                  </sc-for>
+                </div>
+                <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#5A6A7A;margin-bottom:10px">Choose a topic</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;max-height:230px;overflow-y:auto">
+                  <sc-for list="{{ topicPicks }}" as="t" hint-placeholder-count="10">
+                    <button onClick="{{ t.pick }}" style="display:flex;align-items:center;gap:8px;padding:9px 15px;border-radius:11px;cursor:pointer;text-align:left;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.84rem;background:{{ t.bg }};color:{{ t.color }};border:{{ t.border }}">
+                      <span>{{ t.label }}</span>
+                      <span style="font-size:0.72rem;font-weight:800;opacity:0.65">{{ t.count }}</span>
+                    </button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+
+            <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:22px;box-shadow:0 6px 28px rgba(10,22,40,0.08);display:flex;gap:28px;align-items:center;flex-wrap:wrap">
+              <div>
+                <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#5A6A7A;margin-bottom:9px">Difficulty</div>
+                <div style="display:flex;gap:8px">
+                  <sc-for list="{{ levelPicks }}" as="l" hint-placeholder-count="4">
+                    <button onClick="{{ l.pick }}" style="padding:9px 18px;border-radius:50px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.84rem;background:{{ l.bg }};color:{{ l.color }};border:{{ l.border }}">{{ l.label }}</button>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="flex:1;min-width:220px;font-size:0.86rem;font-weight:600;color:#5A6A7A;line-height:1.6;text-wrap:pretty">{{ readyLine }}</div>
+              <button onClick="{{ startQuiz }}" style="padding:15px 36px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:1rem;cursor:pointer;box-shadow:0 8px 26px rgba(0,198,167,0.32)" style-hover="transform:translateY(-2px)" disabled="{{ startDisabled }}">Start practice →</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ quizRunning }}">
+          <div style="max-width:760px">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:14px">
+              <div style="font-weight:800;font-size:0.86rem;color:#0A1628">{{ quizHeader }}</div>
+              <div style="display:flex;gap:10px;align-items:center">
+                <span style="font-weight:800;font-size:0.82rem;color:#00A88E">{{ scoreLine }}</span>
+                <button onClick="{{ endQuiz }}" style="background:none;border:1.5px solid #E5EAF0;border-radius:50px;padding:7px 16px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.8rem;color:#5A6A7A;cursor:pointer" style-hover="border-color:#E63946;color:#E63946">Exit</button>
+              </div>
+            </div>
+            <div style="height:8px;border-radius:50px;background:#E5EAF0;overflow:hidden;margin-bottom:22px">
+              <div style="height:100%;background:linear-gradient(90deg,#00C6A7,#38BDF8);border-radius:50px;transition:width .3s;width:{{ quizPct }}"></div>
+            </div>
+
+            <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:18px;padding:30px;box-shadow:0 6px 28px rgba(10,22,40,0.08)">
+              <div style="display:inline-block;background:#FFF3E0;color:#B45309;font-weight:800;font-size:0.66rem;letter-spacing:1.4px;text-transform:uppercase;padding:4px 12px;border-radius:50px;margin-bottom:14px">{{ qLevel }}</div>
+              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.32rem;color:#0A1628;line-height:1.45;margin-bottom:22px;text-wrap:pretty">{{ qText }}</div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <sc-for list="{{ qOptions }}" as="o" hint-placeholder-count="4">
+                  <button onClick="{{ o.pick }}" style="display:flex;align-items:center;gap:14px;padding:15px 18px;border-radius:13px;cursor:pointer;text-align:left;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.96rem;transition:all .15s;background:{{ o.bg }};border:{{ o.border }};color:{{ o.color }}">
+                    <span style="width:28px;height:28px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:900;font-size:0.86rem;flex-shrink:0;background:{{ o.tagBg }};color:{{ o.tagColor }}">{{ o.tag }}</span>
+                    <span>{{ o.text }}</span>
+                  </button>
+                </sc-for>
+              </div>
+
+              <sc-if value="{{ answered }}">
+                <div style="margin-top:22px;padding:18px 20px;border-radius:14px;animation:pop .2s ease-out;background:{{ feedbackBg }};border:{{ feedbackBorder }}">
+                  <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1rem;margin-bottom:6px;color:{{ feedbackColor }}">{{ feedbackTitle }}</div>
+                  <div style="font-size:0.92rem;font-weight:600;color:#374151;line-height:1.7;text-wrap:pretty">{{ explanation }}</div>
+                  <button onClick="{{ nextQuestion }}" style="margin-top:16px;padding:12px 30px;border-radius:50px;border:none;background:#0A1628;color:#00C6A7;font-family:'Syne',sans-serif;font-weight:900;font-size:0.92rem;cursor:pointer" style-hover="background:#162C52">{{ nextLabel }}</button>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ quizDone }}">
+          <div style="max-width:620px;background:#fff;border:1.5px solid #E5EAF0;border-radius:18px;padding:36px;text-align:center;box-shadow:0 6px 28px rgba(10,22,40,0.08)">
+            <div style="font-size:3rem;margin-bottom:10px">{{ resultEmoji }}</div>
+            <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.7rem;color:#0A1628;margin-bottom:8px">{{ resultTitle }}</div>
+            <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:3rem;color:#00A88E;line-height:1;margin:14px 0">{{ resultScore }}</div>
+            <div style="font-weight:600;color:#5A6A7A;font-size:0.95rem;line-height:1.65;margin-bottom:26px;text-wrap:pretty">{{ resultLine }}</div>
+            <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+              <button onClick="{{ startQuiz }}" style="padding:14px 32px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.95rem;cursor:pointer">Practise again</button>
+              <button onClick="{{ endQuiz }}" style="padding:14px 32px;border-radius:50px;background:#fff;border:1.5px solid #E5EAF0;color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.95rem;cursor:pointer" style-hover="border-color:#00C6A7">Change subject</button>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isTimer }}">
+      <div style="max-width:700px">
+        <div style="display:inline-block;background:#E0FAF5;color:#00A88E;font-weight:800;font-size:0.68rem;letter-spacing:1.8px;text-transform:uppercase;padding:5px 13px;border-radius:50px;margin-bottom:12px">Focus</div>
+        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2.1rem;color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">Study Timer</h1>
+        <p style="font-weight:600;color:#5A6A7A;font-size:0.95rem;margin:0 0 26px">Practise under real exam conditions. Pick a length and work until the bell.</p>
+        <div style="background:#0A1628;border-radius:20px;padding:44px 34px;text-align:center;border:1.5px solid rgba(0,198,167,0.28)">
+          <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:5rem;color:#00C6A7;line-height:1;letter-spacing:-2px">{{ clock }}</div>
+          <div style="font-size:0.78rem;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:rgba(255,255,255,0.42);margin-top:8px">{{ timerState }}</div>
+          <div style="display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin:28px 0 24px">
+            <sc-for list="{{ timerPresets }}" as="p" hint-placeholder-count="5">
+              <button onClick="{{ p.pick }}" style="padding:9px 18px;border-radius:50px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.84rem;background:{{ p.bg }};color:{{ p.color }};border:{{ p.border }}">{{ p.label }}</button>
+            </sc-for>
+          </div>
+          <div style="display:flex;gap:12px;justify-content:center">
+            <button onClick="{{ toggleTimer }}" style="padding:14px 40px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:1rem;cursor:pointer;box-shadow:0 8px 26px rgba(0,198,167,0.3)">{{ timerBtn }}</button>
+            <button onClick="{{ resetTimer }}" style="padding:14px 28px;border-radius:50px;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.2);color:#fff;font-family:'Syne',sans-serif;font-weight:900;font-size:1rem;cursor:pointer" style-hover="border-color:#00C6A7">Reset</button>
+          </div>
+        </div>
+        <div style="margin-top:18px;background:#FFF8F0;border:1.5px solid #FFE0B2;border-radius:14px;padding:18px 20px;font-size:0.9rem;font-weight:600;color:#7C4A03;line-height:1.7">⏱️ In the real PSLE you get roughly one minute per multiple-choice question. Practise finishing 30 questions in 30 minutes.</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isTips }}">
+      <div style="max-width:860px">
+        <div style="display:inline-block;background:#E0FAF5;color:#00A88E;font-weight:800;font-size:0.68rem;letter-spacing:1.8px;text-transform:uppercase;padding:5px 13px;border-radius:50px;margin-bottom:12px">Strategy</div>
+        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2.1rem;color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">Exam Prep Tips</h1>
+        <p style="font-weight:600;color:#5A6A7A;font-size:0.95rem;margin:0 0 26px">Subject-by-subject strategies written for the Botswana PSLE.</p>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ tipCards }}" as="t" hint-placeholder-count="6">
+            <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;overflow:hidden;box-shadow:0 6px 28px rgba(10,22,40,0.07)">
+              <button onClick="{{ t.toggle }}" style="width:100%;display:flex;align-items:center;gap:13px;padding:18px 22px;background:none;border:none;cursor:pointer;text-align:left;font-family:'Plus Jakarta Sans',sans-serif" style-hover="background:#F7FBFA">
+                <span style="font-size:1.35rem">{{ t.emoji }}</span>
+                <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.02rem;color:#0A1628;flex:1">{{ t.name }}</span>
+                <span style="width:26px;height:26px;border-radius:50%;background:#E0FAF5;color:#00A88E;display:flex;align-items:center;justify-content:center;font-size:0.75rem">{{ t.arrow }}</span>
+              </button>
+              <sc-if value="{{ t.open }}">
+                <ul style="margin:0;padding:0 26px 22px 44px;display:flex;flex-direction:column;gap:9px">
+                  <sc-for list="{{ t.tips }}" as="tip" hint-placeholder-count="4">
+                    <li style="font-size:0.92rem;font-weight:600;color:#374151;line-height:1.7;text-wrap:pretty">{{ tip }}</li>
+                  </sc-for>
+                </ul>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isCalm }}">
+      <div style="max-width:820px">
+        <div style="display:inline-block;background:#E0FAF5;color:#00A88E;font-weight:800;font-size:0.68rem;letter-spacing:1.8px;text-transform:uppercase;padding:5px 13px;border-radius:50px;margin-bottom:12px">Confidence</div>
+        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2.1rem;color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">Calm &amp; Confidence</h1>
+        <p style="font-weight:600;color:#5A6A7A;font-size:0.95rem;margin:0 0 26px">Nerves are normal. Use these before you study and before you sit the paper.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start">
+          <div style="background:linear-gradient(135deg,#0A1628,#162C52);border-radius:18px;padding:30px;color:#fff;text-align:center;border:1.5px solid rgba(0,198,167,0.28)">
+            <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:#00C6A7;margin-bottom:22px">Breathing exercise</div>
+            <div style="height:190px;display:flex;align-items:center;justify-content:center">
+              <div style="width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(0,198,167,0.55),rgba(0,198,167,0.07));border:2px solid rgba(0,198,167,0.5);display:flex;align-items:center;justify-content:center;animation:breathe 8s ease-in-out infinite">
+                <span style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.05rem;color:#fff">{{ breathPhase }}</span>
+              </div>
+            </div>
+            <div style="font-size:0.9rem;font-weight:700;color:rgba(255,255,255,0.7);line-height:1.7;margin-top:18px">Breathe in for 4, hold for 4, out for 4.<br>Follow the circle five times.</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:18px;padding:26px;box-shadow:0 6px 28px rgba(10,22,40,0.08)">
+              <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:#00A88E">Power affirmation</div>
+              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.24rem;color:#0A1628;line-height:1.45;margin:14px 0 18px;text-wrap:pretty">“{{ affirmation }}”</div>
+              <button onClick="{{ nextAffirmation }}" style="padding:11px 24px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.88rem;cursor:pointer">Say the next one →</button>
+            </div>
+            <div style="background:#FFF8F0;border:1.5px solid #FFE0B2;border-radius:18px;padding:24px">
+              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#7C4A03;margin-bottom:12px">Exam morning routine</div>
+              <ul style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px">
+                <sc-for list="{{ routine }}" as="r" hint-placeholder-count="5">
+                  <li style="font-size:0.9rem;font-weight:600;color:#7C4A03;line-height:1.65">{{ r }}</li>
+                </sc-for>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isChecklist }}">
+      <div style="max-width:860px">
+        <div style="display:inline-block;background:#E0FAF5;color:#00A88E;font-weight:800;font-size:0.68rem;letter-spacing:1.8px;text-transform:uppercase;padding:5px 13px;border-radius:50px;margin-bottom:12px">Routine</div>
+        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2.1rem;color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">Daily Checklists</h1>
+        <p style="font-weight:600;color:#5A6A7A;font-size:0.95rem;margin:0 0 26px">Tick off today's work, then check your bag the night before the exam.</p>
+
+        <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:18px;padding:26px;box-shadow:0 6px 28px rgba(10,22,40,0.08);margin-bottom:18px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.06rem;color:#0A1628">Today's study checklist</div>
+            <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.1rem;color:#00A88E">{{ checklistPctLabel }}</div>
+          </div>
+          <div style="height:9px;border-radius:50px;background:#EEF2F8;overflow:hidden;margin-bottom:20px">
+            <div style="height:100%;border-radius:50px;background:linear-gradient(90deg,#00C6A7,#38BDF8);transition:width .3s;width:{{ checklistPct }}"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+            <sc-for list="{{ dailyTasks }}" as="t" hint-placeholder-count="8">
+              <button onClick="{{ t.toggle }}" style="display:flex;align-items:center;gap:12px;padding:13px 15px;border-radius:12px;border:1.5px solid #E5EAF0;background:#FAFBFD;cursor:pointer;text-align:left;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.89rem" style-hover="border-color:#00C6A7">
+                <span style="width:22px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:900;color:#fff;flex-shrink:0;background:{{ t.boxBg }}">{{ t.mark }}</span>
+                <span style="color:{{ t.textColor }}">{{ t.text }}</span>
+              </button>
+            </sc-for>
+          </div>
+          <button onClick="{{ resetChecklist }}" style="margin-top:18px;background:none;border:1.5px solid #E5EAF0;border-radius:50px;padding:9px 20px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.82rem;color:#5A6A7A;cursor:pointer" style-hover="border-color:#00C6A7;color:#00A88E">Start a new day</button>
+        </div>
+
+        <div style="background:#0A1628;border-radius:18px;padding:26px;border:1.5px solid rgba(0,198,167,0.28)">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.06rem;color:#00C6A7;margin-bottom:16px">🎒 Exam day bag checklist</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px">
+            <sc-for list="{{ bagItems }}" as="b" hint-placeholder-count="6">
+              <div style="display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:11px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);font-size:0.88rem;font-weight:700;color:rgba(255,255,255,0.85)">
+                <span style="color:#00C6A7;font-weight:900">✓</span>{{ b }}
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isComposition }}">
+      <div style="max-width:860px">
+        <div style="display:inline-block;background:#E0FAF5;color:#00A88E;font-weight:800;font-size:0.68rem;letter-spacing:1.8px;text-transform:uppercase;padding:5px 13px;border-radius:50px;margin-bottom:12px">Writing</div>
+        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2.1rem;color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">Composition Planner</h1>
+        <p style="font-weight:600;color:#5A6A7A;font-size:0.95rem;margin:0 0 22px">Plan before you write. Fill each box, then write your composition from the plan.</p>
+
+        <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:22px;box-shadow:0 6px 28px rgba(10,22,40,0.08);margin-bottom:16px">
+          <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#5A6A7A;margin-bottom:10px">Choose a PSLE-style topic</div>
+          <div style="display:flex;gap:9px;flex-wrap:wrap">
+            <sc-for list="{{ topics }}" as="t" hint-placeholder-count="5">
+              <button onClick="{{ t.pick }}" style="padding:9px 17px;border-radius:50px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.85rem;background:{{ t.bg }};color:{{ t.color }};border:{{ t.border }}">{{ t.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <sc-for list="{{ planBoxes }}" as="b" hint-placeholder-count="4">
+            <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:20px 22px;box-shadow:0 6px 28px rgba(10,22,40,0.07)">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:14px;margin-bottom:4px">
+                <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#0A1628">{{ b.title }}</div>
+                <div style="font-size:0.74rem;font-weight:800;color:#5A6A7A">{{ b.words }} words</div>
+              </div>
+              <div style="font-size:0.84rem;font-weight:600;color:#5A6A7A;margin-bottom:12px;line-height:1.6">{{ b.hint }}</div>
+              <textarea onChange="{{ b.onChange }}" value="{{ b.value }}" placeholder="{{ b.placeholder }}" rows="3" style="width:100%;border:1.5px solid #E5EAF0;border-radius:11px;padding:13px 15px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:0.93rem;color:#111827;line-height:1.65;resize:vertical;background:#FAFBFD" style-focus="outline:none;border-color:#00C6A7;background:#fff"></textarea>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="margin-top:16px;background:#FFF8F0;border:1.5px solid #FFE0B2;border-radius:14px;padding:18px 20px;font-size:0.9rem;font-weight:600;color:#7C4A03;line-height:1.7">✍️ Aim for 5 paragraphs and about 250–350 words. Use one strong idea per paragraph, and end by saying how you felt.</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isSpelling }}">
+      <div style="max-width:700px">
+        <div style="display:inline-block;background:#E0FAF5;color:#00A88E;font-weight:800;font-size:0.68rem;letter-spacing:1.8px;text-transform:uppercase;padding:5px 13px;border-radius:50px;margin-bottom:12px">Game</div>
+        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2.1rem;color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">Spelling Challenge</h1>
+        <p style="font-weight:600;color:#5A6A7A;font-size:0.95rem;margin:0 0 26px">Read the clue, hear the word, then spell it. Ten words per round.</p>
+        <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:18px;padding:32px;box-shadow:0 6px 28px rgba(10,22,40,0.08)">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;font-size:0.82rem;font-weight:800;color:#5A6A7A">
+            <span>{{ spellProgress }}</span>
+            <span style="color:#00A88E">{{ spellScore }}</span>
+          </div>
+          <div style="background:#FAFBFD;border:1.5px dashed #CBD5E1;border-radius:14px;padding:24px;text-align:center;margin-bottom:20px">
+            <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#5A6A7A;margin-bottom:10px">Clue</div>
+            <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.16rem;color:#0A1628;line-height:1.5;text-wrap:pretty">{{ spellClue }}</div>
+            <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.5rem;color:#00A88E;letter-spacing:6px;margin-top:14px">{{ spellMask }}</div>
+            <button onClick="{{ sayWord }}" style="margin-top:16px;padding:10px 22px;border-radius:50px;background:#fff;border:1.5px solid #E5EAF0;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.85rem;color:#0A1628;cursor:pointer" style-hover="border-color:#00C6A7">🔊 Hear the word</button>
+          </div>
+          <input onChange="{{ onSpellInput }}" value="{{ spellInput }}" placeholder="Type the spelling…" style="width:100%;border:1.5px solid #E5EAF0;border-radius:12px;padding:16px 18px;font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;letter-spacing:1px;color:#0A1628;background:#fff;text-align:center" style-focus="outline:none;border-color:#00C6A7">
+          <div style="display:flex;gap:10px;margin-top:16px">
+            <button onClick="{{ checkSpelling }}" style="flex:1;padding:14px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.98rem;cursor:pointer">{{ spellBtn }}</button>
+            <button onClick="{{ resetSpelling }}" style="padding:14px 24px;border-radius:50px;background:#fff;border:1.5px solid #E5EAF0;font-family:'Syne',sans-serif;font-weight:900;font-size:0.98rem;color:#5A6A7A;cursor:pointer" style-hover="border-color:#00C6A7">New round</button>
+          </div>
+          <sc-if value="{{ spellFeedback }}">
+            <div style="margin-top:18px;padding:16px 18px;border-radius:13px;font-weight:700;font-size:0.94rem;line-height:1.65;animation:pop .2s ease-out;background:{{ spellFbBg }};color:{{ spellFbColor }};border:{{ spellFbBorder }}">{{ spellFeedback }}</div>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isUpgrade }}">
+      <div style="max-width:660px">
+        <div style="display:inline-block;background:#E0FAF5;color:#00A88E;font-weight:800;font-size:0.68rem;letter-spacing:1.8px;text-transform:uppercase;padding:5px 13px;border-radius:50px;margin-bottom:12px">Upgrade</div>
+        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2.1rem;color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">Add more subjects</h1>
+        <p style="font-weight:600;color:#5A6A7A;font-size:0.95rem;margin:0 0 20px">You only pay the difference between what you have already paid and the bigger package.</p>
+
+        <div style="background:#0A1628;border-radius:14px;padding:18px 20px;margin-bottom:20px">
+          <div style="font-size:0.66rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,0.45)">Your package now</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#fff;margin-top:5px">{{ currentPlanLine }}</div>
+          <div style="font-size:0.84rem;font-weight:700;color:#00C6A7;margin-top:6px">{{ currentSubjectLine }}</div>
+        </div>
+
+        <sc-if value="{{ upChoose }}">
+          <div>
+            <sc-if value="{{ upHasOptions }}">
+              <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
+                <sc-for list="{{ upOptions }}" as="o" hint-placeholder-count="2">
+                  <button onClick="{{ o.pick }}" style="display:flex;align-items:center;gap:14px;text-align:left;cursor:pointer;padding:18px 20px;border-radius:14px;font-family:'Plus Jakarta Sans',sans-serif;box-shadow:0 6px 28px rgba(10,22,40,0.07);background:{{ o.bg }};border:{{ o.border }}">
+                    <span style="flex:1">
+                      <span style="display:block;font-family:'Syne',sans-serif;font-weight:900;font-size:1.04rem;color:#0A1628">{{ o.name }}</span>
+                      <span style="display:block;font-size:0.84rem;font-weight:600;color:#5A6A7A;margin-top:3px">{{ o.subtitle }}</span>
+                    </span>
+                    <span style="text-align:right;flex-shrink:0">
+                      <span style="display:block;font-family:'Syne',sans-serif;font-weight:900;font-size:1.5rem;color:#00A88E;line-height:1">P{{ o.due }}</span>
+                      <span style="display:block;font-size:0.72rem;font-weight:700;color:#5A6A7A;margin-top:2px">to pay now</span>
+                    </span>
+                  </button>
+                </sc-for>
+              </div>
+
+              <sc-if value="{{ upNeedsSubjects }}">
+                <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:20px;margin-bottom:18px;box-shadow:0 6px 28px rgba(10,22,40,0.07)">
+                  <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:#5A6A7A;margin-bottom:12px">{{ upSlots }}</div>
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px">
+                    <sc-for list="{{ upSubjectPicks }}" as="s" hint-placeholder-count="6">
+                      <button onClick="{{ s.pick }}" style="display:flex;align-items:center;gap:9px;padding:13px 14px;border-radius:12px;cursor:pointer;text-align:left;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.88rem;color:#0A1628;background:{{ s.bg }};border:{{ s.border }};opacity:{{ s.opacity }}">
+                        <span>{{ s.emoji }}</span><span style="flex:1">{{ s.name }}</span>
+                        <span style="font-size:0.7rem;font-weight:800;color:#5A6A7A">{{ s.note }}</span>
+                      </button>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ upError }}">
+                <div style="background:#FEF2F2;border:1.5px solid rgba(230,57,70,0.35);color:#B91C1C;border-radius:11px;padding:12px 15px;font-size:0.86rem;font-weight:700;margin-bottom:14px">{{ upError }}</div>
+              </sc-if>
+
+              <div style="display:flex;gap:11px">
+                <button onClick="{{ upBackToPractice }}" style="padding:14px 22px;border-radius:50px;background:#fff;border:1.5px solid #E5EAF0;color:#5A6A7A;font-family:'Syne',sans-serif;font-weight:900;font-size:0.92rem;cursor:pointer" style-hover="border-color:#00C6A7;color:#0A1628">Not now</button>
+                <button onClick="{{ upToPay }}" style="flex:1;padding:14px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.98rem;cursor:pointer;box-shadow:0 8px 26px rgba(0,198,167,0.28)">Continue to payment →</button>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ upPay }}">
+          <div>
+            <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:22px;box-shadow:0 6px 28px rgba(10,22,40,0.07);margin-bottom:16px">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px">
+                <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.02rem;color:#0A1628">Upgrade to {{ upTargetName }}</span>
+                <span style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.6rem;color:#00A88E">P{{ upDue }}</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:9px">
+                <sc-for list="{{ upMethods }}" as="m" hint-placeholder-count="3">
+                  <button onClick="{{ m.pick }}" style="display:flex;align-items:center;gap:13px;padding:15px 17px;border-radius:12px;cursor:pointer;text-align:left;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.92rem;color:#0A1628;background:{{ m.bg }};border:{{ m.border }}">
+                    <span style="font-size:1.25rem">{{ m.icon }}</span>
+                    <span style="flex:1">{{ m.name }}</span>
+                    <span style="font-family:'Syne',sans-serif;font-weight:900;color:#00A88E">{{ m.mark }}</span>
+                  </button>
+                </sc-for>
+              </div>
+              <sc-if value="{{ upHow }}">
+                <div style="margin-top:16px;background:#F7FBFA;border:1.5px solid #E0FAF5;border-radius:12px;padding:16px 18px">
+                  <div style="font-size:0.9rem;font-weight:600;color:#374151;line-height:1.7;text-wrap:pretty">{{ upHow }}</div>
+                  <div style="margin-top:12px;padding-top:12px;border-top:1px solid #E0FAF5;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap">
+                    <span style="font-size:0.82rem;font-weight:700;color:#5A6A7A">Reference</span>
+                    <span style="font-family:'Syne',sans-serif;font-weight:900;font-size:0.92rem;color:#0A1628;letter-spacing:1px">{{ upReference }}</span>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+
+            <sc-if value="{{ upError }}">
+              <div style="background:#FEF2F2;border:1.5px solid rgba(230,57,70,0.35);color:#B91C1C;border-radius:11px;padding:12px 15px;font-size:0.86rem;font-weight:700;margin-bottom:14px">{{ upError }}</div>
+            </sc-if>
+
+            <div style="display:flex;gap:11px">
+              <button onClick="{{ upBackToChoose }}" style="padding:14px 22px;border-radius:50px;background:#fff;border:1.5px solid #E5EAF0;color:#5A6A7A;font-family:'Syne',sans-serif;font-weight:900;font-size:0.92rem;cursor:pointer" style-hover="border-color:#00C6A7;color:#0A1628">Back</button>
+              <button onClick="{{ upConfirm }}" style="flex:1;padding:14px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.98rem;cursor:pointer;box-shadow:0 8px 26px rgba(0,198,167,0.28)">I have paid — unlock now</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ upDone }}">
+          <div style="background:#fff;border:1.5px solid rgba(0,198,167,0.4);border-radius:18px;padding:34px 28px;text-align:center;box-shadow:0 6px 28px rgba(10,22,40,0.08);animation:pop .22s ease-out">
+            <div style="font-size:2.6rem;margin-bottom:10px">🎉</div>
+            <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.5rem;color:#0A1628;margin-bottom:10px">Subjects unlocked!</div>
+            <div style="font-weight:600;color:#5A6A7A;font-size:0.94rem;line-height:1.7;margin-bottom:22px;text-wrap:pretty">{{ upDoneLine }}</div>
+            <button onClick="{{ upBackToPractice }}" style="padding:14px 32px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.96rem;cursor:pointer">Start practising →</button>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isPosters }}">
+      <div>
+        <div style="display:inline-block;background:#E0FAF5;color:#00A88E;font-weight:800;font-size:0.68rem;letter-spacing:1.8px;text-transform:uppercase;padding:5px 13px;border-radius:50px;margin-bottom:12px">Revision</div>
+        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2.1rem;color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">Study Guide Posters</h1>
+        <p style="font-weight:600;color:#5A6A7A;font-size:0.95rem;margin:0 0 26px">Key facts worth memorising. Print them or read one poster a night.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:18px">
+          <sc-for list="{{ posters }}" as="p" hint-placeholder-count="6">
+            <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:18px;padding:24px;box-shadow:0 6px 28px rgba(10,22,40,0.08)">
+              <div style="display:flex;align-items:center;gap:11px;margin-bottom:16px">
+                <span style="font-size:1.6rem">{{ p.emoji }}</span>
+                <span style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.08rem;color:#0A1628">{{ p.name }}</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:9px">
+                <sc-for list="{{ p.facts }}" as="f" hint-placeholder-count="5">
+                  <div style="display:flex;gap:10px;padding:11px 13px;border-radius:11px;background:#F7FBFA;border:1px solid #E0FAF5;font-size:0.88rem;font-weight:600;color:#374151;line-height:1.6">
+                    <span style="color:#00A88E;font-weight:900">▸</span><span>{{ f }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+  </main>
+</div>
+</sc-if>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;learnerName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Learner&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Learner&quot;},&quot;questionsPerRound&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:5,&quot;min&quot;:3,&quot;max&quot;:10,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Learner&quot;},&quot;examDate&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;2026-10-05&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Exam&quot;},&quot;examLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;October 2026 exams&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Exam&quot;}}">
+const SUBJECTS = [
+  {id:'maths', name:'Maths', emoji:'🔢'},
+  {id:'english', name:'English', emoji:'📖'},
+  {id:'setswana', name:'Setswana', emoji:'🌍'},
+  {id:'social', name:'Social Studies', emoji:'🏛️'},
+  {id:'science', name:'Science', emoji:'🔬'},
+  {id:'agric', name:'Agriculture', emoji:'🌱'}
+];
+
+const PARTS = {
+  science: ['./bank-science.js','./bank-science-p2.js','./bank-science-p3.js'],
+  maths: ['./bank-maths.js','./bank-maths-p2.js','./bank-maths-p3.js'],
+  english: ['./bank-english.js','./bank-english-p2.js','./bank-english-p3.js','./bank-english-p4.js'],
+  setswana: ['./bank-setswana.js','./bank-setswana-p2.js','./bank-setswana-p3.js','./bank-setswana-p4.js'],
+  social: ['./bank-social.js','./bank-social-p2.js','./bank-social-p3.js'],
+  agric: ['./bank-agriculture.js','./bank-agriculture-p2.js','./bank-agriculture-p3.js','./bank-agriculture-p4.js']
+};
+
+const LEGACY = {
+  maths: [
+    {level:'Easy', q:'What is 3/4 of 240?', opts:['160','180','200','120'], a:1, exp:'Divide 240 by 4 to get 60, then multiply by 3: 60 × 3 = 180.'},
+    {level:'Easy', q:'Round 4 678 to the nearest hundred.', opts:['4 600','4 680','4 700','5 000'], a:2, exp:'The tens digit is 7, which is 5 or more, so round the hundreds up: 4 700.'},
+    {level:'Medium', q:'A shirt costs P85. What is the cost of 7 shirts?', opts:['P585','P595','P605','P575'], a:1, exp:'85 × 7 = 595. Split it up: 80 × 7 = 560 and 5 × 7 = 35, then add.'},
+    {level:'Medium', q:'What is 25% of P640?', opts:['P160','P150','P170','P180'], a:0, exp:'25% is the same as one quarter. 640 ÷ 4 = 160.'},
+    {level:'Medium', q:'The perimeter of a square is 36 cm. What is its area?', opts:['81 cm²','36 cm²','72 cm²','144 cm²'], a:0, exp:'Each side is 36 ÷ 4 = 9 cm. Area = 9 × 9 = 81 cm².'},
+    {level:'Hard', q:'A tank holds 4.5 litres. How many 250 ml cups can be filled?', opts:['15','18','20','22'], a:1, exp:'4.5 litres = 4 500 ml. 4 500 ÷ 250 = 18 cups.'},
+    {level:'Hard', q:'Neo scored 18 out of 25. What is her percentage?', opts:['68%','72%','75%','78%'], a:1, exp:'18/25 = 72/100, because 25 × 4 = 100 and 18 × 4 = 72. So 72%.'}
+  ],
+  english: [
+    {level:'Easy', q:'Choose the correct word: The learners ____ writing their exams.', opts:['is','are','was','be'], a:1, exp:'"Learners" is plural, so it takes the plural verb "are".'},
+    {level:'Easy', q:'What is the plural of "child"?', opts:['childs','childes','children','childrens'], a:2, exp:'"Child" is an irregular noun — the plural is "children".'},
+    {level:'Medium', q:'Which word is an adverb? "She answered the question carefully."', opts:['She','answered','question','carefully'], a:3, exp:'"Carefully" describes how she answered, so it is an adverb.'},
+    {level:'Medium', q:'Choose the correctly punctuated sentence.', opts:['Where is my pencil.','Where is my pencil?','where is my pencil?','Where is my pencil!'], a:1, exp:'A question begins with a capital letter and ends with a question mark.'},
+    {level:'Medium', q:'What does the idiom "to pull someone\'s leg" mean?', opts:['To hurt them','To joke with them','To help them','To race them'], a:1, exp:'It means to tease or joke with someone, not to be serious.'},
+    {level:'Hard', q:'Change to reported speech: He said, "I am tired."', opts:['He said he is tired.','He said he was tired.','He says he was tired.','He said I was tired.'], a:1, exp:'In reported speech the present tense "am" moves back to the past tense "was".'},
+    {level:'Hard', q:'Choose the correct comparison: This paper was ____ than the last one.', opts:['more easy','easyer','easier','most easy'], a:2, exp:'Short adjectives add -er. "Easy" drops the y and becomes "easier".'}
+  ],
+  setswana: [
+    {level:'Easy', q:'Tlhopha leina la bontsi la "ngwana".', opts:['bangwana','bana','ngwanana','bongwana'], a:1, exp:'Leina "ngwana" mo bontsing ke "bana".'},
+    {level:'Easy', q:'Setswana sa "school" ke eng?', opts:['sekolo','setlhare','setswalo','sediba'], a:0, exp:'"School" ke "sekolo" mo Setswaneng.'},
+    {level:'Medium', q:'Tlatsa: Ke ____ dijo maabane.', opts:['ja','jele','tla ja','a ja'], a:1, exp:'"Maabane" e supa nako e e fetileng, ka jalo re dirisa "jele".'},
+    {level:'Medium', q:'Seane "Mmangwana o tshwara thipa ka fa bogaleng" se raya eng?', opts:['Mmè o rata dilwana','Mmè o itshokela ngwana wa gagwe','Ngwana o tshaba thipa','Mmè o tshaba ngwana'], a:1, exp:'Se supa gore mmè o ka itshokela dipogisego dingwe le dingwe go thusa ngwana wa gagwe.'},
+    {level:'Medium', q:'Tlhopha lediri mo polelong: "Kgosi o bua le batho."', opts:['Kgosi','bua','batho','le'], a:1, exp:'"Bua" ke lediri ka gonne e supa tiro.'},
+    {level:'Hard', q:'Bontsi jwa "lekgetlo" ke eng?', opts:['makgetlo','dikgetlo','bokgetlo','lekgetlong'], a:0, exp:'Maina a a simolola ka "le-" mo bontsing a simolola ka "ma-": makgetlo.'},
+    {level:'Hard', q:'Tlhopha polelo e e kwadilweng sentle.', opts:['Ke ya sekolong ka moso.','ke ya sekolong ka moso','Ke ya sekolong ka moso','Keya sekolong ka moso.'], a:0, exp:'Polelo e simolola ka tlhaka e kgolo mme e felela ka lekwalonyana la khutlo.'}
+  ],
+  social: [
+    {level:'Easy', q:'What is the capital city of Botswana?', opts:['Francistown','Gaborone','Maun','Serowe'], a:1, exp:'Gaborone became the capital in 1966, when Botswana gained independence.'},
+    {level:'Easy', q:'In which year did Botswana gain independence?', opts:['1956','1960','1966','1976'], a:2, exp:'Botswana became independent on 30 September 1966.'},
+    {level:'Medium', q:'Which desert covers a large part of Botswana?', opts:['Sahara','Namib','Kalahari','Karoo'], a:2, exp:'The Kalahari (Kgalagadi) covers roughly two thirds of the country.'},
+    {level:'Medium', q:'Which mineral is Botswana best known for exporting?', opts:['Gold','Diamonds','Coal','Copper'], a:1, exp:'Diamonds mined at places like Jwaneng and Orapa are the main export.'},
+    {level:'Medium', q:'What is a kgotla used for?', opts:['Farming','Community meetings and disputes','Storing grain','Trading cattle'], a:1, exp:'The kgotla is the traditional meeting place where the community discusses matters and settles disputes.'},
+    {level:'Hard', q:'Which country does NOT share a border with Botswana?', opts:['Namibia','Zimbabwe','Zambia','Angola'], a:3, exp:'Botswana borders Namibia, Zimbabwe, South Africa and Zambia. Angola is further north.'},
+    {level:'Hard', q:'Which river forms part of Botswana\'s northern border?', opts:['Limpopo','Chobe','Orange','Zambezi'], a:1, exp:'The Chobe River forms part of the northern border with Namibia.'}
+  ],
+  science: [
+    {level:'Easy', q:'Which part of a plant takes in water from the soil?', opts:['Leaf','Stem','Root','Flower'], a:2, exp:'Roots absorb water and dissolved minerals from the soil.'},
+    {level:'Easy', q:'What are the three states of matter?', opts:['Solid, liquid, gas','Hot, cold, warm','Hard, soft, wet','Big, small, medium'], a:0, exp:'Matter exists as a solid, a liquid or a gas.'},
+    {level:'Medium', q:'What happens to water during evaporation?', opts:['Liquid becomes gas','Gas becomes liquid','Liquid becomes solid','Solid becomes gas'], a:0, exp:'Heat turns liquid water into water vapour, a gas. That is evaporation.'},
+    {level:'Medium', q:'Which material is a good conductor of electricity?', opts:['Rubber','Copper','Plastic','Wood'], a:1, exp:'Metals like copper conduct electricity, which is why wires are made of copper.'},
+    {level:'Medium', q:'Which stage comes after the egg in a butterfly life cycle?', opts:['Pupa','Adult','Larva (caterpillar)','Cocoon'], a:2, exp:'Egg → larva (caterpillar) → pupa → adult butterfly.'},
+    {level:'Hard', q:'Why do plants need sunlight?', opts:['To stay warm','To make food by photosynthesis','To drink water','To grow roots'], a:1, exp:'Plants use sunlight, water and carbon dioxide to make food. This is photosynthesis.'},
+    {level:'Hard', q:'A complete circuit must have a source, wires and a…', opts:['switch only','load such as a bulb','magnet','battery holder'], a:1, exp:'Current needs a complete path through a load, such as a bulb, to do work.'}
+  ],
+  agric: [
+    {level:'Easy', q:'Which soil type holds the most water?', opts:['Sandy soil','Clay soil','Gravel','Loam'], a:1, exp:'Clay has very small particles, so it holds water tightly.'},
+    {level:'Easy', q:'What is the main purpose of irrigation?', opts:['To kill pests','To supply water to crops','To plough the land','To sell crops'], a:1, exp:'Irrigation supplies water to crops when rainfall is not enough.'},
+    {level:'Medium', q:'Why do farmers practise crop rotation?', opts:['To keep the soil fertile','To make fields look neat','To use fewer seeds','To grow taller plants'], a:0, exp:'Different crops use different nutrients, so rotating them keeps the soil fertile and reduces pests.'},
+    {level:'Medium', q:'Which of these is an indigenous Botswana cattle breed?', opts:['Tswana','Jersey','Friesian','Angus'], a:0, exp:'The Tswana breed is indigenous and well suited to hot, dry conditions.'},
+    {level:'Medium', q:'What is compost made from?', opts:['Plastic waste','Decayed plant and animal matter','Sand and cement','Fertiliser bags'], a:1, exp:'Compost is decayed organic matter that adds nutrients back to the soil.'},
+    {level:'Hard', q:'Which practice best reduces soil erosion on a slope?', opts:['Ploughing up and down the slope','Contour ploughing','Removing all grass','Burning the field'], a:1, exp:'Contour ploughing follows the shape of the land, slowing water so it cannot wash soil away.'},
+    {level:'Hard', q:'Why is overgrazing harmful?', opts:['Cattle get fat','Grass cannot recover and soil is exposed','It makes milk sour','It attracts rain'], a:1, exp:'Too many animals on one area strip the grass, leaving bare soil that erodes easily.'}
+  ]
+};
+
+const TIPS = [
+  {id:'maths', name:'Maths', emoji:'🔢', tips:['Show your working even in multiple choice — it helps you spot careless slips.','Learn your times tables to 12 by heart. Speed here saves time for harder questions.','Underline the question words: "how many more", "altogether", "each".','Estimate first. If your answer is far from your estimate, check again.','Leave a hard question, mark it, and come back. Never lose five minutes on one item.']},
+  {id:'english', name:'English', emoji:'📖', tips:['Read the comprehension questions first, then read the passage looking for answers.','For vocabulary questions, read the whole sentence and try each option in place.','Learn the common tenses: I go / I went / I have gone.','In composition, plan for two minutes before you write a single line.','Watch capital letters and full stops — easy marks are lost there.']},
+  {id:'setswana', name:'Setswana', emoji:'🌍', tips:['Ithute maele le diane — a tlhola a tlhagelela mo tlhatlhobong.','Ela tlhoko dikarolo tsa puo: leina, lediri, letlhaodi.','Bala dikwalo tsa Setswana kgatlhanong le go ithuta ka tlhogo fela.','Kwala dipolelo di di khutshwane tse di feletseng sentle.','Dirisa bontsi le bongwe fa o tshwantshanya maina.']},
+  {id:'social', name:'Social Studies', emoji:'🏛️', tips:['Know the map of Botswana: districts, main towns and neighbouring countries.','Learn key dates: 1966 independence, and the leaders in order.','Understand the kgotla, the three arms of government and the role of a chief.','Link causes to effects — exams often ask "why", not just "what".','Draw simple maps from memory once a week.']},
+  {id:'science', name:'Science', emoji:'🔬', tips:['Learn the water cycle and life cycles as diagrams, not paragraphs.','Know your key words: evaporation, condensation, conductor, insulator.','Practise reading tables and bar graphs — there is always at least one.','Do simple safe experiments at home; you remember what you do.','Explain answers in cause-and-effect sentences.']},
+  {id:'agric', name:'Agriculture', emoji:'🌱', tips:['Know the three soil types and what each is good for.','Learn the difference between crop rotation, mixed farming and monoculture.','Understand pest control methods and why some are safer than others.','Learn common livestock diseases and their prevention.','Connect farming practices to Botswana\'s dry climate.']}
+];
+
+const POSTERS = [
+  {id:'maths', name:'Maths key facts', emoji:'🔢', facts:['Area of a rectangle = length × width; perimeter = 2 × (l + w)','1 km = 1 000 m · 1 m = 100 cm · 1 kg = 1 000 g · 1 l = 1 000 ml','To find a percentage: part ÷ whole × 100','Fractions to decimals: ½ = 0.5 · ¼ = 0.25 · ¾ = 0.75 · ⅕ = 0.2','Order of operations: brackets, then × ÷, then + −']},
+  {id:'english', name:'English essentials', emoji:'📖', facts:['Every sentence needs a subject and a verb','Common conjunctions: and, but, because, although, so','Their (belonging) · There (place) · They\'re (they are)','Its (belonging) · It\'s (it is)','Paragraph = one main idea plus supporting sentences']},
+  {id:'setswana', name:'Setswana dikakaretso', emoji:'🌍', facts:['Maina a a simolola ka le- a fetoga ma- mo bontsing','Lediri le supa tiro; letlhaodi le tlhalosa leina','Diane di dirisiwa go ruta botshelo','Dinako: gompieno, maabane, kamoso','Sebopego sa polelo: leina + lediri + tlaleletso']},
+  {id:'social', name:'Botswana facts', emoji:'🏛️', facts:['Independence: 30 September 1966','Capital: Gaborone · Currency: Pula and Thebe','Neighbours: South Africa, Namibia, Zimbabwe, Zambia','Main exports: diamonds, beef, copper-nickel, tourism','Kgotla: traditional place of community discussion']},
+  {id:'science', name:'Science diagrams', emoji:'🔬', facts:['Water cycle: evaporation → condensation → precipitation → collection','Photosynthesis needs sunlight, water and carbon dioxide','Conductors: metals · Insulators: rubber, plastic, wood','A circuit needs a source, a complete path and a load','Butterfly: egg → larva → pupa → adult']},
+  {id:'agric', name:'Agriculture basics', emoji:'🌱', facts:['Soils: sandy (drains fast) · clay (holds water) · loam (best for crops)','Crop rotation keeps soil fertile and breaks pest cycles','Contour ploughing reduces soil erosion on slopes','Compost and manure add organic matter to soil','Overgrazing exposes soil and causes erosion']}
+];
+
+const AFFIRMATIONS = [
+  'I am prepared, and I get better every single day.',
+  'A hard question is not a closed door. I can work it out.',
+  'I read carefully, I think clearly, I answer calmly.',
+  'Mistakes in practice are how I collect marks in the exam.',
+  'I have studied. I trust what I know.',
+  'I am calm. My mind is quiet and ready.',
+  'Ke kgona. Ke ithutile mme ke tla dira sentle.'
+];
+
+const ROUTINE = ['Sleep early the night before — no late studying.','Eat breakfast. Your brain needs food to think.','Pack your bag the night before.','Arrive early so you are not rushing.','Breathe five slow breaths before you open the paper.','Read every instruction twice before answering.'];
+
+const DAILY = ['Practise one MCQ round','Revise Maths for 20 minutes','Read aloud for 10 minutes','Learn 5 new words','Do a Setswana exercise','Revise one Science topic','Check homework','Say my affirmation'];
+
+const BAG = ['Two sharpened pencils','An eraser and sharpener','A ruler','A blue or black pen','Exam number / entry slip','Water bottle','School uniform ready','A watch (if allowed)'];
+
+const TOPICS = [
+  {id:'day', label:'A day I will never forget', hint:'Tell one story from start to finish.'},
+  {id:'friend', label:'My best friend', hint:'Describe them, then show why they matter.'},
+  {id:'rain', label:'The day it rained heavily', hint:'Use your senses: sound, smell, sight.'},
+  {id:'hero', label:'The person I admire most', hint:'Give real examples of what they do.'},
+  {id:'market', label:'A visit to the market', hint:'Describe people, noise, colour and smell.'}
+];
+
+const BOXES = [
+  {id:'plan', title:'1. My plan', hint:'Write your topic and the three main things that will happen.', placeholder:'Topic… then 3 main ideas'},
+  {id:'intro', title:'2. Introduction', hint:'Set the scene in two or three sentences. Where and when?', placeholder:'It was a Saturday morning in…'},
+  {id:'body', title:'3. Middle paragraphs', hint:'What happened, in order? Add what you saw, heard and felt.', placeholder:'First… Then… Suddenly…'},
+  {id:'end', title:'4. Ending', hint:'How did it finish, and how did you feel about it?', placeholder:'In the end… I felt…'}
+];
+
+const WORDS = [
+  {w:'beautiful', c:'Very pleasing to look at.'},
+  {w:'necessary', c:'Something you must have.'},
+  {w:'February', c:'The second month of the year.'},
+  {w:'because', c:'You use it to give a reason.'},
+  {w:'separate', c:'To keep things apart.'},
+  {w:'government', c:'The group that runs a country.'},
+  {w:'environment', c:'The world around us.'},
+  {w:'knowledge', c:'The things a person knows.'},
+  {w:'agriculture', c:'The science of farming.'},
+  {w:'independence', c:'Being free to rule yourself.'}
+].slice();
+
+const NAV = [
+  {view:'home', label:'Dashboard', icon:'🏠'},
+  {view:'practice', label:'Practice MCQs', icon:'✅'},
+  {view:'timer', label:'Study Timer', icon:'⏱️'},
+  {view:'tips', label:'Exam Tips', icon:'💡'},
+  {view:'calm', label:'Calm & Confidence', icon:'🧠'},
+  {view:'checklist', label:'Daily Checklist', icon:'📋'},
+  {view:'composition', label:'Composition', icon:'✍️'},
+  {view:'spelling', label:'Spelling Game', icon:'🔤'},
+  {view:'posters', label:'Study Posters', icon:'🗺️'}
+];
+
+const KEY = 'psle-toolkit-v1';
+const GRANTS_KEY = 'psle-access-grants';
+const UNLOCK_KEY = 'psle-unlocked';
+
+const PACKAGES = [
+  {id:'single', name:'Single Subject', price:75, quota:1},
+  {id:'bundle', name:'3-Subject Bundle', price:160, quota:3},
+  {id:'full', name:'Full Toolkit Access', price:300, quota:6}
+];
+
+const PAY_METHODS = [
+  {id:'orange', name:'Orange Money', icon:'📱', how:'Dial *145#, choose Send Money, enter 75562568 and the amount below.'},
+  {id:'myzaka', name:'MyZaka (Mascom)', icon:'💳', how:'Dial *167#, choose Pay Bill, enter 75562568 and the amount below.'},
+  {id:'bank', name:'Bank transfer', icon:'🏦', how:'Transfer to FNB Botswana, account 62812345678, branch 281267.'}
+];
+
+function shuffle(a){const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+
+class Component extends DCLogic {
+  state = {
+    locked:true, codeInput:'', codeError:'', remember:true, grantName:'', allowed:null, planName:'',
+    unlockCode:'', pricePaid:0,
+    upStage:'choose', upTarget:null, upSubjects:[], upMethod:null, upError:'',
+    view:'home', subject:null, level:'All', bank:{}, loaded:false, qTopic:'All topics', std:'All',
+    quiz:null, qIndex:0, selected:null, correct:0, quizDone:false,
+    progress:{}, stars:0,
+    affIndex:0, breathStep:0,
+    timerSecs:1800, timerLeft:1800, timerRunning:false,
+    openTip:'maths',
+    checked:{},
+    topic:'day', plan:{},
+    spellWords:shuffle(WORDS).slice(0,10), spellIndex:0, spellInput:'', spellScore:0, spellFeedback:'', spellOk:null
+  };
+
+  async loadBanks(){
+    const bank = {};
+    for(const s of SUBJECTS){
+      const parts = PARTS[s.id] || [];
+      let rows = [];
+      for(const p of parts){
+        try{
+          const mod = await import(p);
+          const data = mod.default || [];
+          rows = rows.concat(data.map(r => ({
+            q:r.q, opts:r.o, a:r.a, exp:r.e, level:r.l, topic:r.t, std:r.s
+          })));
+        }catch(e){}
+      }
+      if(!rows.length) rows = (LEGACY[s.id]||[]).map(r => Object.assign({topic:'General revision', std:'Std 6–7'}, r));
+      bank[s.id] = rows;
+    }
+    this.setState({bank, loaded:true});
+  }
+
+  grants(){
+    try{
+      const raw = localStorage.getItem(GRANTS_KEY);
+      return raw ? JSON.parse(raw) : [];
+    }catch(e){ return []; }
+  }
+
+  async db(){
+    if(!this._db){ try{ this._db = await import('./db.js'); }catch(e){ this._db = null; } }
+    return this._db;
+  }
+
+  async tryUnlock(){
+    const entered = this.state.codeInput.trim().toUpperCase().replace(/\s+/g,'');
+    if(!entered) return this.setState({codeError:'Please type the access code.'});
+    const db = await this.db();
+    if(!db) return this.setState({codeError:'The access system is unavailable. Please WhatsApp 75562568.'});
+
+    this.setState({codeError:'', checking:true});
+    let res;
+    try{
+      res = await db.redeemCode(entered);
+    }catch(e){
+      return this.setState({checking:false, codeError:'Something went wrong checking that code: ' + (e.message || 'unknown error')});
+    }
+    if(!res || !res.authorised){
+      return this.setState({checking:false, codeError:db.reasonMessage(res ? res.reason : 'not-found', res)});
+    }
+
+    const name = res.learner || '';
+    const allowed = (Array.isArray(res.subjects) && res.subjects.length && res.subjects.length < 6) ? res.subjects : null;
+    const planName = res.planName || '';
+    const price = res.price || 0;
+    if(this.state.remember){
+      try{ localStorage.setItem(UNLOCK_KEY, JSON.stringify({code:res.code, learner:name, subjects:allowed, planName, price})); }catch(e){}
+    }
+    this.setState({locked:false, checking:false, codeError:'', codeInput:'', grantName:name, allowed, planName, unlockCode:res.code, pricePaid:price});
+    this.pullProgress(res.code);
+  }
+
+  // Bring a learner's stars and history down from the server.
+  async pullProgress(code){
+    const db = await this.db();
+    if(!db) return;
+    try{
+      const rows = await db.loadProgress(code);
+      if(!rows || !rows.length) return;
+      const progress = {}; let stars = 0;
+      rows.forEach(r => {
+        progress[r.subject] = {answered:r.answered || 0, correct:r.correct || 0};
+        stars += (r.stars || 0);
+      });
+      this.setState(s => ({progress:Object.assign({}, progress, s.progress), stars:Math.max(stars, s.stars)}));
+    }catch(e){}
+  }
+
+  // Push one subject's totals up. Fire-and-forget.
+  async pushProgress(subject){
+    const db = await this.db();
+    if(!db || !this.state.unlockCode) return;
+    const p = (this.state.progress || {})[subject];
+    if(!p) return;
+    try{ await db.saveProgress(this.state.unlockCode, subject, p.answered, p.correct, this.state.stars); }catch(e){}
+  }
+
+  upgradeOptions(){
+    const paid = this.state.pricePaid || 0;
+    const have = this.state.allowed ? this.state.allowed.length : 6;
+    return PACKAGES.filter(p => p.quota > have).map(p => Object.assign({}, p, {due: Math.max(0, p.price - paid)}));
+  }
+
+  upTargetObj(){ return this.upgradeOptions().find(p => p.id === this.state.upTarget) || null; }
+
+  upNeedsSubjects(){
+    const t = this.upTargetObj();
+    return !!t && t.quota < 6;
+  }
+
+  applyUpgrade(){
+    const st = this.state;
+    const t = this.upTargetObj();
+    if(!t) return;
+    const kept = st.allowed || [];
+    const subjects = t.quota >= 6
+      ? SUBJECTS.map(s => s.id)
+      : kept.concat(st.upSubjects.filter(id => kept.indexOf(id) < 0)).slice(0, t.quota);
+    try{
+      const raw = localStorage.getItem(GRANTS_KEY);
+      const list = raw ? JSON.parse(raw) : [];
+      const i = list.findIndex(g => (g.code||'').toUpperCase() === (st.unlockCode||'').toUpperCase());
+      if(i >= 0){
+        list[i].subjects = subjects;
+        list[i].planName = t.name;
+        list[i].price = t.price;
+        list[i].upgrades = (list[i].upgrades || []).concat([{to:t.id, paid:t.due, method:st.upMethod, date:new Date().toISOString(), status:'pending-verification'}]);
+        localStorage.setItem(GRANTS_KEY, JSON.stringify(list));
+      }
+    }catch(e){}
+    try{
+      const raw = localStorage.getItem(UNLOCK_KEY);
+      if(raw){
+        const u = JSON.parse(raw);
+        u.subjects = subjects; u.planName = t.name; u.price = t.price;
+        localStorage.setItem(UNLOCK_KEY, JSON.stringify(u));
+      }
+    }catch(e){}
+    this.setState({allowed:subjects, planName:t.name, pricePaid:t.price, upStage:'done'});
+  }
+
+  canUse(id){
+    const a = this.state.allowed;
+    return !a || a.indexOf(id) >= 0;
+  }
+
+  // Re-checks a remembered session against the server on every load, so a
+  // revoked or unverified code loses access within one refresh.
+  async restoreSession(){
+    let u = null;
+    try{
+      const raw = localStorage.getItem(UNLOCK_KEY);
+      if(raw) u = JSON.parse(raw);
+    }catch(e){}
+    if(!u || !u.code) return;
+
+    // Admin previews are granted by the admin dashboard, not by a payment.
+    if(u.admin === true){
+      return this.setState({
+        locked:false, grantName:u.learner || '',
+        allowed: Array.isArray(u.subjects) && u.subjects.length ? u.subjects : null,
+        planName: u.planName || '', unlockCode: (u.code||'').toUpperCase(), pricePaid: u.price || 0
+      });
+    }
+
+    const db = await this.db();
+    if(!db) return;
+    try{
+      const res = await db.redeemCode(u.code);
+      if(!res || !res.authorised){
+        try{ localStorage.removeItem(UNLOCK_KEY); }catch(e){}
+        return this.setState({locked:true, codeError:db.reasonMessage(res ? res.reason : 'not-found', res)});
+      }
+      this.setState({
+        locked:false, grantName:res.learner || '',
+        allowed: (Array.isArray(res.subjects) && res.subjects.length && res.subjects.length < 6) ? res.subjects : null,
+        planName: res.planName || '', unlockCode: res.code, pricePaid: res.price || 0
+      });
+      this.pullProgress(res.code);
+    }catch(e){}
+  }
+
+  componentDidMount(){
+    this.restoreSession();
+    this.loadBanks();
+    try{
+      const raw = localStorage.getItem(KEY);
+      if(raw){
+        const s = JSON.parse(raw);
+        this.setState({progress:s.progress||{}, stars:s.stars||0, checked:s.checked||{}, plan:s.plan||{}, topic:s.topic||'day'});
+      }
+    }catch(e){}
+    this.tick = setInterval(()=>{
+      this.setState(s => {
+        const next = {breathStep:(s.breathStep+1)%3};
+        if(s.timerRunning && s.timerLeft>0) next.timerLeft = s.timerLeft-1;
+        if(s.timerRunning && s.timerLeft<=1) next.timerRunning = false;
+        return next;
+      });
+    }, 1000);
+  }
+  componentWillUnmount(){ clearInterval(this.tick); }
+
+  save(patch){
+    this.setState(patch, () => {
+      try{
+        const {progress, stars, checked, plan, topic} = this.state;
+        localStorage.setItem(KEY, JSON.stringify({progress, stars, checked, plan, topic}));
+      }catch(e){}
+    });
+  }
+
+  go(view){ this.setState({view}); }
+
+  rows(subject){ return (this.state.bank||{})[subject] || []; }
+
+  pool(){
+    const st = this.state;
+    return this.rows(st.subject).filter(q =>
+      (st.std==='All' || q.std===st.std) &&
+      (st.qTopic==='All topics' || q.topic===st.qTopic) &&
+      (st.level==='All' || q.level===st.level)
+    );
+  }
+
+  topicsFor(){
+    const st = this.state;
+    const seen = new Map();
+    this.rows(st.subject).filter(q => st.std==='All' || q.std===st.std).forEach(q => {
+      seen.set(q.topic, (seen.get(q.topic)||0)+1);
+    });
+    return Array.from(seen, ([name,count]) => ({name, count}));
+  }
+
+  standardsFor(){
+    const seen = [];
+    this.rows(this.state.subject).forEach(q => { if(q.std && seen.indexOf(q.std)<0) seen.push(q.std); });
+    return seen;
+  }
+
+  startQuiz(){
+    if(!this.canUse(this.state.subject)) return;
+    const size = this.props.questionsPerRound ?? 5;
+    const qs = shuffle(this.pool()).slice(0, size);
+    if(!qs.length) return;
+    this.setState({quiz:qs, qIndex:0, selected:null, correct:0, quizDone:false});
+  }
+
+  answer(i){
+    if(this.state.selected!==null) return;
+    const q = this.state.quiz[this.state.qIndex];
+    const ok = i===q.a;
+    const sid = this.state.subject;
+    const p = Object.assign({}, this.state.progress);
+    const cur = p[sid] || {answered:0, correct:0};
+    p[sid] = {answered:cur.answered+1, correct:cur.correct + (ok?1:0)};
+    this.save({selected:i, correct:this.state.correct+(ok?1:0), progress:p, stars:this.state.stars+(ok?1:0)});
+    clearTimeout(this._sync);
+    this._sync = setTimeout(() => this.pushProgress(sid), 1500);
+  }
+
+  next(){
+    if(this.state.qIndex+1 >= this.state.quiz.length) this.setState({quizDone:true, quiz:null});
+    else this.setState({qIndex:this.state.qIndex+1, selected:null});
+  }
+
+  fmt(s){ const m=Math.floor(s/60), r=s%60; return m+':'+String(r).padStart(2,'0'); }
+
+  daysToExam(){
+    const target = new Date(this.props.examDate || '2026-10-05');
+    const diff = Math.ceil((target - new Date())/86400000);
+    return diff > 0 ? diff : 0;
+  }
+
+  renderVals(){
+    const st = this.state;
+    const learner = st.grantName || this.props.learnerName || 'Learner';
+    const teal = '#00C6A7';
+
+    const navItems = NAV.map(n => ({
+      label:n.label, icon:n.icon,
+      go: () => this.go(n.view),
+      bg: st.view===n.view ? 'rgba(0,198,167,0.14)' : 'transparent',
+      border: st.view===n.view ? 'rgba(0,198,167,0.45)' : 'transparent',
+      color: st.view===n.view ? teal : 'rgba(255,255,255,0.72)'
+    }));
+
+    const subjectProgress = SUBJECTS.map(s => {
+      const p = st.progress[s.id] || {answered:0, correct:0};
+      const total = Math.max(1, this.rows(s.id).length);
+      const pct = Math.min(100, Math.round(p.answered/total*100));
+      const open = this.canUse(s.id);
+      return {
+        name:s.name, emoji: open ? s.emoji : '🔒', pct: open ? pct+'%' : '0%',
+        answeredLabel: open ? (p.answered ? p.answered+' answered' : 'Not started') : 'Not in your package',
+        scoreLabel: open ? (p.answered ? Math.round(p.correct/p.answered*100)+'%' : '—') : 'Locked',
+        cardBg: open ? '#fff' : '#F3F5F8',
+        cardOpacity: open ? '1' : '0.72',
+        go: () => open
+          ? this.setState({view:'practice', subject:s.id, quiz:null, quizDone:false, qTopic:'All topics', std:'All'})
+          : this.setState({view:'practice'})
+      };
+    });
+
+    const doneCount = DAILY.filter((_,i) => st.checked['d'+i]).length;
+    const task = (text, i) => ({
+      text,
+      mark: st.checked['d'+i] ? '✓' : '',
+      boxBg: st.checked['d'+i] ? teal : '#CBD5E1',
+      textColor: st.checked['d'+i] ? '#5A6A7A' : '#111827',
+      toggle: () => {
+        const c = Object.assign({}, st.checked); c['d'+i] = !c['d'+i];
+        this.save({checked:c, stars: c['d'+i] ? st.stars+1 : st.stars});
+      }
+    });
+
+    const q = st.quiz ? st.quiz[st.qIndex] : null;
+    const answered = st.selected !== null;
+    const isRight = answered && q && st.selected === q.a;
+    const poolCount = st.subject ? this.pool().length : 0;
+    const subjName = st.subject ? SUBJECTS.find(s=>s.id===st.subject).name : '';
+
+    const spellWord = st.spellWords[st.spellIndex];
+
+    const planBoxes = BOXES.map(b => ({
+      title:b.title, hint:b.hint, placeholder:b.placeholder,
+      value: st.plan[b.id] || '',
+      words: (st.plan[b.id]||'').trim() ? (st.plan[b.id]||'').trim().split(/\s+/).length : 0,
+      onChange: (e) => { const p = Object.assign({}, st.plan); p[b.id] = e.target.value; this.save({plan:p}); }
+    }));
+
+    const pill = (on) => ({
+      bg: on ? teal : '#fff',
+      color: on ? '#0A1628' : '#5A6A7A',
+      border: on ? '1.5px solid '+teal : '1.5px solid #E5EAF0'
+    });
+
+    return {
+      locked: st.locked, unlocked: !st.locked,
+      codeInput: st.codeInput,
+      codeError: st.codeError,
+      onCodeInput: (e) => this.setState({codeInput:e.target.value, codeError:''}),
+      onCodeKey: (e) => { if(e.key === 'Enter') this.tryUnlock(); },
+      submitCode: () => this.tryUnlock(),
+      remember: st.remember,
+      rememberMark: st.remember ? '✓' : '',
+      rememberBg: st.remember ? teal : 'rgba(255,255,255,0.25)',
+      toggleRemember: () => this.setState({remember: !st.remember}),
+      lockApp: () => {
+        try{ localStorage.removeItem(UNLOCK_KEY); }catch(e){}
+        this.setState({locked:true, codeInput:'', codeError:'', grantName:'', allowed:null, planName:'', unlockCode:'', pricePaid:0});
+      },
+
+      adminPreview: (st.planName || '').indexOf('admin') >= 0,
+      previewLabel: st.allowed ? 'Admin preview · seeing ' + st.allowed.length + ' subject(s)' : 'Admin preview · all six subjects unlocked',
+
+      navItems, learner, stars: st.stars,
+      daysLeft: this.daysToExam(),
+      examLabel: this.props.examLabel || 'October 2026 exams',
+      homeLine: st.stars ? 'You have earned '+st.stars+' stars so far. Keep the streak going — pick a subject and practise a round.' : 'Start with one round of MCQs. Five questions is enough to begin.',
+      isHome: st.view==='home', isPractice: st.view==='practice', isTimer: st.view==='timer',
+      isTips: st.view==='tips', isCalm: st.view==='calm', isChecklist: st.view==='checklist',
+      isComposition: st.view==='composition', isSpelling: st.view==='spelling', isPosters: st.view==='posters',
+      subjectProgress,
+      todayTasks: DAILY.slice(0,4).map(task),
+      dailyTasks: DAILY.map(task),
+      bagItems: BAG,
+      checklistLine: doneCount+' of '+DAILY.length+' tasks done today',
+      checklistPct: Math.round(doneCount/DAILY.length*100)+'%',
+      checklistPctLabel: Math.round(doneCount/DAILY.length*100)+'%',
+      resetChecklist: () => this.save({checked:{}}),
+      affirmation: AFFIRMATIONS[st.affIndex % AFFIRMATIONS.length],
+      nextAffirmation: () => this.setState({affIndex: st.affIndex+1}),
+      routine: ROUTINE,
+      breathPhase: ['Breathe in','Hold','Breathe out'][st.breathStep],
+
+      subjectPicks: SUBJECTS.map(s => {
+        const open = this.canUse(s.id);
+        return {
+          name:s.name, emoji: open ? s.emoji : '🔒',
+          count: open ? this.rows(s.id).length + ' questions' : 'Locked',
+          bg: open ? '#fff' : '#F3F5F8',
+          opacity: open ? '1' : '0.7',
+          border: st.subject===s.id && open ? '2px solid '+teal : '1.5px solid #E5EAF0',
+          pick: () => open && this.setState({subject:s.id, quiz:null, quizDone:false, qTopic:'All topics', std:'All'})
+        };
+      }),
+      hasLocked: !!st.allowed && st.allowed.length < SUBJECTS.length,
+      lockedLine: st.allowed
+        ? 'Your ' + (st.planName || 'package') + ' covers ' + st.allowed.length + ' of the 6 subjects.'
+        : '',
+      goUpgrade: () => this.setState({view:'upgrade', upStage:'choose', upTarget:null, upSubjects:[], upMethod:null, upError:''}),
+
+      isUpgrade: st.view === 'upgrade',
+      upChoose: st.upStage === 'choose',
+      upPay: st.upStage === 'pay',
+      upDone: st.upStage === 'done',
+      currentPlanLine: (st.planName || 'Your package') + ' · ' + (st.allowed ? st.allowed.length : 6) + ' of 6 subjects · P' + (st.pricePaid || 0) + ' paid',
+      currentSubjectLine: (st.allowed || SUBJECTS.map(s=>s.id))
+        .map(id => (SUBJECTS.find(s => s.id === id) || {}).name).filter(Boolean).join(' · '),
+      upOptions: this.upgradeOptions().map(p => ({
+        name:p.name, quota:p.quota, due:p.due,
+        subtitle: p.quota >= 6 ? 'All six subjects' : 'Any ' + p.quota + ' subjects',
+        bg: st.upTarget === p.id ? 'rgba(0,198,167,0.10)' : '#fff',
+        border: st.upTarget === p.id ? '2px solid ' + teal : '1.5px solid #E5EAF0',
+        pick: () => this.setState({upTarget:p.id, upSubjects:[], upError:''})
+      })),
+      upHasOptions: this.upgradeOptions().length > 0,
+      upNeedsSubjects: this.upNeedsSubjects(),
+      upSlots: (() => {
+        const t = this.upTargetObj();
+        if(!t) return '';
+        const have = st.allowed ? st.allowed.length : 0;
+        const extra = t.quota - have;
+        return 'Choose ' + extra + ' more subject' + (extra === 1 ? '' : 's') + ' · ' + st.upSubjects.length + ' of ' + extra + ' chosen';
+      })(),
+      upSubjectPicks: SUBJECTS.map(s => {
+        const owned = (st.allowed || []).indexOf(s.id) >= 0;
+        const on = st.upSubjects.indexOf(s.id) >= 0;
+        const t = this.upTargetObj();
+        const extra = t ? t.quota - (st.allowed ? st.allowed.length : 0) : 0;
+        return {
+          name:s.name,
+          emoji: owned ? '✓' : s.emoji,
+          note: owned ? 'Already yours' : '',
+          bg: owned ? '#F3F5F8' : on ? 'rgba(0,198,167,0.10)' : '#fff',
+          border: on ? '2px solid ' + teal : '1.5px solid #E5EAF0',
+          opacity: owned ? '0.6' : '1',
+          pick: () => {
+            if(owned) return;
+            const list = st.upSubjects.slice();
+            const i = list.indexOf(s.id);
+            if(i >= 0) list.splice(i, 1);
+            else if(list.length < extra) list.push(s.id);
+            else return;
+            this.setState({upSubjects:list, upError:''});
+          }
+        };
+      }),
+      upDue: this.upTargetObj() ? this.upTargetObj().due : 0,
+      upTargetName: this.upTargetObj() ? this.upTargetObj().name : '',
+      upError: st.upError,
+      upToPay: () => {
+        const t = this.upTargetObj();
+        if(!t) return this.setState({upError:'Please choose a package to upgrade to.'});
+        if(this.upNeedsSubjects()){
+          const extra = t.quota - (st.allowed ? st.allowed.length : 0);
+          if(st.upSubjects.length !== extra) return this.setState({upError:'Please choose ' + extra + ' more subject' + (extra === 1 ? '' : 's') + '.'});
+        }
+        this.setState({upStage:'pay', upError:''});
+      },
+      upMethods: PAY_METHODS.map(m => ({
+        name:m.name, icon:m.icon, how:m.how,
+        bg: st.upMethod === m.id ? 'rgba(0,198,167,0.10)' : '#fff',
+        border: st.upMethod === m.id ? '2px solid ' + teal : '1.5px solid #E5EAF0',
+        mark: st.upMethod === m.id ? '✓' : '',
+        pick: () => this.setState({upMethod:m.id, upError:''})
+      })),
+      upHow: (PAY_METHODS.find(m => m.id === st.upMethod) || {}).how || '',
+      upReference: 'UPG-' + (st.unlockCode ? st.unlockCode.replace('PSLE-','') : 'CODE'),
+      upBackToChoose: () => this.setState({upStage:'choose', upError:''}),
+      upConfirm: () => {
+        if(!st.upMethod) return this.setState({upError:'Please choose how you paid.'});
+        this.applyUpgrade();
+      },
+      upDoneLine: 'Your package is now ' + (st.planName || '') + '. The new subjects are unlocked straight away — WhatsApp us the proof of payment on 75562568 with reference UPG-' + (st.unlockCode ? st.unlockCode.replace('PSLE-','') : '') + ' so we can confirm it.',
+      upBackToPractice: () => this.setState({view:'practice'}),
+      levelPicks: ['All','Easy','Medium','Hard'].map(l => Object.assign({label:l, pick:()=>this.setState({level:l})}, pill(st.level===l))),
+      hasTopics: !!st.subject,
+      stdPicks: ['All'].concat(this.standardsFor()).map(s => Object.assign({
+        label: s==='All' ? 'Both standards' : s,
+        pick: ()=>this.setState({std:s, qTopic:'All topics'})
+      }, pill(st.std===s))),
+      topicPicks: st.subject ? [{name:'All topics', count:this.rows(st.subject).filter(q=>st.std==='All'||q.std===st.std).length}].concat(this.topicsFor()).map(t => Object.assign({
+        label: t.name, count: t.count+' Qs',
+        pick: ()=>this.setState({qTopic:t.name})
+      }, pill(st.qTopic===t.name))) : [],
+      readyLine: st.subject ? st.qTopic+' · '+st.level+' · '+poolCount+' questions ready.' : 'Choose a subject above to begin.',
+      startDisabled: !st.subject || !poolCount,
+      startQuiz: () => this.startQuiz(),
+      endQuiz: () => this.setState({quiz:null, quizDone:false, selected:null}),
+      quizIdle: !st.quiz && !st.quizDone,
+      quizRunning: !!st.quiz,
+      quizDone: st.quizDone,
+      quizHeader: st.quiz ? subjName+' · '+st.qTopic+' · Question '+(st.qIndex+1)+' of '+st.quiz.length : '',
+      quizPct: st.quiz ? Math.round((st.qIndex)/st.quiz.length*100)+'%' : '0%',
+      scoreLine: st.quiz ? st.correct+' correct' : '',
+      qLevel: q ? q.level : '',
+      qText: q ? q.q : '',
+      qOptions: q ? q.opts.map((t,i) => {
+        const right = i===q.a, chosen = i===st.selected;
+        let bg='#fff', border='1.5px solid #E5EAF0', color='#111827', tagBg='#EEF2F8', tagColor='#5A6A7A';
+        if(answered && right){ bg='#E0FAF5'; border='2px solid '+teal; tagBg=teal; tagColor='#0A1628'; }
+        else if(answered && chosen){ bg='#FEF2F2'; border='2px solid #E63946'; tagBg='#E63946'; tagColor='#fff'; }
+        else if(answered){ color='#9AA5B1'; }
+        return {text:t, tag:'ABCD'[i], bg, border, color, tagBg, tagColor, pick:()=>this.answer(i)};
+      }) : [],
+      answered,
+      feedbackBg: isRight ? '#E0FAF5' : '#FEF2F2',
+      feedbackBorder: isRight ? '1.5px solid rgba(0,198,167,0.5)' : '1.5px solid rgba(230,57,70,0.35)',
+      feedbackColor: isRight ? '#00806B' : '#B91C1C',
+      feedbackTitle: isRight ? '✓ Correct — well done!' : '✗ Not quite. Here is why:',
+      explanation: q ? q.exp : '',
+      nextQuestion: () => this.next(),
+      nextLabel: st.quiz && st.qIndex+1 >= st.quiz.length ? 'See my score →' : 'Next question →',
+      resultEmoji: st.correct >= 4 ? '🌟' : st.correct >= 3 ? '👍' : '💪',
+      resultTitle: st.correct >= 4 ? 'Excellent round!' : st.correct >= 3 ? 'Good work' : 'Keep going',
+      resultScore: st.correct+' / '+(this.props.questionsPerRound ?? 5),
+      resultLine: st.correct >= 4 ? 'You are on track. Try the Hard level next and see how you do.' : 'Read the explanations again, then run the same round. Repeating is how marks are made.',
+
+      clock: this.fmt(st.timerLeft),
+      timerState: st.timerRunning ? 'Running — stay focused' : st.timerLeft===0 ? 'Time is up' : 'Ready when you are',
+      timerBtn: st.timerRunning ? 'Pause' : 'Start',
+      toggleTimer: () => this.setState({timerRunning: !st.timerRunning}),
+      resetTimer: () => this.setState({timerRunning:false, timerLeft:st.timerSecs}),
+      timerPresets: [10,20,30,45,60].map(m => Object.assign({label:m+' min', pick:()=>this.setState({timerSecs:m*60, timerLeft:m*60, timerRunning:false})}, (() => {
+        const on = st.timerSecs===m*60;
+        return {bg: on ? teal : 'rgba(255,255,255,0.08)', color: on ? '#0A1628' : 'rgba(255,255,255,0.8)', border: on ? '1.5px solid '+teal : '1.5px solid rgba(255,255,255,0.18)'};
+      })())),
+
+      tipCards: TIPS.map(t => ({
+        name:t.name, emoji:t.emoji, tips:t.tips,
+        open: st.openTip===t.id, arrow: st.openTip===t.id ? '▲' : '▼',
+        toggle: () => this.setState({openTip: st.openTip===t.id ? null : t.id})
+      })),
+      posters: POSTERS,
+
+      topics: TOPICS.map(t => Object.assign({label:t.label, pick:()=>this.save({topic:t.id})}, pill(st.topic===t.id))),
+      planBoxes,
+
+      spellProgress: 'Word '+(st.spellIndex+1)+' of '+st.spellWords.length,
+      spellScore: st.spellScore+' correct',
+      spellClue: spellWord ? spellWord.c : 'Round complete!',
+      spellMask: spellWord ? spellWord.w[0] + ' _'.repeat(spellWord.w.length-1) : '',
+      spellInput: st.spellInput,
+      spellBtn: st.spellIndex+1 >= st.spellWords.length ? 'Check & finish' : 'Check spelling',
+      onSpellInput: (e) => this.setState({spellInput:e.target.value}),
+      sayWord: () => { try{ const u = new SpeechSynthesisUtterance(spellWord.w); u.rate=0.8; speechSynthesis.speak(u); }catch(e){} },
+      checkSpelling: () => {
+        if(!spellWord) return;
+        const ok = st.spellInput.trim().toLowerCase() === spellWord.w.toLowerCase();
+        const last = st.spellIndex+1 >= st.spellWords.length;
+        this.save({
+          spellScore: st.spellScore + (ok?1:0),
+          stars: st.stars + (ok?1:0),
+          spellFeedback: ok ? '✓ Correct! "'+spellWord.w+'" — well spelled.' : '✗ The correct spelling is "'+spellWord.w+'". Say it slowly, syllable by syllable.',
+          spellOk: ok,
+          spellIndex: last ? st.spellIndex : st.spellIndex+1,
+          spellInput: ''
+        });
+      },
+      spellFbBg: st.spellOk ? '#E0FAF5' : '#FEF2F2',
+      spellFbColor: st.spellOk ? '#00806B' : '#B91C1C',
+      spellFbBorder: st.spellOk ? '1.5px solid rgba(0,198,167,0.5)' : '1.5px solid rgba(230,57,70,0.35)',
+      resetSpelling: () => this.setState({spellWords:shuffle(WORDS).slice(0,10), spellIndex:0, spellInput:'', spellScore:0, spellFeedback:'', spellOk:null})
+    };
+  }
+}
+
+</script>
+</body>
+</html>
