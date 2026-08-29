@@ -15,14 +15,18 @@ body{margin:0;font-family:'Plus Jakarta Sans',sans-serif;background:#0A1628;colo
 @keyframes pop{0%{transform:scale(.97);opacity:0}100%{transform:scale(1);opacity:1}}
 a{color:#00C6A7;text-decoration:none;}
 a:hover{color:#7BF3DE;}
+input{max-width:100%;}
+@media(max-width:560px){
+  [data-wrap]{padding:26px 14px 60px !important;}
+}
 </style>
 </helmet>
 
-<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 22px 70px;background:radial-gradient(circle at 50% 0%,#16305A 0%,#0A1628 60%)">
+<div data-wrap style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 22px 70px;background:radial-gradient(circle at 50% 0%,#16305A 0%,#0A1628 60%)">
   <div style="width:100%;max-width:440px">
 
     <div style="text-align:center;margin-bottom:26px">
-      <a href="index.html" style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.44rem;color:#fff">PSLE Prep <span style="color:#00C6A7">Toolkit</span></a>
+      <a href="landing.html" style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.44rem;color:#fff">PSLE Prep <span style="color:#00C6A7">Toolkit</span></a>
       <div style="margin-top:8px;font-size:0.7rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4)">Sign in to continue</div>
     </div>
 

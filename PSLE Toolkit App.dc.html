@@ -16,6 +16,32 @@ body{margin:0;font-family:'Plus Jakarta Sans',sans-serif;background:#F5F7FA;colo
 @keyframes pop{0%{transform:scale(.94);opacity:0}100%{transform:scale(1);opacity:1}}
 a{color:#00A88E;text-decoration:none;}
 a:hover{color:#00C6A7;}
+img,textarea,input{max-width:100%;}
+/* Tablet and below: the sidebar becomes a top bar. */
+@media(max-width:900px){
+  [data-shell]{flex-direction:column !important;}
+  [data-side]{width:100% !important;height:auto !important;position:sticky;top:0;z-index:120;
+    padding:12px 14px !important;gap:12px !important;overflow:visible !important;}
+  [data-brand]{display:flex;align-items:baseline;gap:10px;}
+  [data-brand] br{display:none;}
+  [data-brand-sub]{margin-top:0 !important;}
+  [data-nav]{flex-direction:row !important;flex-wrap:nowrap;overflow-x:auto;gap:6px !important;
+    padding-bottom:3px;-webkit-overflow-scrolling:touch;}
+  [data-nav] button{width:auto !important;flex:0 0 auto;white-space:nowrap;padding:10px 14px !important;}
+  [data-side-foot]{margin-top:0 !important;display:flex;align-items:center;gap:10px;
+    padding:10px 13px !important;}
+  [data-side-foot] > div:first-child,[data-side-foot] > div:last-child{margin:0;}
+  [data-days-num]{font-size:1.3rem !important;}
+  [data-exits]{flex-direction:row !important;}
+  [data-exits] a,[data-exits] button{flex:1;justify-content:center;}
+  [data-main]{padding:20px 16px 60px !important;}
+  [data-two-col]{grid-template-columns:1fr !important;}
+}
+@media(max-width:560px){
+  [data-exits] span:last-child{display:none;}
+  [data-exits] a,[data-exits] button{padding:10px !important;}
+  [data-side-foot]{flex-wrap:wrap;}
+}
 </style>
 </helmet>
 
@@ -49,15 +75,15 @@ a:hover{color:#00C6A7;}
 </sc-if>
 
 <sc-if value="{{ unlocked }}">
-<div style="display:flex;min-height:100vh;align-items:stretch;background:#F5F7FA">
+<div data-shell style="display:flex;min-height:100vh;align-items:stretch;background:#F5F7FA">
 
-  <aside style="width:262px;flex-shrink:0;background:#0A1628;padding:26px 18px 30px;display:flex;flex-direction:column;gap:26px;position:sticky;top:0;height:100vh;overflow-y:auto">
-    <div>
+  <aside data-side style="width:262px;flex-shrink:0;background:#0A1628;padding:26px 18px 30px;display:flex;flex-direction:column;gap:26px;position:sticky;top:0;height:100vh;overflow-y:auto">
+    <div data-brand>
       <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.12rem;color:#fff;line-height:1.2">PSLE Prep<br><span style="color:#00C6A7">Toolkit</span></div>
-      <div style="margin-top:10px;font-size:0.7rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,0.38)">Standard 6 &amp; 7 · Botswana</div>
+      <div data-brand-sub style="margin-top:10px;font-size:0.7rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,0.38)">Standard 6 &amp; 7 · Botswana</div>
     </div>
 
-    <nav style="display:flex;flex-direction:column;gap:5px">
+    <nav data-nav style="display:flex;flex-direction:column;gap:5px">
       <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="9">
         <button onClick="{{ item.go }}" style="display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:11px 13px;border-radius:11px;border:1.5px solid transparent;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.9rem;transition:all .18s;background:{{ item.bg }};border-color:{{ item.border }};color:{{ item.color }}" style-hover="background:rgba(255,255,255,0.09)">
           <span style="font-size:1.05rem;width:20px;text-align:center">{{ item.icon }}</span>
@@ -66,14 +92,16 @@ a:hover{color:#00C6A7;}
       </sc-for>
     </nav>
 
-    <div style="margin-top:auto;background:rgba(0,198,167,0.10);border:1.5px solid rgba(0,198,167,0.28);border-radius:14px;padding:16px">
-      <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,0.45)">Days to PSLE</div>
-      <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:2rem;color:#00C6A7;line-height:1.1;margin-top:4px">{{ daysLeft }}</div>
+    <div data-side-foot style="margin-top:auto;background:rgba(0,198,167,0.10);border:1.5px solid rgba(0,198,167,0.28);border-radius:14px;padding:16px">
+      <div>
+        <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,0.45)">Days to PSLE</div>
+        <div data-days-num style="font-family:'Syne',sans-serif;font-weight:900;font-size:2rem;color:#00C6A7;line-height:1.1;margin-top:4px">{{ daysLeft }}</div>
+      </div>
       <div style="font-size:0.78rem;font-weight:700;color:rgba(255,255,255,0.55);margin-top:2px">{{ examLabel }}</div>
     </div>
 
-    <div style="display:flex;flex-direction:column;gap:7px">
-      <a href="index.html" style="display:flex;align-items:center;gap:9px;padding:10px 13px;border-radius:11px;border:1.5px solid rgba(255,255,255,0.12);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.82rem;color:rgba(255,255,255,0.5)" style-hover="border-color:rgba(255,255,255,0.3);color:rgba(255,255,255,0.85)">
+    <div data-exits style="display:flex;flex-direction:column;gap:7px">
+      <a href="landing.html" style="display:flex;align-items:center;gap:9px;padding:10px 13px;border-radius:11px;border:1.5px solid rgba(255,255,255,0.12);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.82rem;color:rgba(255,255,255,0.5)" style-hover="border-color:rgba(255,255,255,0.3);color:rgba(255,255,255,0.85)">
         <span>🏠</span><span>Back to website</span>
       </a>
       <button onClick="{{ lockApp }}" style="display:flex;align-items:center;gap:9px;width:100%;padding:10px 13px;border-radius:11px;background:none;border:1.5px solid rgba(255,255,255,0.12);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.82rem;color:rgba(255,255,255,0.5)" style-hover="border-color:rgba(255,255,255,0.3);color:rgba(255,255,255,0.8)">
@@ -82,7 +110,7 @@ a:hover{color:#00C6A7;}
     </div>
   </aside>
 
-  <main style="flex:1;min-width:0;padding:34px 40px 70px;max-width:1180px">
+  <main data-main style="flex:1;min-width:0;padding:34px 40px 70px;max-width:1180px">
 
     <sc-if value="{{ adminPreview }}">
       <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:#0A1628;border:1.5px solid rgba(0,198,167,0.35);border-radius:14px;padding:13px 18px;margin-bottom:22px">
@@ -98,7 +126,7 @@ a:hover{color:#00C6A7;}
         <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:26px">
           <div>
             <div style="display:inline-block;background:#E0FAF5;color:#00A88E;font-weight:800;font-size:0.68rem;letter-spacing:1.8px;text-transform:uppercase;padding:5px 13px;border-radius:50px;margin-bottom:12px">Your dashboard</div>
-            <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2.3rem;color:#0A1628;line-height:1.14;letter-spacing:-0.6px;margin:0">Dumela, {{ learner }} 👋</h1>
+            <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(1.65rem,5.5vw,2.3rem);color:#0A1628;line-height:1.14;letter-spacing:-0.6px;margin:0">Dumela, {{ learner }} 👋</h1>
             <p style="font-weight:600;color:#5A6A7A;font-size:0.98rem;margin:8px 0 0;line-height:1.6;max-width:520px;text-wrap:pretty">{{ homeLine }}</p>
           </div>
           <div style="background:#0A1628;border-radius:16px;padding:18px 24px;text-align:center;border:1.5px solid rgba(0,198,167,0.3)">
@@ -107,7 +135,7 @@ a:hover{color:#00C6A7;}
           </div>
         </div>
 
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));gap:16px;margin-bottom:30px">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(196px,100%),1fr));gap:16px;margin-bottom:30px">
           <sc-for list="{{ subjectProgress }}" as="s" hint-placeholder-count="6">
             <button onClick="{{ s.go }}" style="background:{{ s.cardBg }};opacity:{{ s.cardOpacity }};border:1.5px solid #E5EAF0;border-radius:16px;padding:18px 18px 16px;text-align:left;cursor:pointer;box-shadow:0 6px 28px rgba(10,22,40,0.08);transition:transform .18s,box-shadow .18s;font-family:'Plus Jakarta Sans',sans-serif" style-hover="transform:translateY(-4px);box-shadow:0 14px 34px rgba(10,22,40,0.13)">
               <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
@@ -125,7 +153,7 @@ a:hover{color:#00C6A7;}
           </sc-for>
         </div>
 
-        <div style="display:grid;grid-template-columns:1.35fr 1fr;gap:18px;align-items:start">
+        <div data-two-col style="display:grid;grid-template-columns:1.35fr 1fr;gap:18px;align-items:start">
           <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:24px;box-shadow:0 6px 28px rgba(10,22,40,0.08)">
             <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.06rem;color:#0A1628;margin-bottom:4px">Today's plan</div>
             <div style="font-size:0.86rem;font-weight:600;color:#5A6A7A;margin-bottom:16px">{{ checklistLine }}</div>
@@ -151,12 +179,12 @@ a:hover{color:#00C6A7;}
     <sc-if value="{{ isPractice }}">
       <div>
         <div style="display:inline-block;background:#E0FAF5;color:#00A88E;font-weight:800;font-size:0.68rem;letter-spacing:1.8px;text-transform:uppercase;padding:5px 13px;border-radius:50px;margin-bottom:12px">Practice</div>
-        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2.1rem;color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">MCQ Question Banks</h1>
+        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(1.55rem,5vw,2.1rem);color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">MCQ Question Banks</h1>
         <p style="font-weight:600;color:#5A6A7A;font-size:0.95rem;margin:0 0 26px">Pick a subject and a difficulty. Instant feedback and a full explanation on every question.</p>
 
         <sc-if value="{{ quizIdle }}" hint-placeholder-val="{{ true }}">
           <div>
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));gap:14px;margin-bottom:26px">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(178px,100%),1fr));gap:14px;margin-bottom:26px">
               <sc-for list="{{ subjectPicks }}" as="s" hint-placeholder-count="6">
                 <button onClick="{{ s.pick }}" style="border-radius:16px;padding:20px 16px;text-align:center;cursor:pointer;background:{{ s.bg }};opacity:{{ s.opacity }};box-shadow:0 6px 28px rgba(10,22,40,0.08);font-family:'Plus Jakarta Sans',sans-serif;transition:transform .18s;border:{{ s.border }}" style-hover="transform:translateY(-4px)">
                   <div style="font-size:2rem;margin-bottom:8px">{{ s.emoji }}</div>
@@ -262,10 +290,10 @@ a:hover{color:#00C6A7;}
     <sc-if value="{{ isTimer }}">
       <div style="max-width:700px">
         <div style="display:inline-block;background:#E0FAF5;color:#00A88E;font-weight:800;font-size:0.68rem;letter-spacing:1.8px;text-transform:uppercase;padding:5px 13px;border-radius:50px;margin-bottom:12px">Focus</div>
-        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2.1rem;color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">Study Timer</h1>
+        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(1.55rem,5vw,2.1rem);color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">Study Timer</h1>
         <p style="font-weight:600;color:#5A6A7A;font-size:0.95rem;margin:0 0 26px">Practise under real exam conditions. Pick a length and work until the bell.</p>
         <div style="background:#0A1628;border-radius:20px;padding:44px 34px;text-align:center;border:1.5px solid rgba(0,198,167,0.28)">
-          <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:5rem;color:#00C6A7;line-height:1;letter-spacing:-2px">{{ clock }}</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(3rem,15vw,5rem);color:#00C6A7;line-height:1;letter-spacing:-2px">{{ clock }}</div>
           <div style="font-size:0.78rem;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:rgba(255,255,255,0.42);margin-top:8px">{{ timerState }}</div>
           <div style="display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin:28px 0 24px">
             <sc-for list="{{ timerPresets }}" as="p" hint-placeholder-count="5">
@@ -284,7 +312,7 @@ a:hover{color:#00C6A7;}
     <sc-if value="{{ isTips }}">
       <div style="max-width:860px">
         <div style="display:inline-block;background:#E0FAF5;color:#00A88E;font-weight:800;font-size:0.68rem;letter-spacing:1.8px;text-transform:uppercase;padding:5px 13px;border-radius:50px;margin-bottom:12px">Strategy</div>
-        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2.1rem;color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">Exam Prep Tips</h1>
+        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(1.55rem,5vw,2.1rem);color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">Exam Prep Tips</h1>
         <p style="font-weight:600;color:#5A6A7A;font-size:0.95rem;margin:0 0 26px">Subject-by-subject strategies written for the Botswana PSLE.</p>
         <div style="display:flex;flex-direction:column;gap:12px">
           <sc-for list="{{ tipCards }}" as="t" hint-placeholder-count="6">
@@ -310,9 +338,9 @@ a:hover{color:#00C6A7;}
     <sc-if value="{{ isCalm }}">
       <div style="max-width:820px">
         <div style="display:inline-block;background:#E0FAF5;color:#00A88E;font-weight:800;font-size:0.68rem;letter-spacing:1.8px;text-transform:uppercase;padding:5px 13px;border-radius:50px;margin-bottom:12px">Confidence</div>
-        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2.1rem;color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">Calm &amp; Confidence</h1>
+        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(1.55rem,5vw,2.1rem);color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">Calm &amp; Confidence</h1>
         <p style="font-weight:600;color:#5A6A7A;font-size:0.95rem;margin:0 0 26px">Nerves are normal. Use these before you study and before you sit the paper.</p>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start">
+        <div data-two-col style="display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start">
           <div style="background:linear-gradient(135deg,#0A1628,#162C52);border-radius:18px;padding:30px;color:#fff;text-align:center;border:1.5px solid rgba(0,198,167,0.28)">
             <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:#00C6A7;margin-bottom:22px">Breathing exercise</div>
             <div style="height:190px;display:flex;align-items:center;justify-content:center">
@@ -344,7 +372,7 @@ a:hover{color:#00C6A7;}
     <sc-if value="{{ isChecklist }}">
       <div style="max-width:860px">
         <div style="display:inline-block;background:#E0FAF5;color:#00A88E;font-weight:800;font-size:0.68rem;letter-spacing:1.8px;text-transform:uppercase;padding:5px 13px;border-radius:50px;margin-bottom:12px">Routine</div>
-        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2.1rem;color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">Daily Checklists</h1>
+        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(1.55rem,5vw,2.1rem);color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">Daily Checklists</h1>
         <p style="font-weight:600;color:#5A6A7A;font-size:0.95rem;margin:0 0 26px">Tick off today's work, then check your bag the night before the exam.</p>
 
         <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:18px;padding:26px;box-shadow:0 6px 28px rgba(10,22,40,0.08);margin-bottom:18px">
@@ -355,7 +383,7 @@ a:hover{color:#00C6A7;}
           <div style="height:9px;border-radius:50px;background:#EEF2F8;overflow:hidden;margin-bottom:20px">
             <div style="height:100%;border-radius:50px;background:linear-gradient(90deg,#00C6A7,#38BDF8);transition:width .3s;width:{{ checklistPct }}"></div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+          <div data-two-col style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
             <sc-for list="{{ dailyTasks }}" as="t" hint-placeholder-count="8">
               <button onClick="{{ t.toggle }}" style="display:flex;align-items:center;gap:12px;padding:13px 15px;border-radius:12px;border:1.5px solid #E5EAF0;background:#FAFBFD;cursor:pointer;text-align:left;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.89rem" style-hover="border-color:#00C6A7">
                 <span style="width:22px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:900;color:#fff;flex-shrink:0;background:{{ t.boxBg }}">{{ t.mark }}</span>
@@ -368,7 +396,7 @@ a:hover{color:#00C6A7;}
 
         <div style="background:#0A1628;border-radius:18px;padding:26px;border:1.5px solid rgba(0,198,167,0.28)">
           <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.06rem;color:#00C6A7;margin-bottom:16px">🎒 Exam day bag checklist</div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(210px,100%),1fr));gap:9px">
             <sc-for list="{{ bagItems }}" as="b" hint-placeholder-count="6">
               <div style="display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:11px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);font-size:0.88rem;font-weight:700;color:rgba(255,255,255,0.85)">
                 <span style="color:#00C6A7;font-weight:900">✓</span>{{ b }}
@@ -382,7 +410,7 @@ a:hover{color:#00C6A7;}
     <sc-if value="{{ isComposition }}">
       <div style="max-width:860px">
         <div style="display:inline-block;background:#E0FAF5;color:#00A88E;font-weight:800;font-size:0.68rem;letter-spacing:1.8px;text-transform:uppercase;padding:5px 13px;border-radius:50px;margin-bottom:12px">Writing</div>
-        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2.1rem;color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">Composition Planner</h1>
+        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(1.55rem,5vw,2.1rem);color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">Composition Planner</h1>
         <p style="font-weight:600;color:#5A6A7A;font-size:0.95rem;margin:0 0 22px">Plan before you write. Fill each box, then write your composition from the plan.</p>
 
         <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:22px;box-shadow:0 6px 28px rgba(10,22,40,0.08);margin-bottom:16px">
@@ -414,7 +442,7 @@ a:hover{color:#00C6A7;}
     <sc-if value="{{ isSpelling }}">
       <div style="max-width:700px">
         <div style="display:inline-block;background:#E0FAF5;color:#00A88E;font-weight:800;font-size:0.68rem;letter-spacing:1.8px;text-transform:uppercase;padding:5px 13px;border-radius:50px;margin-bottom:12px">Game</div>
-        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2.1rem;color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">Spelling Challenge</h1>
+        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(1.55rem,5vw,2.1rem);color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">Spelling Challenge</h1>
         <p style="font-weight:600;color:#5A6A7A;font-size:0.95rem;margin:0 0 26px">Read the clue, hear the word, then spell it. Ten words per round.</p>
         <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:18px;padding:32px;box-shadow:0 6px 28px rgba(10,22,40,0.08)">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;font-size:0.82rem;font-weight:800;color:#5A6A7A">
@@ -442,7 +470,7 @@ a:hover{color:#00C6A7;}
     <sc-if value="{{ isUpgrade }}">
       <div style="max-width:660px">
         <div style="display:inline-block;background:#E0FAF5;color:#00A88E;font-weight:800;font-size:0.68rem;letter-spacing:1.8px;text-transform:uppercase;padding:5px 13px;border-radius:50px;margin-bottom:12px">Upgrade</div>
-        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2.1rem;color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">Add more subjects</h1>
+        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(1.55rem,5vw,2.1rem);color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">Add more subjects</h1>
         <p style="font-weight:600;color:#5A6A7A;font-size:0.95rem;margin:0 0 20px">You only pay the difference between what you have already paid and the bigger package.</p>
 
         <div style="background:#0A1628;border-radius:14px;padding:18px 20px;margin-bottom:20px">
@@ -472,7 +500,7 @@ a:hover{color:#00C6A7;}
               <sc-if value="{{ upNeedsSubjects }}">
                 <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:20px;margin-bottom:18px;box-shadow:0 6px 28px rgba(10,22,40,0.07)">
                   <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:#5A6A7A;margin-bottom:12px">{{ upSlots }}</div>
-                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px">
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr));gap:9px">
                     <sc-for list="{{ upSubjectPicks }}" as="s" hint-placeholder-count="6">
                       <button onClick="{{ s.pick }}" style="display:flex;align-items:center;gap:9px;padding:13px 14px;border-radius:12px;cursor:pointer;text-align:left;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.88rem;color:#0A1628;background:{{ s.bg }};border:{{ s.border }};opacity:{{ s.opacity }}">
                         <span>{{ s.emoji }}</span><span style="flex:1">{{ s.name }}</span>
@@ -547,9 +575,9 @@ a:hover{color:#00C6A7;}
     <sc-if value="{{ isPosters }}">
       <div>
         <div style="display:inline-block;background:#E0FAF5;color:#00A88E;font-weight:800;font-size:0.68rem;letter-spacing:1.8px;text-transform:uppercase;padding:5px 13px;border-radius:50px;margin-bottom:12px">Revision</div>
-        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:2.1rem;color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">Study Guide Posters</h1>
+        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(1.55rem,5vw,2.1rem);color:#0A1628;letter-spacing:-0.5px;margin:0 0 8px">Study Guide Posters</h1>
         <p style="font-weight:600;color:#5A6A7A;font-size:0.95rem;margin:0 0 26px">Key facts worth memorising. Print them or read one poster a night.</p>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:18px">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(310px,100%),1fr));gap:18px">
           <sc-for list="{{ posters }}" as="p" hint-placeholder-count="6">
             <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:18px;padding:24px;box-shadow:0 6px 28px rgba(10,22,40,0.08)">
               <div style="display:flex;align-items:center;gap:11px;margin-bottom:16px">
