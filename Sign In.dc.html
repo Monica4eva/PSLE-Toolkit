@@ -106,7 +106,7 @@ input{max-width:100%;}
 
     <div style="margin-top:22px;text-align:center;font-size:0.86rem;font-weight:600;color:rgba(255,255,255,0.45);line-height:1.8">
       No access yet? <a href="Get Access.dc.html" style="font-weight:800">Get access here</a><br>
-      Lost your code or password? WhatsApp <a href="https://wa.me/26775562568" style="font-weight:800">75562568</a>
+      Lost your code or password? WhatsApp <a href="https://wa.me/26774310425" style="font-weight:800">75562568</a>
     </div>
 
   </div>
@@ -160,7 +160,7 @@ class Component extends DCLogic {
 
   async redeem(code){
     const db = await this.db();
-    if(!db) return this.setState({busy:false, error:'The sign-in system is unavailable. Please WhatsApp 75562568.'});
+    if(!db) return this.setState({busy:false, error:'The sign-in system is unavailable. Please WhatsApp +26774310425.'});
     try{
       const res = await db.redeemCode(code);
       if(!res || !res.authorised){
@@ -175,7 +175,7 @@ class Component extends DCLogic {
   // Signs in, then finds a usable code on that account.
   async loginWithEmail(email, password){
     const db = await this.db();
-    if(!db) return this.setState({busy:false, error:'The sign-in system is unavailable. Please WhatsApp 75562568.'});
+    if(!db) return this.setState({busy:false, error:'The sign-in system is unavailable. Please WhatsApp +26774310425.'});
     try{
       if(password) await db.signIn(email, password);
       const orders = await db.myOrders();
@@ -186,8 +186,8 @@ class Component extends DCLogic {
       if(!usable){
         const pending = orders.find(o => o.status === 'pending-verification');
         return this.setState({busy:false, error: pending
-          ? 'Your payment is not confirmed yet, so the toolkit is still locked. Send your proof of payment to WhatsApp 75562568 and we will activate it — usually within a few hours.'
-          : 'That access has been switched off. Please WhatsApp 75562568.'});
+          ? 'Your payment is not confirmed yet, so the toolkit is still locked. Send your proof of payment to WhatsApp +26774310425 and we will activate it — usually within a few hours.'
+          : 'That access has been switched off. Please WhatsApp +26774310425.'});
       }
       await this.redeem(usable.code);
     }catch(e){
