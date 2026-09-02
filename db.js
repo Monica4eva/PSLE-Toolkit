@@ -363,6 +363,31 @@ export async function saveProgress(code, subject, answered, correct, stars){
   return !error;
 }
 
+// Anonymous standing — a band only, never a name or a position.
+export async function myStanding(code){
+  const db = await client();
+  if(!db) return null;
+  const { data, error } = await db.rpc('my_standing', { p_code: code });
+  if(error) return null;
+  return data;
+}
+
+// Wipe one subject's saved progress.
+export async function clearSubject(code, subject){
+  const db = await client();
+  if(!db) return false;
+  const { error } = await db.rpc('clear_subject', { p_code: code, p_subject: subject });
+  return !error;
+}
+
+// Wipe a learner's saved progress so they can start from zero.
+export async function clearProgress(code){
+  const db = await client();
+  if(!db) return false;
+  const { error } = await db.rpc('clear_progress', { p_code: code });
+  return !error;
+}
+
 export async function loadProgress(code){
   const db = await client();
   if(!db) return [];

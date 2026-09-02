@@ -77,7 +77,7 @@ img,textarea,input{max-width:100%;}
 
   <aside data-side style="width:262px;flex-shrink:0;background:#0A1628;padding:26px 18px 30px;display:flex;flex-direction:column;gap:26px;position:sticky;top:0;height:100vh;overflow-y:auto">
     <div data-brand>
-      <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.12rem;color:#fff;line-height:1.2">PSLE Prep<br><span style="color:#00C6A7">Toolkit</span></div>
+      <a href="index.html" title="Back to the website" style="display:block;font-family:'Syne',sans-serif;font-weight:900;font-size:1.12rem;color:#fff;line-height:1.2;text-decoration:none" style-hover="color:#00C6A7">PSLE Prep<br><span style="color:#00C6A7">Toolkit</span></a>
       <div data-brand-sub style="margin-top:10px;font-size:0.7rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,0.38)">Standard 6 &amp; 7 · Botswana</div>
     </div>
 
@@ -99,7 +99,7 @@ img,textarea,input{max-width:100%;}
     </div>
 
     <div data-exits style="display:flex;flex-direction:column;gap:7px">
-      <a href="landing.html" style="display:flex;align-items:center;gap:9px;padding:10px 13px;border-radius:11px;border:1.5px solid rgba(255,255,255,0.12);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.82rem;color:rgba(255,255,255,0.5)" style-hover="border-color:rgba(255,255,255,0.3);color:rgba(255,255,255,0.85)">
+      <a href="index.html" style="display:flex;align-items:center;gap:9px;padding:10px 13px;border-radius:11px;border:1.5px solid rgba(255,255,255,0.12);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.82rem;color:rgba(255,255,255,0.5)" style-hover="border-color:rgba(255,255,255,0.3);color:rgba(255,255,255,0.85)">
         <span>🏠</span><span>Back to website</span>
       </a>
       <button onClick="{{ lockApp }}" style="display:flex;align-items:center;gap:9px;width:100%;padding:10px 13px;border-radius:11px;background:none;border:1.5px solid rgba(255,255,255,0.12);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.82rem;color:rgba(255,255,255,0.5)" style-hover="border-color:rgba(255,255,255,0.3);color:rgba(255,255,255,0.8)">
@@ -151,6 +151,33 @@ img,textarea,input{max-width:100%;}
               </div>
             </button>
           </sc-for>
+        </div>
+
+        <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:18px;padding:24px;box-shadow:0 6px 28px rgba(10,22,40,0.08);margin-bottom:18px">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.06rem;color:#0A1628;margin-bottom:4px">What you have accomplished</div>
+          <div style="font-size:0.85rem;font-weight:600;color:#5A6A7A;margin-bottom:18px">Your own record — this is you against last week, not against anyone else.</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr));gap:12px">
+            <sc-for list="{{ achievements }}" as="a" hint-placeholder-count="4">
+              <div style="background:#FAFBFD;border:1px solid #E5EAF0;border-radius:13px;padding:15px 16px">
+                <div style="font-size:0.7rem;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:#5A6A7A">{{ a.label }}</div>
+                <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.6rem;color:#0A1628;line-height:1.15;margin-top:3px">{{ a.value }}</div>
+                <div style="font-size:0.76rem;font-weight:700;color:#9AA5B1;margin-top:2px">{{ a.note }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <sc-if value="{{ showStanding }}">
+            <div style="margin-top:15px;background:linear-gradient(135deg,#0A1628,#162C52);border:1.5px solid rgba(0,198,167,0.35);border-radius:13px;padding:16px 18px;display:flex;gap:14px;align-items:flex-start">
+              <span style="font-size:1.5rem;line-height:1">{{ standingIcon }}</span>
+              <div style="flex:1;min-width:0">
+                <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.98rem;color:#fff;line-height:1.45;text-wrap:pretty">{{ standingText }}</div>
+                <div style="font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.5);line-height:1.55;margin-top:5px;text-wrap:pretty">{{ standingNote }}</div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ bestSubject }}">
+            <div style="margin-top:15px;background:#E0FAF5;border:1px solid rgba(0,198,167,0.35);border-radius:11px;padding:13px 15px;font-size:0.88rem;font-weight:700;color:#00806B;line-height:1.6;text-wrap:pretty">{{ bestSubject }}</div>
+          </sc-if>
         </div>
 
         <div data-two-col style="display:grid;grid-template-columns:1.35fr 1fr;gap:18px;align-items:start">
@@ -221,6 +248,17 @@ img,textarea,input{max-width:100%;}
               </div>
             </sc-if>
 
+            <sc-if value="{{ allSeen }}">
+              <div style="background:linear-gradient(135deg,#0A1628,#162C52);border:1.5px solid rgba(0,198,167,0.4);border-radius:16px;padding:22px 24px;margin-bottom:16px;display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+                <span style="font-size:2rem">🏁</span>
+                <div style="flex:1;min-width:200px">
+                  <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.06rem;color:#00C6A7;margin-bottom:3px">You have finished every question here</div>
+                  <div style="font-size:0.87rem;font-weight:600;color:rgba(255,255,255,0.62);line-height:1.6;text-wrap:pretty">Clear this topic to start again from scratch with a clean score, or pick another topic. Nothing else you have done is affected.</div>
+                </div>
+                <button onClick="{{ startOverHere }}" style="padding:12px 24px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.88rem;cursor:pointer;white-space:nowrap">↺ Start this topic again</button>
+              </div>
+            </sc-if>
+
             <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:22px;box-shadow:0 6px 28px rgba(10,22,40,0.08);display:flex;gap:28px;align-items:center;flex-wrap:wrap">
               <div>
                 <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#5A6A7A;margin-bottom:9px">Difficulty</div>
@@ -230,7 +268,17 @@ img,textarea,input{max-width:100%;}
                   </sc-for>
                 </div>
               </div>
-              <div style="flex:1;min-width:220px;font-size:0.86rem;font-weight:600;color:#5A6A7A;line-height:1.6;text-wrap:pretty">{{ readyLine }}</div>
+              <div style="flex:1;min-width:220px;font-size:0.86rem;font-weight:600;color:#5A6A7A;line-height:1.6;text-wrap:pretty">{{ readyLine }}
+                <sc-if value="{{ coverLine }}">
+                  <div style="margin-top:10px">
+                    <div style="height:6px;border-radius:50px;background:#EEF2F8;overflow:hidden;margin-bottom:6px"><div style="height:100%;border-radius:50px;background:linear-gradient(90deg,#00C6A7,#38BDF8);width:{{ coverPct }}"></div></div>
+                    <div style="font-size:0.8rem;font-weight:700;color:#00A88E">{{ coverLine }}</div>
+                    <sc-if value="{{ someSeen }}">
+                      <button onClick="{{ startOverHere }}" style="margin-top:8px;background:none;border:none;padding:0;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.78rem;color:#9AA5B1;text-decoration:underline" style-hover="color:#B91C1C">Clear this topic and start again</button>
+                    </sc-if>
+                  </div>
+                </sc-if>
+              </div>
               <button onClick="{{ startQuiz }}" style="padding:15px 36px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:1rem;cursor:pointer;box-shadow:0 8px 26px rgba(0,198,167,0.32)" style-hover="transform:translateY(-2px)" disabled="{{ startDisabled }}">Start practice →</button>
             </div>
           </div>
@@ -356,6 +404,31 @@ img,textarea,input{max-width:100%;}
               <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.24rem;color:#0A1628;line-height:1.45;margin:14px 0 18px;text-wrap:pretty">“{{ affirmation }}”</div>
               <button onClick="{{ nextAffirmation }}" style="padding:11px 24px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.88rem;cursor:pointer">Say the next one →</button>
             </div>
+
+            <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:18px;padding:24px;box-shadow:0 6px 28px rgba(10,22,40,0.08)">
+              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#0A1628;margin-bottom:5px">Write your own</div>
+              <div style="font-size:0.85rem;font-weight:600;color:#5A6A7A;line-height:1.6;margin-bottom:14px;text-wrap:pretty">The ones you write yourself work best. Say something true about you — in English or Setswana.</div>
+              <input onChange="{{ onAffDraft }}" onKeyDown="{{ onAffKey }}" value="{{ affDraft }}" placeholder="e.g. I am good at Maths when I slow down." style="width:100%;border:1.5px solid #E5EAF0;border-radius:11px;padding:13px 15px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:0.92rem;color:#111827;background:#FAFBFD" style-focus="outline:none;border-color:#00C6A7;background:#fff">
+              <sc-if value="{{ affError }}">
+                <div style="margin-top:10px;font-size:0.84rem;font-weight:700;color:#B91C1C">{{ affError }}</div>
+              </sc-if>
+              <button onClick="{{ addAffirmation }}" style="margin-top:12px;padding:11px 22px;border-radius:50px;border:none;background:#0A1628;color:#00C6A7;font-family:'Syne',sans-serif;font-weight:900;font-size:0.86rem;cursor:pointer" style-hover="background:#162C52">+ Add to my affirmations</button>
+
+              <sc-if value="{{ hasMyAff }}">
+                <div style="margin-top:18px;padding-top:16px;border-top:1px solid #EEF2F8">
+                  <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:#5A6A7A;margin-bottom:10px">My own affirmations</div>
+                  <div style="display:flex;flex-direction:column;gap:8px">
+                    <sc-for list="{{ myAffirmations }}" as="a" hint-placeholder-count="2">
+                      <div style="display:flex;align-items:flex-start;gap:11px;padding:11px 13px;border-radius:11px;background:#F7FBFA;border:1px solid #E0FAF5">
+                        <span style="flex:1;font-size:0.89rem;font-weight:700;color:#0A1628;line-height:1.55">“{{ a.text }}”</span>
+                        <button onClick="{{ a.remove }}" style="background:none;border:none;cursor:pointer;font-size:0.9rem;color:#9AA5B1;padding:0 2px;line-height:1.4" style-hover="color:#B91C1C">✕</button>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <div style="margin-top:11px;font-size:0.8rem;font-weight:600;color:#9AA5B1;line-height:1.55">Yours are mixed in with the others when you tap “next”.</div>
+                </div>
+              </sc-if>
+            </div>
             <div style="background:#FFF8F0;border:1.5px solid #FFE0B2;border-radius:18px;padding:24px">
               <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#7C4A03;margin-bottom:12px">Exam morning routine</div>
               <ul style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px">
@@ -394,6 +467,26 @@ img,textarea,input{max-width:100%;}
           <button onClick="{{ resetChecklist }}" style="margin-top:18px;background:none;border:1.5px solid #E5EAF0;border-radius:50px;padding:9px 20px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.82rem;color:#5A6A7A;cursor:pointer" style-hover="border-color:#00C6A7;color:#00A88E">Start a new day</button>
         </div>
 
+        <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:18px;padding:24px;box-shadow:0 6px 28px rgba(10,22,40,0.07);margin-bottom:18px">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.02rem;color:#0A1628;margin-bottom:5px">Start completely fresh</div>
+          <div style="font-size:0.87rem;font-weight:600;color:#5A6A7A;line-height:1.65;margin-bottom:15px;text-wrap:pretty">{{ eraseBlurb }}</div>
+          <sc-if value="{{ eraseArmed }}">
+            <div>
+              <div style="background:#FEF2F2;border:1.5px solid rgba(230,57,70,0.35);border-radius:12px;padding:14px 16px;font-size:0.88rem;font-weight:700;color:#B91C1C;line-height:1.6;margin-bottom:13px">This clears your stars, every subject's progress, your checklists and your composition. Your access is not affected — you stay signed in. This cannot be undone.</div>
+              <div style="display:flex;gap:9px;flex-wrap:wrap">
+                <button onClick="{{ eraseConfirm }}" style="padding:12px 24px;border-radius:50px;border:none;background:#E63946;color:#fff;font-family:'Syne',sans-serif;font-weight:900;font-size:0.88rem;cursor:pointer">Yes, erase everything</button>
+                <button onClick="{{ eraseCancel }}" style="padding:12px 22px;border-radius:50px;background:#fff;border:1.5px solid #E5EAF0;color:#5A6A7A;font-family:'Syne',sans-serif;font-weight:900;font-size:0.88rem;cursor:pointer">Keep my progress</button>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ eraseIdle }}">
+            <button onClick="{{ eraseArm }}" style="padding:11px 22px;border-radius:50px;background:#fff;border:1.5px solid rgba(230,57,70,0.35);color:#B91C1C;font-family:'Syne',sans-serif;font-weight:900;font-size:0.86rem;cursor:pointer" style-hover="background:#FEF2F2">↺ Erase my progress</button>
+          </sc-if>
+          <sc-if value="{{ eraseDone }}">
+            <div style="background:#E0FAF5;border:1.5px solid rgba(0,198,167,0.4);border-radius:12px;padding:13px 16px;font-size:0.88rem;font-weight:700;color:#00806B;line-height:1.6">✓ Everything is cleared. You are starting from zero.</div>
+          </sc-if>
+        </div>
+
         <div style="background:#0A1628;border-radius:18px;padding:26px;border:1.5px solid rgba(0,198,167,0.28)">
           <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.06rem;color:#00C6A7;margin-bottom:16px">🎒 Exam day bag checklist</div>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(210px,100%),1fr));gap:9px">
@@ -422,6 +515,16 @@ img,textarea,input{max-width:100%;}
           </div>
         </div>
 
+        <div style="background:linear-gradient(135deg,#0A1628,#162C52);border-radius:16px;padding:22px 24px;margin-bottom:16px;border:1.5px solid rgba(0,198,167,0.28)">
+          <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#00C6A7;margin-bottom:4px">How to write this one well</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.08rem;color:#fff;margin-bottom:14px">{{ topicLabel }}</div>
+          <ul style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px">
+            <sc-for list="{{ topicTips }}" as="tip" hint-placeholder-count="4">
+              <li style="font-size:0.9rem;font-weight:600;color:rgba(255,255,255,0.82);line-height:1.65;text-wrap:pretty">{{ tip }}</li>
+            </sc-for>
+          </ul>
+        </div>
+
         <div style="display:flex;flex-direction:column;gap:14px">
           <sc-for list="{{ planBoxes }}" as="b" hint-placeholder-count="4">
             <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:20px 22px;box-shadow:0 6px 28px rgba(10,22,40,0.07)">
@@ -430,10 +533,68 @@ img,textarea,input{max-width:100%;}
                 <div style="font-size:0.74rem;font-weight:800;color:#5A6A7A">{{ b.words }} words</div>
               </div>
               <div style="font-size:0.84rem;font-weight:600;color:#5A6A7A;margin-bottom:12px;line-height:1.6">{{ b.hint }}</div>
-              <textarea onChange="{{ b.onChange }}" value="{{ b.value }}" placeholder="{{ b.placeholder }}" rows="3" style="width:100%;border:1.5px solid #E5EAF0;border-radius:11px;padding:13px 15px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:0.93rem;color:#111827;line-height:1.65;resize:vertical;background:#FAFBFD" style-focus="outline:none;border-color:#00C6A7;background:#fff"></textarea>
+              <textarea onChange="{{ b.onChange }}" value="{{ b.value }}" placeholder="{{ b.placeholder }}" rows="{{ b.rows }}" style="width:100%;border:1.5px solid #E5EAF0;border-radius:11px;padding:13px 15px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:0.93rem;color:#111827;line-height:1.65;resize:vertical;background:#FAFBFD" style-focus="outline:none;border-color:#00C6A7;background:#fff"></textarea>
             </div>
           </sc-for>
         </div>
+
+        <div style="margin-top:16px;background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:22px;box-shadow:0 6px 28px rgba(10,22,40,0.07);text-align:center">
+          <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.06rem;color:#0A1628;margin-bottom:6px">Ready for feedback?</div>
+          <div style="font-size:0.86rem;font-weight:600;color:#5A6A7A;line-height:1.6;margin-bottom:16px;text-wrap:pretty">{{ submitHint }}</div>
+          <button onClick="{{ submitComposition }}" style="padding:15px 34px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:1rem;cursor:pointer;box-shadow:0 8px 26px rgba(0,198,167,0.3)">Submit my composition →</button>
+        </div>
+
+        <sc-if value="{{ hasMark }}">
+          <div style="margin-top:16px;background:#fff;border:1.5px solid rgba(0,198,167,0.45);border-radius:18px;padding:26px;box-shadow:0 6px 28px rgba(10,22,40,0.09);animation:pop .22s ease-out">
+            <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding-bottom:18px;border-bottom:1px solid #EEF2F8">
+              <div style="font-size:2.4rem">{{ markEmoji }}</div>
+              <div style="flex:1;min-width:170px">
+                <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.24rem;color:#0A1628">{{ markBand }}</div>
+                <div style="font-size:0.87rem;font-weight:600;color:#5A6A7A;line-height:1.55;margin-top:3px;text-wrap:pretty">{{ markNote }}</div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.9rem;color:#00A88E;line-height:1">{{ markScore }}</div>
+                <div style="font-size:0.76rem;font-weight:800;color:#5A6A7A;margin-top:2px">structure score</div>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(120px,100%),1fr));gap:10px;margin:18px 0">
+              <sc-for list="{{ markStats }}" as="s" hint-placeholder-count="4">
+                <div style="background:#FAFBFD;border:1px solid #E5EAF0;border-radius:11px;padding:12px 14px">
+                  <div style="font-size:0.72rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#5A6A7A">{{ s.label }}</div>
+                  <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.3rem;color:#0A1628;line-height:1.2">{{ s.value }}</div>
+                  <div style="font-size:0.72rem;font-weight:700;color:#9AA5B1">{{ s.target }}</div>
+                </div>
+              </sc-for>
+            </div>
+
+            <sc-if value="{{ hasGood }}">
+              <div style="background:#E0FAF5;border:1.5px solid rgba(0,198,167,0.4);border-radius:13px;padding:16px 18px;margin-bottom:12px">
+                <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:0.95rem;color:#00806B;margin-bottom:9px">✓ What is working</div>
+                <ul style="margin:0;padding-left:19px;display:flex;flex-direction:column;gap:6px">
+                  <sc-for list="{{ markGood }}" as="g" hint-placeholder-count="3">
+                    <li style="font-size:0.9rem;font-weight:600;color:#134E48;line-height:1.6">{{ g }}</li>
+                  </sc-for>
+                </ul>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ hasFix }}">
+              <div style="background:#FFF8F0;border:1.5px solid #FFE0B2;border-radius:13px;padding:16px 18px">
+                <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:0.95rem;color:#7C4A03;margin-bottom:9px">→ Work on this next</div>
+                <ul style="margin:0;padding-left:19px;display:flex;flex-direction:column;gap:6px">
+                  <sc-for list="{{ markFix }}" as="x" hint-placeholder-count="3">
+                    <li style="font-size:0.9rem;font-weight:600;color:#7C4A03;line-height:1.6">{{ x }}</li>
+                  </sc-for>
+                </ul>
+              </div>
+            </sc-if>
+
+            <div style="margin-top:16px;font-size:0.82rem;font-weight:600;color:#9AA5B1;line-height:1.6;text-wrap:pretty">This score checks structure, length, description and accuracy — the things a computer can judge fairly. It cannot mark your imagination or your story idea, and a real examiner will. Always ask your teacher to read your best pieces.</div>
+
+            <button onClick="{{ clearMark }}" style="margin-top:14px;background:none;border:1.5px solid #E5EAF0;border-radius:50px;padding:10px 22px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.84rem;color:#5A6A7A;cursor:pointer" style-hover="border-color:#00C6A7;color:#00A88E">Hide feedback</button>
+          </div>
+        </sc-if>
 
         <div style="margin-top:16px;background:#FFF8F0;border:1.5px solid #FFE0B2;border-radius:14px;padding:18px 20px;font-size:0.9rem;font-weight:600;color:#7C4A03;line-height:1.7">✍️ Aim for 5 paragraphs and about 250–350 words. Use one strong idea per paragraph, and end by saying how you felt.</div>
       </div>
@@ -572,6 +733,48 @@ img,textarea,input{max-width:100%;}
       </div>
     </sc-if>
 
+    <sc-if value="{{ posterOpen }}">
+      <div style="position:fixed;inset:0;z-index:400;background:rgba(10,22,40,0.75);display:flex;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto">
+        <div style="width:100%;max-width:760px;background:#fff;border-radius:20px;box-shadow:0 24px 70px rgba(0,0,0,0.4);animation:pop .2s ease-out;margin:auto">
+          <div style="position:sticky;top:0;background:#0A1628;border-radius:20px 20px 0 0;padding:20px 24px;display:flex;align-items:center;gap:13px;z-index:2">
+            <span style="font-size:1.7rem">{{ posterEmoji }}</span>
+            <span style="flex:1;font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(1.05rem,3.4vw,1.3rem);color:#fff;line-height:1.2">{{ posterTitle }}</span>
+            <button onClick="{{ closePoster }}" style="width:36px;height:36px;flex-shrink:0;border-radius:50%;background:rgba(255,255,255,0.12);border:1.5px solid rgba(255,255,255,0.22);color:#fff;font-size:1rem;font-weight:900;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif" style-hover="background:rgba(230,57,70,0.35);border-color:#E63946">✕</button>
+          </div>
+
+          <div style="padding:24px">
+            <sc-if value="{{ posterWhy }}">
+              <div style="background:#FFF8F0;border:1.5px solid #FFE0B2;border-radius:13px;padding:16px 18px;margin-bottom:20px;font-size:0.92rem;font-weight:600;color:#7C4A03;line-height:1.7;text-wrap:pretty">💡 {{ posterWhy }}</div>
+            </sc-if>
+
+            <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#5A6A7A;margin-bottom:11px">Learn these by heart</div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px">
+              <sc-for list="{{ posterFacts }}" as="f" hint-placeholder-count="5">
+                <div style="display:flex;gap:10px;padding:12px 14px;border-radius:11px;background:#E0FAF5;border:1px solid rgba(0,198,167,0.3);font-size:0.91rem;font-weight:700;color:#134E48;line-height:1.6">
+                  <span style="color:#00A88E;font-weight:900">▸</span><span>{{ f }}</span>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <sc-for list="{{ posterDetail }}" as="d" hint-placeholder-count="4">
+                <div style="border:1.5px solid #E5EAF0;border-radius:14px;padding:18px 20px;background:#FAFBFD">
+                  <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.02rem;color:#0A1628;margin-bottom:11px">{{ d.t }}</div>
+                  <div style="display:flex;flex-direction:column;gap:7px">
+                    <sc-for list="{{ d.lines }}" as="ln" hint-placeholder-count="4">
+                      <div style="font-size:0.9rem;font-weight:600;color:#374151;line-height:1.65;text-wrap:pretty">{{ ln }}</div>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+
+            <button onClick="{{ closePoster }}" style="width:100%;margin-top:22px;padding:14px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.96rem;cursor:pointer">Close poster</button>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
     <sc-if value="{{ isPosters }}">
       <div>
         <div style="display:inline-block;background:#E0FAF5;color:#00A88E;font-weight:800;font-size:0.68rem;letter-spacing:1.8px;text-transform:uppercase;padding:5px 13px;border-radius:50px;margin-bottom:12px">Revision</div>
@@ -579,10 +782,11 @@ img,textarea,input{max-width:100%;}
         <p style="font-weight:600;color:#5A6A7A;font-size:0.95rem;margin:0 0 26px">Key facts worth memorising. Print them or read one poster a night.</p>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(310px,100%),1fr));gap:18px">
           <sc-for list="{{ posters }}" as="p" hint-placeholder-count="6">
-            <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:18px;padding:24px;box-shadow:0 6px 28px rgba(10,22,40,0.08)">
+            <button onClick="{{ p.open }}" style="display:block;width:100%;text-align:left;background:#fff;border:1.5px solid #E5EAF0;border-radius:18px;padding:24px;box-shadow:0 6px 28px rgba(10,22,40,0.08);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:transform .18s,box-shadow .18s" style-hover="transform:translateY(-4px);box-shadow:0 14px 34px rgba(10,22,40,0.14);border-color:#00C6A7">
               <div style="display:flex;align-items:center;gap:11px;margin-bottom:16px">
                 <span style="font-size:1.6rem">{{ p.emoji }}</span>
-                <span style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.08rem;color:#0A1628">{{ p.name }}</span>
+                <span style="flex:1;font-family:'Syne',sans-serif;font-weight:900;font-size:1.08rem;color:#0A1628">{{ p.name }}</span>
+                <span style="font-size:1rem;color:#00A88E">⤢</span>
               </div>
               <div style="display:flex;flex-direction:column;gap:9px">
                 <sc-for list="{{ p.facts }}" as="f" hint-placeholder-count="5">
@@ -591,7 +795,8 @@ img,textarea,input{max-width:100%;}
                   </div>
                 </sc-for>
               </div>
-            </div>
+              <div style="margin-top:14px;font-size:0.78rem;font-weight:800;color:#00A88E">{{ p.more }}</div>
+            </button>
           </sc-for>
         </div>
       </div>
@@ -603,7 +808,7 @@ img,textarea,input{max-width:100%;}
           <span style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.2rem;color:#00C6A7;line-height:1">{{ daysLeft }}</span>
           <span style="font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.55)">days left</span>
         </div>
-        <a href="landing.html" style="padding:8px 13px;border-radius:50px;border:1.5px solid rgba(255,255,255,0.18);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.76rem;color:rgba(255,255,255,0.6);white-space:nowrap">🏠 Website</a>
+        <a href="index.html" style="padding:8px 13px;border-radius:50px;border:1.5px solid rgba(255,255,255,0.18);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.76rem;color:rgba(255,255,255,0.6);white-space:nowrap">🏠 Website</a>
         <button onClick="{{ lockApp }}" style="padding:8px 13px;border-radius:50px;background:none;border:1.5px solid rgba(255,255,255,0.18);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.76rem;color:rgba(255,255,255,0.6);white-space:nowrap">🔒 Sign out</button>
       </div>
     </div>
@@ -699,12 +904,60 @@ const TIPS = [
 ];
 
 const POSTERS = [
-  {id:'maths', name:'Maths key facts', emoji:'🔢', facts:['Area of a rectangle = length × width; perimeter = 2 × (l + w)','1 km = 1 000 m · 1 m = 100 cm · 1 kg = 1 000 g · 1 l = 1 000 ml','To find a percentage: part ÷ whole × 100','Fractions to decimals: ½ = 0.5 · ¼ = 0.25 · ¾ = 0.75 · ⅕ = 0.2','Order of operations: brackets, then × ÷, then + −']},
-  {id:'english', name:'English essentials', emoji:'📖', facts:['Every sentence needs a subject and a verb','Common conjunctions: and, but, because, although, so','Their (belonging) · There (place) · They\'re (they are)','Its (belonging) · It\'s (it is)','Paragraph = one main idea plus supporting sentences']},
-  {id:'setswana', name:'Setswana dikakaretso', emoji:'🌍', facts:['Maina a a simolola ka le- a fetoga ma- mo bontsing','Lediri le supa tiro; letlhaodi le tlhalosa leina','Diane di dirisiwa go ruta botshelo','Dinako: gompieno, maabane, kamoso','Sebopego sa polelo: leina + lediri + tlaleletso']},
-  {id:'social', name:'Botswana facts', emoji:'🏛️', facts:['Independence: 30 September 1966','Capital: Gaborone · Currency: Pula and Thebe','Neighbours: South Africa, Namibia, Zimbabwe, Zambia','Main exports: diamonds, beef, copper-nickel, tourism','Kgotla: traditional place of community discussion']},
-  {id:'science', name:'Science diagrams', emoji:'🔬', facts:['Water cycle: evaporation → condensation → precipitation → collection','Photosynthesis needs sunlight, water and carbon dioxide','Conductors: metals · Insulators: rubber, plastic, wood','A circuit needs a source, a complete path and a load','Butterfly: egg → larva → pupa → adult']},
-  {id:'agric', name:'Agriculture basics', emoji:'🌱', facts:['Soils: sandy (drains fast) · clay (holds water) · loam (best for crops)','Crop rotation keeps soil fertile and breaks pest cycles','Contour ploughing reduces soil erosion on slopes','Compost and manure add organic matter to soil','Overgrazing exposes soil and causes erosion']}
+  {id:'maths', name:'Maths key facts', emoji:'🔢', facts:['Area of a rectangle = length × width; perimeter = 2 × (l + w)','1 km = 1 000 m · 1 m = 100 cm · 1 kg = 1 000 g · 1 l = 1 000 ml','To find a percentage: part ÷ whole × 100','Fractions to decimals: ½ = 0.5 · ¼ = 0.25 · ¾ = 0.75 · ⅕ = 0.2','Order of operations: brackets, then × ÷, then + −'],
+   why:'Most lost marks in PSLE Maths are not hard sums — they are units muddled up, or the order of operations done backwards. Learn this page by heart and you protect easy marks.',
+   detail:[
+     {t:'Worked example — percentage', lines:['Neo scored 18 out of 25. What percentage?','Step 1: part ÷ whole → 18 ÷ 25 = 0.72','Step 2: × 100 → 72%','Shortcut: 25 × 4 = 100, so 18 × 4 = 72. Same answer, faster.']},
+     {t:'Worked example — area and perimeter', lines:['A room is 6 m by 4 m.','Area = 6 × 4 = 24 m² (that is floor covering)','Perimeter = 2 × (6 + 4) = 20 m (that is skirting board)','Ask yourself: am I covering a surface, or going around the edge?']},
+     {t:'Order of operations', lines:['B — brackets first','× and ÷ next, left to right','+ and − last, left to right','8 + 4 × 3 = 8 + 12 = 20  (not 36)']},
+     {t:'Unit conversions to memorise', lines:['Length: 1 km = 1 000 m · 1 m = 100 cm · 1 cm = 10 mm','Mass: 1 tonne = 1 000 kg · 1 kg = 1 000 g','Capacity: 1 litre = 1 000 ml · 1 ml = 1 cm³','Going to a SMALLER unit? Multiply. To a BIGGER unit? Divide.']},
+     {t:'Fraction · decimal · percentage', lines:['½ = 0.5 = 50%','¼ = 0.25 = 25%','¾ = 0.75 = 75%','⅕ = 0.2 = 20%','⅒ = 0.1 = 10%','⅓ = 0.333… ≈ 33%']}
+   ]},
+  {id:'english', name:'English essentials', emoji:'📖', facts:['Every sentence needs a subject and a verb','Common conjunctions: and, but, because, although, so','Their (belonging) · There (place) · They\'re (they are)','Its (belonging) · It\'s (it is)','Paragraph = one main idea plus supporting sentences'],
+   why:'Examiners mark composition on structure and correctness as much as on imagination. These are the rules that decide those marks.',
+   detail:[
+     {t:'The words that catch everyone', lines:['their = belonging to them → their books','there = a place → sit over there','they\'re = they are → they\'re late','its = belonging to it → the dog wagged its tail','it\'s = it is → it\'s raining','your = belonging to you · you\'re = you are','to = towards · too = also or excessive · two = 2']},
+     {t:'Tenses you must control', lines:['Present: I go to school every day.','Past: I went to school yesterday.','Present perfect: I have gone already.','Future: I will go tomorrow.','Keep ONE tense through a paragraph unless the time really changes.']},
+     {t:'Reported speech', lines:['Direct: She said, "I am tired."','Reported: She said she was tired.','am → was · is → was · go → went · will → would','"today" → "that day" · "tomorrow" → "the next day"']},
+     {t:'Paragraph shape', lines:['One main idea per paragraph.','Sentence 1 introduces the idea.','Sentences 2-4 develop it with detail.','New idea = new paragraph, indented or with a line space.']},
+     {t:'Punctuation quick check', lines:['Every sentence: capital letter at the start, full stop at the end.','Question → question mark. Strong feeling → exclamation mark.','Speech: "Come here," she said. Comma inside the quotes.','Lists: bread, milk, sugar and eggs. No comma before the final "and".']}
+   ]},
+  {id:'setswana', name:'Setswana dikakaretso', emoji:'🌍', facts:['Maina a a simolola ka le- a fetoga ma- mo bontsing','Lediri le supa tiro; letlhaodi le tlhalosa leina','Diane di dirisiwa go ruta botshelo','Dinako: gompieno, maabane, kamoso','Sebopego sa polelo: leina + lediri + tlaleletso'],
+   why:'Ditlhopha tsa maina le dinako tsa madiri ke tse di tsayang dintlha tse dintsi mo tlhatlhobong. Ithute tsona ka tlhogo.',
+   detail:[
+     {t:'Ditlhopha tsa maina (noun classes)', lines:['mo- / ba- : mosimane → basimane (batho)','mo- / me- : mosese → mesese','le- / ma- : lebati → mabati','se- / di- : sediba → didiba','N- / di- : kgomo → dikgomo','lo- / ma- : losea → masea']},
+     {t:'Dinako tsa madiri (tenses)', lines:['Gompieno: Ke bala buka.','Nako e fetileng: Ke badile buka.','Nako e e tlang: Ke tla bala buka.','E tswelelang mo nakong e fetileng: Ke ne ke bala.','Taelo: Bala! (mongwe) · Balang! (bantsi)']},
+     {t:'Madiri a a fetogang (irregular)', lines:['tsaya → tsere','ja → jele','bona → bone','ya → ile','tla → tsile','nwa → nole']},
+     {t:'Diane tse di tlwaelegileng', lines:['Mmangwana o tshwara thipa ka fa bogaleng — mmè o itshokela ngwana.','Kgetsi ya tsie e kgonwa ka go tshwaraganelwa — tirisanommogo.','Mmutla o tshabile ka mabelo — bonako bo boloka motho.','Se sa feleng se a tlhola — dilo tsotlhe di na le bokhutlo.']},
+     {t:'Maele (idioms)', lines:['go bua ka nko — go bua ka lonyatso','go tshwara pelo — go itshoka','go tlhatswa diatla — go tlogela maikarabelo','go bona ka leitlho le le lengwe — go tlhaloganya motho']}
+   ]},
+  {id:'social', name:'Botswana facts', emoji:'🏛️', facts:['Independence: 30 September 1966','Capital: Gaborone · Currency: Pula and Thebe','Neighbours: South Africa, Namibia, Zimbabwe, Zambia','Main exports: diamonds, beef, copper-nickel, tourism','Kgotla: traditional place of community discussion'],
+   why:'Social Studies rewards learners who know dates, places and how government works. These are facts you either know or you do not — so learn them properly.',
+   detail:[
+     {t:'Dates to know', lines:['30 September 1966 — Botswana becomes independent','1966 — Sir Seretse Khama becomes first President','1967 — diamonds discovered at Orapa','1980 — Sir Ketumile Masire becomes President','Learn them in order; exams often ask "which came first".']},
+     {t:'The three arms of government', lines:['Legislature (Parliament) — makes the laws','Executive (President and Cabinet) — carries out the laws','Judiciary (the courts) — interprets the laws and judges disputes','Ntlo ya Dikgosi advises Parliament on custom and tradition.']},
+     {t:'Geography', lines:['Neighbours: South Africa (south), Namibia (west and north), Zimbabwe (east), Zambia (a short northern border)','The Kalahari (Kgalagadi) covers about two thirds of the country','Okavango Delta — inland delta, a World Heritage Site','Chobe — famous for the largest elephant population in Africa','Main rivers: Chobe, Limpopo, Okavango']},
+     {t:'Economy', lines:['Diamonds — Jwaneng, Orapa, Letlhakane','Beef — exported through the BMC','Copper-nickel — Selebi-Phikwe','Coal — Morupule, used for electricity','Tourism — Okavango, Chobe, Kgalagadi','Before diamonds, Botswana was one of the poorest countries in the world.']},
+     {t:'The kgotla', lines:['The traditional meeting place of a village.','Led by the kgosi (chief).','Used to discuss community matters and settle disputes.','Everyone may speak — "mmualebe o bua la gagwe".','Still used today alongside the modern court system.']}
+   ]},
+  {id:'science', name:'Science diagrams', emoji:'🔬', facts:['Water cycle: evaporation → condensation → precipitation → collection','Photosynthesis needs sunlight, water and carbon dioxide','Conductors: metals · Insulators: rubber, plastic, wood','A circuit needs a source, a complete path and a load','Butterfly: egg → larva → pupa → adult'],
+   why:'Science questions are often about a process — what happens, in what order, and why. Learn the sequences and you can answer most of them.',
+   detail:[
+     {t:'The water cycle, in order', lines:['1. Evaporation — the sun heats water, it becomes vapour','2. Condensation — vapour rises, cools, forms clouds','3. Precipitation — it falls as rain, hail or snow','4. Collection — it gathers in rivers, dams and underground','Then it starts again. The sun drives the whole cycle.']},
+     {t:'Photosynthesis', lines:['Needs: sunlight + water + carbon dioxide','Made: food (glucose) + oxygen released','Happens in the leaves, in the green parts','Roots take in the water; leaves take in the carbon dioxide','This is why cutting down trees reduces oxygen.']},
+     {t:'Life cycles', lines:['Butterfly: egg → larva (caterpillar) → pupa → adult','Frog: egg → tadpole → froglet → adult frog','Both are complete metamorphosis — the young looks nothing like the adult','Chicken: egg → chick → adult (no metamorphosis)']},
+     {t:'Heat and electricity', lines:['Conductors of heat and electricity: copper, iron, aluminium, all metals','Insulators: rubber, plastic, wood, glass, air, cloth','Conduction — through a solid, particle to particle','Convection — hot liquid or gas rises, cool sinks','Radiation — travels as waves, needs no material (the sun to earth)']},
+     {t:'A working circuit needs three things', lines:['1. A source of energy — a cell or battery','2. A complete path — wires with no break','3. A load — a bulb, motor or buzzer that does the work','Series: one path. One bulb fails, all go out.','Parallel: separate paths. One fails, others keep working.']}
+   ]},
+  {id:'agric', name:'Agriculture basics', emoji:'🌱', facts:['Soils: sandy (drains fast) · clay (holds water) · loam (best for crops)','Crop rotation keeps soil fertile and breaks pest cycles','Contour ploughing reduces soil erosion on slopes','Compost and manure add organic matter to soil','Overgrazing exposes soil and causes erosion'],
+   why:'Agriculture questions almost always come back to one thing: Botswana is dry. Explain your answers in terms of saving water and protecting soil and you will usually be right.',
+   detail:[
+     {t:'The three soils', lines:['Sandy — big particles, drains fast, warms quickly, loses nutrients','Clay — tiny particles, holds water tightly, can waterlog, cracks when dry','Loam — a balance of sand, silt and clay. Best for most crops.','Test by feel: sandy is gritty, clay is sticky, loam is smooth and crumbly.']},
+     {t:'Protecting soil from erosion', lines:['Contour ploughing — plough across the slope, not down it','Terracing — steps cut into a hillside','Windbreaks — rows of trees to slow the wind','Cover crops and mulch — never leave soil bare','Controlled grazing — keep animal numbers within the carrying capacity']},
+     {t:'Keeping soil fertile', lines:['Crop rotation — change the crop each season; legumes add nitrogen','Compost — decayed plant and animal matter','Manure — animal droppings, adds nutrients and organic matter','Fallowing — resting the land for a season','Fertilisers — urea for nitrogen, superphosphate for phosphorus']},
+     {t:'Livestock in a dry country', lines:['Tswana cattle — indigenous, suited to heat and drought','Goats browse shrubs that cattle will not eat','Supplementary feeding matters most in the dry season','Always provide shade and clean water','Signs of a sick animal: off its food, standing apart, dull coat']},
+     {t:'Poultry keeping', lines:['Chicks need a brooder for about the first three weeks','Layers need clean nesting boxes and about 16 hours of light','Replace wet or caked litter — it causes disease','Vaccinate against Newcastle disease','Record feed used, eggs collected and any deaths, every day.']}
+   ]}
 ];
 
 const AFFIRMATIONS = [
@@ -714,7 +967,24 @@ const AFFIRMATIONS = [
   'Mistakes in practice are how I collect marks in the exam.',
   'I have studied. I trust what I know.',
   'I am calm. My mind is quiet and ready.',
-  'Ke kgona. Ke ithutile mme ke tla dira sentle.'
+  'Ke kgona. Ke ithutile mme ke tla dira sentle.',
+  'I do not have to be perfect. I have to keep going.',
+  'Every question I practise makes the exam smaller.',
+  'I have sat in that classroom all year. I belong in that exam hall.',
+  'When I do not know an answer, I move on and come back. That is skill, not failure.',
+  'My best is enough. My best is what I will give.',
+  'I am allowed to find this hard and still do it well.',
+  'Slow and correct beats fast and careless.',
+  'I have come too far to doubt myself now.',
+  'Nerves mean I care. I can be nervous and still be ready.',
+  'One question at a time. That is all the exam ever is.',
+  'Ke tsile kgakala. Ga ke ye go ineela gompieno.',
+  'Bothata bo bongwe fela ka nako. Ke tla bo fenya.',
+  'Ke na le kitso. Ke tla e supa mo pampiring.',
+  'What I revise today, I will remember in October.',
+  'I am the kind of learner who tries again.',
+  'My family believes in me, and today so do I.',
+  'I will read every question twice before I answer.'
 ];
 
 const ROUTINE = ['Sleep early the night before — no late studying.','Eat breakfast. Your brain needs food to think.','Pack your bag the night before.','Arrive early so you are not rushing.','Breathe five slow breaths before you open the paper.','Read every instruction twice before answering.'];
@@ -723,33 +993,145 @@ const DAILY = ['Practise one MCQ round','Revise Maths for 20 minutes','Read alou
 
 const BAG = ['Two sharpened pencils','An eraser and sharpener','A ruler','A blue or black pen','Exam number / entry slip','Water bottle','School uniform ready','A watch (if allowed)'];
 
+const TOPIC_TIPS = {
+  day:['Pick ONE day, not a whole holiday. A single day has a shape.','Start in the middle of the action, not with waking up.','Say what made it unforgettable near the end, not in the first line.','Use the weather and the time of day to set the mood.'],
+  friend:['Describe two or three specific things about them, not a list of ten.','Show the friendship through one story — the day they helped you.','Include something they say often. Real speech makes a person real.','End with why you would choose them again.'],
+  rain:['Start with the sound before the sight — rain on a zinc roof.','Use smell: wet soil, dust settling, smoke.','Show what people did: ran, shouted, fetched buckets.','In Botswana rain is good news. Say what it meant.'],
+  hero:['Give real examples of what they do, not adjectives about them.','One scene where you watched them do something admirable.','Say what you have copied from them.','Avoid "he is very kind and very good" — show it instead.'],
+  market:['Use all five senses — a market is noise, colour and smell at once.','Name real things: madila, morogo, second-hand clothes, tomatoes.','Include one conversation, even two lines.','Pick one stall to describe closely rather than the whole market thinly.'],
+  lost:['Build the worry slowly. Short sentences make fear feel faster.','Say what you could see and hear while you were lost.','Show your thoughts: "What if nobody comes?"','End with the relief, and what you do differently now.'],
+  kindness:['One small act, described closely, beats a big vague one.','Say what you needed and how it felt to be given it.','Describe the person doing it — face, voice, hands.','End with what you learned about how to treat others.'],
+  mistake:['Be honest. Examiners reward real reflection.','Describe the moment you realised you were wrong.','Do not make excuses in the writing — own it.','End with the specific thing you now do differently.'],
+  journey:['Give the journey a beginning, middle and arrival.','Name places you passed through.','Describe fellow travellers — a journey is people, not scenery.','Say how you felt arriving compared with leaving.'],
+  wedding:['Choose three details: the food, the music, one person dancing.','Use colour — dresses, tents, cloth.','Include the sound of singing or ululating.','Say what the celebration meant to the family.'],
+  animal:['Describe it physically before anything happens.','Give it a name if it had one.','Tell one event involving it — not its whole life.','Say how you felt about it, honestly.'],
+  school:['Start at the gate. First impressions are strong openings.','Describe one face that was kind, and one that was not.','Show the fear of not knowing where to sit.','End with how you felt walking home.'],
+  helped:['Say clearly what was needed before you helped.','Describe what you actually did, step by step.','Include what the person said or did in return.','End with how helping changed how you see yourself.'],
+  dream:['Say what you want to be in the first paragraph.','Give the reason — a person or event that started it.','Say what you are doing NOW towards it. This is the best paragraph.','End with the difference you want to make.']
+};
+
 const TOPICS = [
   {id:'day', label:'A day I will never forget', hint:'Tell one story from start to finish.'},
   {id:'friend', label:'My best friend', hint:'Describe them, then show why they matter.'},
   {id:'rain', label:'The day it rained heavily', hint:'Use your senses: sound, smell, sight.'},
   {id:'hero', label:'The person I admire most', hint:'Give real examples of what they do.'},
-  {id:'market', label:'A visit to the market', hint:'Describe people, noise, colour and smell.'}
+  {id:'market', label:'A visit to the market', hint:'Describe people, noise, colour and smell.'},
+  {id:'lost', label:'The day I got lost', hint:'Build the worry, then the relief.'},
+  {id:'kindness', label:'Someone showed me kindness', hint:'One small act. Why it mattered.'},
+  {id:'mistake', label:'A mistake that taught me something', hint:'Be honest. End with what changed.'},
+  {id:'journey', label:'A long journey I took', hint:'Places, people, what you saw on the way.'},
+  {id:'wedding', label:'A wedding or celebration I attended', hint:'Food, music, clothes, dancing.'},
+  {id:'animal', label:'An animal I will never forget', hint:'Describe it, then tell what happened.'},
+  {id:'school', label:'My first day at a new school', hint:'How you felt entering, and leaving.'},
+  {id:'helped', label:'The day I helped someone', hint:'What was needed, what you did.'},
+  {id:'dream', label:'What I want to be one day', hint:'Say why, and what you are doing now.'}
 ];
 
 const BOXES = [
   {id:'plan', title:'1. My plan', hint:'Write your topic and the three main things that will happen.', placeholder:'Topic… then 3 main ideas'},
   {id:'intro', title:'2. Introduction', hint:'Set the scene in two or three sentences. Where and when?', placeholder:'It was a Saturday morning in…'},
   {id:'body', title:'3. Middle paragraphs', hint:'What happened, in order? Add what you saw, heard and felt.', placeholder:'First… Then… Suddenly…'},
-  {id:'end', title:'4. Ending', hint:'How did it finish, and how did you feel about it?', placeholder:'In the end… I felt…'}
+  {id:'end', title:'4. Ending', hint:'How did it finish, and how did you feel about it?', placeholder:'In the end… I felt…'},
+  {id:'full', title:'5. My full composition', hint:'Now write it out properly, using your plan. Leave a blank line between paragraphs. Aim for 250–350 words.', placeholder:'Write your whole composition here…', big:true}
 ];
 
 const WORDS = [
-  {w:'beautiful', c:'Very pleasing to look at.'},
-  {w:'necessary', c:'Something you must have.'},
-  {w:'February', c:'The second month of the year.'},
-  {w:'because', c:'You use it to give a reason.'},
-  {w:'separate', c:'To keep things apart.'},
-  {w:'government', c:'The group that runs a country.'},
-  {w:'environment', c:'The world around us.'},
-  {w:'knowledge', c:'The things a person knows.'},
-  {w:'agriculture', c:'The science of farming.'},
-  {w:'independence', c:'Being free to rule yourself.'}
-].slice();
+  // Easier — common PSLE spelling slips
+  {w:'because', c:'You use it to give a reason.', lv:'Easy'},
+  {w:'friend', c:'Someone you like and trust.', lv:'Easy'},
+  {w:'school', c:'Where you go to learn.', lv:'Easy'},
+  {w:'people', c:'More than one person.', lv:'Easy'},
+  {w:'always', c:'Every single time.', lv:'Easy'},
+  {w:'before', c:'Earlier than something else.', lv:'Easy'},
+  {w:'family', c:'Your parents, brothers and sisters.', lv:'Easy'},
+  {w:'water', c:'You drink it every day.', lv:'Easy'},
+  {w:'money', c:'You use it to buy things.', lv:'Easy'},
+  {w:'teacher', c:'The person who teaches your class.', lv:'Easy'},
+  {w:'morning', c:'The early part of the day.', lv:'Easy'},
+  {w:'garden', c:'Where vegetables or flowers grow.', lv:'Easy'},
+  {w:'village', c:'A small place where people live.', lv:'Easy'},
+  {w:'clothes', c:'What you wear.', lv:'Easy'},
+  {w:'brother', c:'A boy with the same parents as you.', lv:'Easy'},
+  {w:'answer', c:'What you give to a question.', lv:'Easy'},
+  {w:'kitchen', c:'The room where food is cooked.', lv:'Easy'},
+  {w:'window', c:'You look through it.', lv:'Easy'},
+  {w:'because', c:'It gives the reason for something.', lv:'Easy'},
+  {w:'children', c:'More than one child.', lv:'Easy'},
+
+  // Medium — the classic traps
+  {w:'beautiful', c:'Very pleasing to look at.', lv:'Medium'},
+  {w:'necessary', c:'Something you must have.', lv:'Medium'},
+  {w:'February', c:'The second month of the year.', lv:'Medium'},
+  {w:'separate', c:'To keep things apart.', lv:'Medium'},
+  {w:'together', c:'With each other.', lv:'Medium'},
+  {w:'beginning', c:'The start of something.', lv:'Medium'},
+  {w:'different', c:'Not the same.', lv:'Medium'},
+  {w:'important', c:'It matters a great deal.', lv:'Medium'},
+  {w:'business', c:'Buying and selling to make money.', lv:'Medium'},
+  {w:'medicine', c:'You take it when you are sick.', lv:'Medium'},
+  {w:'exercise', c:'Moving your body to stay healthy.', lv:'Medium'},
+  {w:'sentence', c:'A group of words with a full stop.', lv:'Medium'},
+  {w:'question', c:'It ends with a question mark.', lv:'Medium'},
+  {w:'received', c:'You got something that was given.', lv:'Medium'},
+  {w:'believe', c:'To think something is true.', lv:'Medium'},
+  {w:'library', c:'A place full of books.', lv:'Medium'},
+  {w:'hospital', c:'Where sick people are treated.', lv:'Medium'},
+  {w:'neighbour', c:'The person living next to you.', lv:'Medium'},
+  {w:'stomach', c:'Food goes here after you swallow.', lv:'Medium'},
+  {w:'chocolate', c:'A sweet brown treat.', lv:'Medium'},
+  {w:'restaurant', c:'You buy and eat a meal there.', lv:'Medium'},
+  {w:'vegetable', c:'Cabbage, carrots and spinach are these.', lv:'Medium'},
+  {w:'temperature', c:'How hot or cold something is.', lv:'Medium'},
+  {w:'strength', c:'How strong something is.', lv:'Medium'},
+  {w:'height', c:'How tall something is.', lv:'Medium'},
+  {w:'weight', c:'How heavy something is.', lv:'Medium'},
+  {w:'foreign', c:'From another country.', lv:'Medium'},
+  {w:'science', c:'The study of the natural world.', lv:'Medium'},
+  {w:'certain', c:'Completely sure.', lv:'Medium'},
+  {w:'thought', c:'The past tense of think.', lv:'Medium'},
+  {w:'through', c:'In one side and out the other.', lv:'Medium'},
+  {w:'straight', c:'Not bent or curved.', lv:'Medium'},
+  {w:'building', c:'A house, shop or office.', lv:'Medium'},
+  {w:'machine', c:'It does work using power.', lv:'Medium'},
+  {w:'engine', c:'It makes a car move.', lv:'Medium'},
+  {w:'journey', c:'Travelling from one place to another.', lv:'Medium'},
+  {w:'weather', c:'Rain, sun and wind.', lv:'Medium'},
+  {w:'material', c:'What something is made of.', lv:'Medium'},
+  {w:'possible', c:'It can be done.', lv:'Medium'},
+  {w:'usually', c:'Most of the time.', lv:'Medium'},
+
+  // Harder — PSLE stretch words
+  {w:'government', c:'The group that runs a country.', lv:'Hard'},
+  {w:'environment', c:'The world around us.', lv:'Hard'},
+  {w:'knowledge', c:'The things a person knows.', lv:'Hard'},
+  {w:'agriculture', c:'The science of farming.', lv:'Hard'},
+  {w:'independence', c:'Being free to rule yourself.', lv:'Hard'},
+  {w:'responsible', c:'You can be trusted with a duty.', lv:'Hard'},
+  {w:'discipline', c:'Controlling how you behave.', lv:'Hard'},
+  {w:'opportunity', c:'A chance to do something good.', lv:'Hard'},
+  {w:'immediately', c:'Right now, with no delay.', lv:'Hard'},
+  {w:'unfortunately', c:'Sadly, it did not go well.', lv:'Hard'},
+  {w:'embarrassed', c:'Ashamed in front of others.', lv:'Hard'},
+  {w:'occasionally', c:'Now and then, not often.', lv:'Hard'},
+  {w:'definitely', c:'Without any doubt at all.', lv:'Hard'},
+  {w:'appreciate', c:'To be thankful for something.', lv:'Hard'},
+  {w:'communicate', c:'To share information with others.', lv:'Hard'},
+  {w:'electricity', c:'It powers lights and fridges.', lv:'Hard'},
+  {w:'photosynthesis', c:'How plants make their own food.', lv:'Hard'},
+  {w:'condensation', c:'Water vapour turning back to liquid.', lv:'Hard'},
+  {w:'multiplication', c:'Times tables use this.', lv:'Hard'},
+  {w:'measurement', c:'Finding out length, mass or volume.', lv:'Hard'},
+  {w:'experiment', c:'A test to find something out.', lv:'Hard'},
+  {w:'equipment', c:'The tools needed for a job.', lv:'Hard'},
+  {w:'committee', c:'A small group chosen to decide things.', lv:'Hard'},
+  {w:'parliament', c:'Where a country makes its laws.', lv:'Hard'},
+  {w:'citizenship', c:'Belonging to a country.', lv:'Hard'},
+  {w:'traditional', c:'Passed down from long ago.', lv:'Hard'},
+  {w:'ceremony', c:'A formal event like a wedding.', lv:'Hard'},
+  {w:'achievement', c:'Something good you managed to do.', lv:'Hard'},
+  {w:'encouragement', c:'Words that give someone courage.', lv:'Hard'},
+  {w:'description', c:'Words that tell what something is like.', lv:'Hard'}
+];
 
 const NAV = [
   {view:'home', label:'Dashboard', icon:'🏠'},
@@ -793,7 +1175,8 @@ class Component extends DCLogic {
     timerSecs:1800, timerLeft:1800, timerRunning:false,
     openTip:'maths',
     checked:{},
-    topic:'day', plan:{},
+    topic:'day', plan:{}, mark:null, myAff:[], affDraft:'', affError:'', openPoster:null,
+    seen:{}, resetSubj:null, standing:null,
     spellWords:shuffle(WORDS).slice(0,10), spellIndex:0, spellInput:'', spellScore:0, spellFeedback:'', spellOk:null
   };
 
@@ -858,11 +1241,22 @@ class Component extends DCLogic {
     this.pullProgress(res.code);
   }
 
+  // Anonymous standing among other learners — a band, never a position.
+  async pullStanding(code){
+    const db = await this.db();
+    if(!db || !db.myStanding) return;
+    try{
+      const s = await db.myStanding(code);
+      if(s) this.setState({standing:s});
+    }catch(e){}
+  }
+
   // Bring a learner's stars and history down from the server.
   async pullProgress(code){
     const db = await this.db();
     if(!db) return;
     try{
+      this.pullStanding(code);
       const rows = await db.loadProgress(code);
       if(!rows || !rows.length) return;
       const progress = {}; let stars = 0;
@@ -1013,20 +1407,47 @@ class Component extends DCLogic {
       stars: (s && s.stars) || 0,
       checked: (s && s.checked) || {},
       plan: (s && s.plan) || {},
-      topic: (s && s.topic) || 'day'
+      topic: (s && s.topic) || 'day',
+      myAff: (s && s.myAff) || [],
+      seen: (s && s.seen) || {},
+      mark: null
     });
   }
 
   save(patch){
     this.setState(patch, () => {
       try{
-        const {progress, stars, checked, plan, topic} = this.state;
-        localStorage.setItem(this.dataKey(), JSON.stringify({progress, stars, checked, plan, topic}));
+        const {progress, stars, checked, plan, topic, myAff, seen} = this.state;
+        localStorage.setItem(this.dataKey(), JSON.stringify({progress, stars, checked, plan, topic, myAff, seen}));
       }catch(e){}
     });
   }
 
   go(view){ this.setState({view}); }
+
+  // Wipes this learner's own work only. Access and the code are untouched.
+  async eraseProgress(){
+    clearTimeout(this._sync);
+    try{ localStorage.removeItem(this.dataKey()); }catch(e){}
+    this.setState({
+      progress:{}, stars:0, checked:{}, plan:{}, myAff:[], mark:null, seen:{}, resetSubj:null,
+      quiz:null, quizDone:false, selected:null, correct:0,
+      spellScore:0, spellIndex:0, spellInput:'', spellFeedback:'', spellOk:null,
+      erase:'done'
+    });
+    const db = await this.db();
+    if(db && this.state.unlockCode){
+      try{ await db.clearProgress(this.state.unlockCode); }catch(e){}
+    }
+  }
+
+  addAffirmation(){
+    const text = (this.state.affDraft || '').trim();
+    if(text.length < 8) return this.setState({affError:'Write a full sentence — at least a few words.'});
+    if((this.state.myAff || []).length >= 12) return this.setState({affError:'You have twelve of your own. Remove one to add another.'});
+    this.save({myAff:(this.state.myAff || []).concat([text])});
+    this.setState({affDraft:'', affError:''});
+  }
 
   rows(subject){ return (this.state.bank||{})[subject] || []; }
 
@@ -1054,10 +1475,71 @@ class Component extends DCLogic {
     return seen;
   }
 
+  // Questions already answered in this topic, so rounds do not repeat until
+  // the learner has genuinely worked through the whole bank.
+  seenKey(){
+    const st = this.state;
+    return st.subject + '|' + st.std + '|' + st.qTopic;
+  }
+
+  seenSet(){
+    return new Set(((this.state.seen || {})[this.seenKey()]) || []);
+  }
+
+  markSeen(qText){
+    const key = this.seenKey();
+    const seen = Object.assign({}, this.state.seen || {});
+    const list = (seen[key] || []).slice();
+    if(list.indexOf(qText) < 0) list.push(qText);
+    seen[key] = list;
+    this.save({seen});
+  }
+
+  async clearSeen(){
+    const st = this.state;
+    const seen = Object.assign({}, st.seen || {});
+    delete seen[this.seenKey()];
+    // Clearing the whole subject resets its score too; clearing one topic
+    // only forgets which questions were asked.
+    const wholeSubject = st.qTopic === 'All topics' && st.std === 'All';
+    const progress = Object.assign({}, st.progress);
+    if(wholeSubject) delete progress[st.subject];
+    this.save({seen, progress});
+    this.setState({quiz:null, quizDone:false, selected:null});
+    if(wholeSubject){
+      const db = await this.db();
+      if(db && st.unlockCode){
+        try{ await db.clearSubject(st.unlockCode, st.subject); }catch(e){}
+      }
+    }
+  }
+
+  // Wipes one subject's score and question history, leaving everything else.
+  async resetSubject(id){
+    const progress = Object.assign({}, this.state.progress);
+    delete progress[id];
+    const seen = Object.assign({}, this.state.seen || {});
+    Object.keys(seen).forEach(k => { if(k.indexOf(id + '|') === 0) delete seen[k]; });
+    this.save({progress, seen, resetSubj:null, quiz:null, quizDone:false, selected:null});
+    const db = await this.db();
+    if(db && this.state.unlockCode){
+      try{ await db.clearSubject(this.state.unlockCode, id); }catch(e){}
+    }
+  }
+
   startQuiz(){
     if(!this.canUse(this.state.subject)) return;
     const size = this.props.questionsPerRound ?? 5;
-    const qs = shuffle(this.pool()).slice(0, size);
+    const pool = this.pool();
+    if(!pool.length) return;
+    const seen = this.seenSet();
+    // Unseen questions first, so a learner works through the whole bank
+    // before anything comes round again.
+    let qs = shuffle(pool.filter(q => !seen.has(q.q))).slice(0, size);
+    if(qs.length < size){
+      const used = new Set(qs.map(q => q.q));
+      qs = qs.concat(shuffle(pool.filter(q => !used.has(q.q))).slice(0, size - qs.length));
+    }
     if(!qs.length) return;
     this.setState({quiz:qs, qIndex:0, selected:null, correct:0, quizDone:false});
   }
@@ -1071,6 +1553,7 @@ class Component extends DCLogic {
     const cur = p[sid] || {answered:0, correct:0};
     p[sid] = {answered:cur.answered+1, correct:cur.correct + (ok?1:0)};
     this.save({selected:i, correct:this.state.correct+(ok?1:0), progress:p, stars:this.state.stars+(ok?1:0)});
+    this.markSeen(q.q);
     clearTimeout(this._sync);
     this._sync = setTimeout(() => this.pushProgress(sid), 1500);
   }
@@ -1081,6 +1564,96 @@ class Component extends DCLogic {
   }
 
   fmt(s){ const m=Math.floor(s/60), r=s%60; return m+':'+String(r).padStart(2,'0'); }
+
+  // Structural feedback on a composition. It checks the things that CAN be
+  // checked fairly — length, paragraphing, openings, endings, description,
+  // sentence variety — and says plainly that it cannot judge imagination.
+  markComposition(text){
+    const raw = (text || '').trim();
+    if(!raw) return null;
+
+    const words = raw.split(/\s+/).filter(Boolean);
+    const wc = words.length;
+    const paras = raw.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
+    const sentences = raw.split(/[.!?]+/).map(s => s.trim()).filter(s => s.split(/\s+/).length > 1);
+    const lower = ' ' + raw.toLowerCase() + ' ';
+    const has = (list) => list.filter(w => lower.indexOf(' ' + w) >= 0);
+
+    const senses = has(['saw','heard','smell','smelled','smelt','felt','tasted','touch','loud','quiet','bright','dark','cold','warm','hot','sweet','dusty','shouted','whispered','silence','soft','rough']);
+    const connectives = has(['because','although','however','suddenly','meanwhile','afterwards','therefore','while','until','since','before','after','then','finally','eventually','instead']);
+    const feelings = has(['afraid','frightened','happy','proud','ashamed','excited','nervous','relieved','angry','sad','grateful','worried','shocked','delighted']);
+    const speech = /["“”']/.test(raw);
+    const weakOpen = /^(i will tell you|this is my|in this composition|i am going to (write|tell)|my composition)/i.test(raw);
+    const reflective = /(i (learned|learnt|realised|realized|understood|will never forget)|from that day|since then|that is why|i felt)/i.test(raw);
+    const lengths = sentences.map(s => s.split(/\s+/).length);
+    const shortest = lengths.length ? Math.min.apply(null, lengths) : 0;
+    const longest = lengths.length ? Math.max.apply(null, lengths) : 0;
+    const varied = lengths.length > 3 && (longest - shortest) >= 8;
+    const capIssues = sentences.filter(s => s && s[0] === s[0].toLowerCase() && /[a-z]/.test(s[0])).length;
+
+    let score = 0;
+    const good = [], fix = [];
+
+    // Length — 4
+    if(wc >= 250 && wc <= 380){ score += 4; good.push('Your length is right for the PSLE — ' + wc + ' words.'); }
+    else if(wc >= 180){ score += 2; fix.push('You wrote ' + wc + ' words. Aim for 250–350 — add one more full paragraph of detail.'); }
+    else { score += 1; fix.push('At ' + wc + ' words this is too short to score well. The exam expects roughly 250–350.'); }
+
+    // Paragraphing — 4
+    if(paras.length >= 5){ score += 4; good.push('You used ' + paras.length + ' paragraphs. That is proper structure.'); }
+    else if(paras.length >= 3){ score += 2; fix.push('Only ' + paras.length + ' paragraphs. Aim for 5: opening, three middle paragraphs, ending. Leave a blank line between each.'); }
+    else { fix.push('This reads as one block. Break it into 5 paragraphs — one idea each — with a blank line between them.'); }
+
+    // Opening — 3
+    if(weakOpen){ fix.push('Your opening announces the composition ("I will tell you about…"). Start inside the story instead — with a sound, an action or speech.'); }
+    else if(wc > 20){ score += 3; good.push('Your opening starts in the story rather than announcing it.'); }
+
+    // Ending — 3
+    if(reflective){ score += 3; good.push('You end by reflecting on what it meant. Examiners look for that.'); }
+    else { fix.push('Your ending stops rather than closes. Finish by saying how you felt or what you learned.'); }
+
+    // Description — 3
+    if(senses.length >= 5){ score += 3; good.push('Good sensory detail — you used ' + senses.length + ' describing words.'); }
+    else if(senses.length >= 2){ score += 2; fix.push('Add more of what you saw, heard and smelled. You used ' + senses.length + ' sensory words; aim for five or more.'); }
+    else { fix.push('There is almost no description. Tell the reader what you could see, hear and smell.'); }
+
+    // Connectives — 2
+    if(connectives.length >= 4){ score += 2; good.push('You link your ideas well (' + connectives.slice(0,4).join(', ') + ').'); }
+    else { fix.push('Join your ideas with words like because, although, suddenly, afterwards. You used ' + connectives.length + '.'); }
+
+    // Sentence variety — 2
+    if(varied){ score += 2; good.push('Your sentences vary in length, which makes it enjoyable to read.'); }
+    else if(lengths.length > 3){ fix.push('Your sentences are all a similar length. Mix a very short one in for effect. Like this.'); }
+
+    // Feelings & speech — 2
+    if(feelings.length) score += 1;
+    else fix.push('Name your feelings somewhere — afraid, proud, relieved. It lifts a narrative.');
+    if(speech) score += 1;
+    else fix.push('Try adding one line of speech in quotation marks. It brings a person to life.');
+
+    // Capitals — 1
+    if(capIssues === 0 && sentences.length > 2){ score += 1; good.push('Every sentence starts with a capital letter.'); }
+    else if(capIssues) fix.push(capIssues + ' sentence(s) do not start with a capital letter.');
+
+    const MAX = 24;
+    const pct = Math.round(score / MAX * 100);
+    const band = pct >= 80 ? {label:'Strong', emoji:'🌟', note:'This would do well. Polish the small things and keep this standard.'}
+      : pct >= 60 ? {label:'Good, with room to grow', emoji:'👍', note:'The bones are right. Fix the points below and it becomes strong.'}
+      : pct >= 40 ? {label:'Getting there', emoji:'💪', note:'You have a story. Now shape it — structure and description are where your marks are.'}
+      : {label:'Needs another draft', emoji:'📝', note:'Do not be discouraged. Work through the list below and write it again — that is how writing improves.'};
+
+    return {
+      score, pct, band, max:MAX,
+      stats:[
+        {k:'Words', v:wc, target:'250–350'},
+        {k:'Paragraphs', v:paras.length, target:'5'},
+        {k:'Sentences', v:sentences.length, target:'—'},
+        {k:'Sensory words', v:senses.length, target:'5+'}
+      ],
+      good: good.slice(0, 4),
+      fix: fix.slice(0, 5)
+    };
+  }
 
   daysToExam(){
     const target = new Date(this.props.examDate || '2026-10-05');
@@ -1139,7 +1712,7 @@ class Component extends DCLogic {
     const spellWord = st.spellWords[st.spellIndex];
 
     const planBoxes = BOXES.map(b => ({
-      title:b.title, hint:b.hint, placeholder:b.placeholder,
+      title:b.title, hint:b.hint, placeholder:b.placeholder, rows: b.big ? 14 : 3,
       value: st.plan[b.id] || '',
       words: (st.plan[b.id]||'').trim() ? (st.plan[b.id]||'').trim().split(/\s+/).length : 0,
       onChange: (e) => { const p = Object.assign({}, st.plan); p[b.id] = e.target.value; this.save({plan:p}); }
@@ -1172,6 +1745,61 @@ class Component extends DCLogic {
       adminPreview: (st.planName || '').indexOf('admin') >= 0,
       previewLabel: st.allowed ? 'Admin preview · seeing ' + st.allowed.length + ' subject(s)' : 'Admin preview · all six subjects unlocked',
 
+      // — What this learner has accomplished. Their own record, not a
+      //   comparison against other children.
+      achievements: (() => {
+        const rows = SUBJECTS.filter(s => this.canUse(s.id));
+        let answered = 0, correct = 0, mastered = 0, started = 0;
+        rows.forEach(s => {
+          const p = st.progress[s.id] || {answered:0, correct:0};
+          answered += p.answered; correct += p.correct;
+          if(p.answered) started++;
+          const total = this.rows(s.id).length;
+          if(total && p.answered >= total) mastered++;
+        });
+        const acc = answered ? Math.round(correct / answered * 100) : 0;
+        const ticks = DAILY.filter((_, i) => st.checked['d' + i]).length;
+        return [
+          {label:'Questions answered', value:answered, note: answered ? correct + ' correct' : 'none yet'},
+          {label:'Accuracy', value: answered ? acc + '%' : '—', note: answered ? (acc >= 75 ? 'exam-ready standard' : acc >= 50 ? 'keep practising' : 'read the explanations') : 'answer a round to see this'},
+          {label:'Subjects started', value: started + ' of ' + rows.length, note: mastered ? mastered + ' fully completed' : 'none finished yet'},
+          {label:'Stars earned', value: st.stars, note: ticks + ' of ' + DAILY.length + ' tasks ticked today'}
+        ];
+      })(),
+      // Shows nothing at all until there are enough learners to stay anonymous.
+      showStanding: !!(st.standing && st.standing.ready),
+      standingText: (() => {
+        const s = st.standing;
+        if(!s || !s.ready) return '';
+        const map = {
+          'top-third': 'You are in the top third of learners practising this fortnight.',
+          'middle-third': 'You are in the middle third of learners practising this fortnight.',
+          'building-up': 'You are still building up compared with other learners this fortnight — more practice will move you.'
+        };
+        return map[s.band] || '';
+      })(),
+      standingNote: (() => {
+        const s = st.standing;
+        if(!s || !s.ready) return '';
+        return 'Compared anonymously with ' + s.learners + ' learners. No names, no positions — nobody can see you, and you cannot see them.';
+      })(),
+      standingIcon: (() => {
+        const s = st.standing;
+        if(!s || !s.ready) return '';
+        return s.band === 'top-third' ? '🥇' : s.band === 'middle-third' ? '📈' : '🌱';
+      })(),
+
+      bestSubject: (() => {
+        const scored = SUBJECTS.filter(s => this.canUse(s.id))
+          .map(s => ({name:s.name, emoji:s.emoji, p:st.progress[s.id] || {answered:0, correct:0}}))
+          .filter(x => x.p.answered >= 5)
+          .map(x => ({name:x.name, emoji:x.emoji, pct:Math.round(x.p.correct / x.p.answered * 100)}))
+          .sort((a, b) => b.pct - a.pct);
+        if(!scored.length) return '';
+        return scored[0].emoji + '  Your strongest so far is ' + scored[0].name + ' at ' + scored[0].pct + '%'
+          + (scored.length > 1 ? ' · give ' + scored[scored.length-1].name + ' (' + scored[scored.length-1].pct + '%) some extra time' : '');
+      })(),
+
       navItems, learner, stars: st.stars,
       daysLeft: this.daysToExam(),
       examLabel: this.props.examLabel || 'October 2026 exams',
@@ -1187,7 +1815,20 @@ class Component extends DCLogic {
       checklistPct: Math.round(doneCount/DAILY.length*100)+'%',
       checklistPctLabel: Math.round(doneCount/DAILY.length*100)+'%',
       resetChecklist: () => this.save({checked:{}}),
-      affirmation: AFFIRMATIONS[st.affIndex % AFFIRMATIONS.length],
+
+      eraseIdle: st.erase !== 'armed' && st.erase !== 'done',
+      eraseArmed: st.erase === 'armed',
+      eraseDone: st.erase === 'done',
+      eraseBlurb: st.stars
+        ? 'You have ' + st.stars + ' stars and progress saved. If you want to begin again from zero — a new term, or a different child using this device — you can wipe it all.'
+        : 'If you want to begin again from zero, you can wipe your stars, progress and checklists.',
+      eraseArm: () => this.setState({erase:'armed'}),
+      eraseCancel: () => this.setState({erase:null}),
+      eraseConfirm: () => this.eraseProgress(),
+      affirmation: (() => {
+        const pool = AFFIRMATIONS.concat(st.myAff || []);
+        return pool[st.affIndex % pool.length];
+      })(),
       nextAffirmation: () => this.setState({affIndex: st.affIndex+1}),
       routine: ROUTINE,
       breathPhase: ['Breathe in','Hold','Breathe out'][st.breathStep],
@@ -1293,6 +1934,41 @@ class Component extends DCLogic {
         label: t.name, count: t.count+' Qs',
         pick: ()=>this.setState({qTopic:t.name})
       }, pill(st.qTopic===t.name))) : [],
+      // — how much of this topic has been worked through —
+      seenCount: (() => { const p = st.subject ? this.pool().length : 0; const s = st.subject ? this.seenSet() : new Set();
+        return p ? this.pool().filter(q => s.has(q.q)).length : 0; })(),
+      poolTotal: st.subject ? this.pool().length : 0,
+      coverLine: (() => {
+        if(!st.subject) return '';
+        const pool = this.pool(); if(!pool.length) return '';
+        const s = this.seenSet();
+        const done = pool.filter(q => s.has(q.q)).length;
+        if(!done) return '';
+        return done >= pool.length
+          ? '✓ You have answered every question here — ' + pool.length + ' of ' + pool.length + '.'
+          : done + ' of ' + pool.length + ' answered so far.';
+      })(),
+      coverPct: (() => {
+        if(!st.subject) return '0%';
+        const pool = this.pool(); if(!pool.length) return '0%';
+        const s = this.seenSet();
+        return Math.round(pool.filter(q => s.has(q.q)).length / pool.length * 100) + '%';
+      })(),
+      allSeen: (() => {
+        if(!st.subject) return false;
+        const pool = this.pool(); if(!pool.length) return false;
+        const s = this.seenSet();
+        return pool.filter(q => s.has(q.q)).length >= pool.length;
+      })(),
+      someSeen: (() => {
+        if(!st.subject) return false;
+        const pool = this.pool(); if(!pool.length) return false;
+        const s = this.seenSet();
+        const d = pool.filter(q => s.has(q.q)).length;
+        return d > 0 && d < pool.length;
+      })(),
+      startOverHere: () => this.clearSeen(),
+
       readyLine: st.subject ? st.qTopic+' · '+st.level+' · '+poolCount+' questions ready.' : 'Choose a subject above to begin.',
       startDisabled: !st.subject || !poolCount,
       startQuiz: () => this.startQuiz(),
@@ -1341,10 +2017,64 @@ class Component extends DCLogic {
         open: st.openTip===t.id, arrow: st.openTip===t.id ? '▲' : '▼',
         toggle: () => this.setState({openTip: st.openTip===t.id ? null : t.id})
       })),
-      posters: POSTERS,
+      posters: POSTERS.map(p => ({
+        name:p.name, emoji:p.emoji, facts:p.facts,
+        more: (p.detail || []).length + ' sections · tap to open',
+        open: () => this.setState({openPoster:p})
+      })),
 
-      topics: TOPICS.map(t => Object.assign({label:t.label, pick:()=>this.save({topic:t.id})}, pill(st.topic===t.id))),
+      topics: TOPICS.map(t => Object.assign({label:t.label, pick:()=>this.save({topic:t.id, mark:null})}, pill(st.topic===t.id))),
       planBoxes,
+      topicLabel: (TOPICS.find(t => t.id === st.topic) || TOPICS[0]).label,
+      topicTips: TOPIC_TIPS[st.topic] || [],
+
+      canSubmit: ((st.plan || {}).full || '').trim().split(/\s+/).filter(Boolean).length >= 40,
+      submitHint: ((st.plan || {}).full || '').trim()
+        ? 'Write at least 40 words in box 5 before asking for feedback.'
+        : 'Write your composition in box 5 above, then submit it for feedback.',
+      submitComposition: () => {
+        const res = this.markComposition((this.state.plan || {}).full);
+        this.setState({mark:res});
+      },
+      clearMark: () => this.setState({mark:null}),
+      mark: st.mark,
+      hasMark: !!st.mark,
+      markScore: st.mark ? st.mark.score + ' / ' + st.mark.max : '',
+      markPct: st.mark ? st.mark.pct + '%' : '',
+      markEmoji: st.mark ? st.mark.band.emoji : '',
+      markBand: st.mark ? st.mark.band.label : '',
+      markNote: st.mark ? st.mark.band.note : '',
+      markStats: st.mark ? st.mark.stats.map(s => ({label:s.k, value:s.v, target:'target ' + s.target})) : [],
+      markGood: st.mark ? st.mark.good : [],
+      markFix: st.mark ? st.mark.fix : [],
+      hasGood: !!(st.mark && st.mark.good.length),
+      hasFix: !!(st.mark && st.mark.fix.length),
+
+      // Learner's own affirmations
+      myAffirmations: (st.myAff || []).map((a, i) => ({
+        text: a,
+        remove: () => {
+          const list = (this.state.myAff || []).slice();
+          list.splice(i, 1);
+          this.save({myAff:list});
+        }
+      })),
+      hasMyAff: !!(st.myAff || []).length,
+      affDraft: st.affDraft || '',
+      onAffDraft: (e) => this.setState({affDraft:e.target.value}),
+      onAffKey: (e) => { if(e.key === 'Enter') this.addAffirmation(); },
+      addAffirmation: () => this.addAffirmation(),
+      affError: st.affError || '',
+
+      // Poster detail
+      openPoster: st.openPoster,
+      posterOpen: !!st.openPoster,
+      closePoster: () => this.setState({openPoster:null}),
+      posterTitle: st.openPoster ? st.openPoster.name : '',
+      posterEmoji: st.openPoster ? st.openPoster.emoji : '',
+      posterWhy: st.openPoster ? (st.openPoster.why || '') : '',
+      posterFacts: st.openPoster ? (st.openPoster.facts || []) : [],
+      posterDetail: st.openPoster ? (st.openPoster.detail || []) : [],
 
       spellProgress: 'Word '+(st.spellIndex+1)+' of '+st.spellWords.length,
       spellScore: st.spellScore+' correct',

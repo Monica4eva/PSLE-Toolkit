@@ -32,7 +32,7 @@ input,textarea,select{max-width:100%;}
       </div>
       <div style="display:flex;gap:16px;align-items:center">
         <a href="Sign In.dc.html" style="font-size:0.84rem;font-weight:700;color:rgba(255,255,255,0.55)">Already have access? Sign in</a>
-        <a href="landing.html" style="font-size:0.84rem;font-weight:700;color:rgba(255,255,255,0.55)">← Website</a>
+        <a href="index.html" style="font-size:0.84rem;font-weight:700;color:rgba(255,255,255,0.55)">← Website</a>
       </div>
     </div>
 
@@ -196,7 +196,7 @@ input,textarea,select{max-width:100%;}
         <sc-if value="{{ awaitingPayment }}">
           <div style="background:rgba(255,180,60,0.1);border:1.5px solid rgba(255,180,60,0.4);border-radius:14px;padding:18px 20px;margin-bottom:22px;text-align:left">
             <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:0.94rem;color:#FFC463;margin-bottom:7px">⏳ Not active yet</div>
-            <div style="font-size:0.88rem;font-weight:600;color:rgba(255,255,255,0.72);line-height:1.65;text-wrap:pretty">This code stays locked until we confirm your payment. Send your proof of payment to WhatsApp <strong style="color:#fff">75562568</strong> and we will switch it on — usually within a few hours.</div>
+            <div style="font-size:0.88rem;font-weight:600;color:rgba(255,255,255,0.72);line-height:1.65;text-wrap:pretty">This code stays locked until we confirm your payment. Send your proof of payment to WhatsApp <strong style="color:#fff">74310425</strong> and we will switch it on — usually within a few hours.</div>
           </div>
         </sc-if>
 
@@ -261,11 +261,11 @@ const ALL_SUBJECTS = SUBJECTS.map(s => s.id);
 
 const METHODS = [
   {id:'orange', name:'Orange Money', icon:'📱', detail:'Pay from your Orange Money wallet',
-   how:'Dial *145# on your Orange line, choose "Send Money", enter merchant number +26774310425, enter the amount, and use the reference below so we can match your payment.'},
+   how:'Dial *145# on your Orange line, choose "Send Money", enter merchant number 74310425, enter the amount, and use the reference below so we can match your payment.'},
   {id:'myzaka', name:'MyZaka (Mascom)', icon:'💳', detail:'Pay from your Mascom MyZaka wallet',
-   how:'Dial *167# on your Mascom line, choose "Pay Bill", enter 75562568 as the recipient, enter the amount, then confirm with your PIN. Add the reference below.'},
-  {id:'bank', name:'Bank transfer / EFT', icon:'🏦', detail:'FNB Botswana  Name: Swift Social Connect Pty Ltd  · Acc 62917438667',
-   how:'Transfer the total to FNB Botswana, account 62917438667, branch code 281267, name "PSLE Prep Toolkit". Use the reference below as the payment description and WhatsApp us the proof.'}
+   how:'Dial *167# on your Mascom line, choose "Pay Bill", enter 74310425 as the recipient, enter the amount, then confirm with your PIN. Add the reference below.'},
+  {id:'bank', name:'Bank transfer / EFT', icon:'🏦', detail:'FNB Botswana · Acc 62812345678',
+   how:'Transfer the total to FNB Botswana, account 62812345678, branch code 281267, name "PSLE Prep Toolkit". Use the reference below as the payment description and WhatsApp us the proof.'}
 ];
 
 function makeCode(){
@@ -321,11 +321,11 @@ class Component extends DCLogic {
         });
         return this.setState({code:res.code, step:'done', submitting:false, payError:''});
       }catch(e){
-        return this.setState({submitting:false, payError:'We could not save your order: ' + (e.message || 'unknown error') + '. Please try again, or WhatsApp 75562568.'});
+        return this.setState({submitting:false, payError:'We could not save your order: ' + (e.message || 'unknown error') + '. Please try again, or WhatsApp 74310425.'});
       }
     }
 
-    this.setState({submitting:false, payError:'The ordering system is not available right now. Please WhatsApp 75562568 and we will set you up by hand.'});
+    this.setState({submitting:false, payError:'The ordering system is not available right now. Please WhatsApp 74310425 and we will set you up by hand.'});
   }
 
   renderVals(){
@@ -418,7 +418,7 @@ class Component extends DCLogic {
       assurances: [
         {title:'No subscription', text:'One payment covers you until the October 2026 exams. Nothing renews automatically.'},
         {title:'Works on any device', text:'Your access code opens the toolkit on a phone, tablet or school computer.'},
-        {title:'We are here to help', text:'WhatsApp 75562568 if a payment or code does not go through.'}
+        {title:'We are here to help', text:'WhatsApp 74310425 if a payment or code does not go through.'}
       ],
 
       fields: [
@@ -476,7 +476,7 @@ class Component extends DCLogic {
       doneLine: 'We have your ' + plan.name.toLowerCase() + ' order for ' + (st.learner.trim() || 'your learner') + ', reference ' + this.reference() + '.',
       nextSteps: [
         {num:'1', text:'Pay P' + plan.price + ' using the details on the previous screen, quoting reference ' + this.reference() + '.'},
-        {num:'2', text:'WhatsApp your proof of payment to 75562568 with that reference. We activate the code as soon as we see it — usually within a few hours.'},
+        {num:'2', text:'WhatsApp your proof of payment to 74310425 with that reference. We activate the code as soon as we see it — usually within a few hours.'},
         {num:'3', text:'Once we confirm, sign in with the access code above and your child can start straight away.'}
       ],
       startOver: () => this.setState({step:'plan', method:null, subjects:[], subjectError:'', parent:'', phone:'', email:'', learner:'', code:'', detailsError:'', payError:''})

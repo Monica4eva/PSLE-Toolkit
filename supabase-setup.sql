@@ -356,6 +356,280 @@ revoke all on function set_order_status(text, text) from public;
 grant execute on function set_order_status(text, text) to authenticated;
 
 
+-- ---------- 6b. CLEAR A LEARNER'S PROGRESS ----------
+-- save_progress() only ever raises a total (it uses greatest), so a learner
+-- starting fresh needs their rows removed outright. Allowed for anyone
+-- holding a verified code — it only ever deletes their own work.
+
+create or replace function clear_progress(p_code text)
+returns integer
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare ok boolean; n integer;
+begin
+  select (status = 'verified') into ok from orders
+   where upper(code) = upper(trim(p_code)) limit 1;
+
+  if not coalesce(ok, false) then
+    raise exception 'code not active';
+  end if;
+
+  delete from progress where upper(code) = upper(trim(p_code));
+  get diagnostics n = row_count;
+  return n;
+end;
+$$;
+
+revoke all on function clear_progress(text) from public;
+grant execute on function clear_progress(text) to anon, authenticated;
+
+
+create or replace function clear_subject(p_code text, p_subject text)
+returns integer
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare ok boolean; n integer;
+begin
+  select (status = 'verified') into ok from orders
+   where upper(code) = upper(trim(p_code)) limit 1;
+  if not coalesce(ok, false) then
+    raise exception 'code not active';
+  end if;
+  delete from progress
+   where upper(code) = upper(trim(p_code)) and subject = p_subject;
+  get diagnostics n = row_count;
+  return n;
+end;
+$$;
+
+revoke all on function clear_subject(text, text) from public;
+grant execute on function clear_subject(text, text) to anon, authenticated;
+
+
+-- ---------- 6c. ANONYMOUS STANDING ----------
+-- Returns ONLY a band — top third / middle third / building up — plus the
+-- number of learners compared against. No names, no exact position, no
+-- other learner's data ever leaves the database. Needs at least 8 active
+-- learners before it will answer, so nobody can work out who is who.
+
+create or replace function my_standing(p_code text)
+returns json
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  ok boolean;
+  mine numeric;
+  total integer;
+  below integer;
+  pct numeric;
+begin
+  select (status = 'verified') into ok from orders
+   where upper(code) = upper(trim(p_code)) limit 1;
+  if not coalesce(ok, false) then
+    raise exception 'code not active';
+  end if;
+
+  -- One score per learner: questions answered correctly in the last 14 days.
+  with active as (
+    select code, sum(correct) as score
+      from progress
+     where updated_at > now() - interval '14 days'
+     group by code
+    having sum(answered) >= 20
+  )
+  select count(*),
+         coalesce(max(case when upper(code) = upper(trim(p_code)) then score end), -1)
+    into total, mine
+    from active;
+
+  if total < 8 then
+    return json_build_object('ready', false, 'reason', 'too-few', 'learners', total);
+  end if;
+  if mine < 0 then
+    return json_build_object('ready', false, 'reason', 'not-enough-practice');
+  end if;
+
+  with active as (
+    select code, sum(correct) as score
+      from progress
+     where updated_at > now() - interval '14 days'
+     group by code
+    having sum(answered) >= 20
+  )
+  select count(*) into below from active where score < mine;
+
+  pct := below::numeric / total::numeric;
+
+  return json_build_object(
+    'ready', true,
+    'learners', total,
+    'band', case when pct >= 0.667 then 'top-third'
+                 when pct >= 0.334 then 'middle-third'
+                 else 'building-up' end
+  );
+end;
+$$;
+
+revoke all on function my_standing(text) from public;
+grant execute on function my_standing(text) to anon, authenticated;
+
+
+-- ---------- 7a. RESET THE DEVICES ON A CODE ----------
+-- Frees all device slots for one code. Needed when a parent changes
+-- phone, clears their browser, or the slots were used up testing.
+
+create or replace function reset_devices(p_code text)
+returns integer
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare n integer;
+begin
+  if not is_admin() then
+    raise exception 'not authorised';
+  end if;
+
+  delete from devices where upper(code) = upper(trim(p_code));
+  get diagnostics n = row_count;
+
+  insert into audit_log (actor, action, order_code, detail)
+  values (auth.uid(), 'devices:reset', upper(trim(p_code)), n || ' freed');
+
+  return n;
+end;
+$$;
+
+revoke all on function reset_devices(text) from public;
+grant execute on function reset_devices(text) to authenticated;
+
+
+-- ---------- 7c. DELETE AN ORDER FOR GOOD ----------
+-- Removes the order, its device slots and its saved progress. The audit
+-- log entry stays, so there is always a record it existed.
+-- Prefer 'revoke' for a real customer — delete is for test data and
+-- genuine mistakes.
+
+create or replace function delete_order(p_code text)
+returns json
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare r orders;
+begin
+  if not is_admin() then
+    raise exception 'not authorised';
+  end if;
+
+  select * into r from orders where upper(code) = upper(trim(p_code)) limit 1;
+  if not found then
+    raise exception 'code not found';
+  end if;
+
+  insert into audit_log (actor, action, order_code, detail)
+  values (auth.uid(), 'order:deleted', r.code,
+          r.parent_name || ' / ' || r.learner_name || ' / P' || r.price);
+
+  delete from devices  where upper(code) = upper(r.code);
+  delete from progress where upper(code) = upper(r.code);
+  delete from orders   where upper(code) = upper(r.code);
+
+  return json_build_object('code', r.code, 'deleted', true);
+end;
+$$;
+
+revoke all on function delete_order(text) from public;
+grant execute on function delete_order(text) to authenticated;
+
+
+-- ---------- 7d. LOGIN ACCOUNTS ----------
+-- auth.users is not readable through the API, so admins get a
+-- deliberately narrow view: who signed up, and how many orders they hold.
+
+create or replace function list_accounts()
+returns json
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare result json;
+begin
+  if not is_admin() then
+    raise exception 'not authorised';
+  end if;
+
+  select json_agg(row_to_json(a) order by a.created_at desc) into result
+  from (
+    select u.email,
+           u.created_at,
+           coalesce(p.is_admin, false) as is_admin,
+           (select count(*) from orders o
+             where o.account_id = u.id
+                or lower(coalesce(o.email,'')) = lower(u.email)) as order_count
+      from auth.users u
+      left join profiles p on p.id = u.id
+  ) a;
+
+  return coalesce(result, '[]'::json);
+end;
+$$;
+
+revoke all on function list_accounts() from public;
+grant execute on function list_accounts() to authenticated;
+
+
+-- Removes someone's ability to sign in. Their ORDERS are kept (the
+-- history stays intact) — delete those separately if you want them gone.
+-- Admin accounts and your own account are protected.
+
+create or replace function delete_account(p_email text)
+returns json
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare u_id uuid; u_admin boolean;
+begin
+  if not is_admin() then
+    raise exception 'not authorised';
+  end if;
+
+  select u.id, coalesce(p.is_admin, false)
+    into u_id, u_admin
+    from auth.users u left join profiles p on p.id = u.id
+   where lower(u.email) = lower(trim(p_email))
+   limit 1;
+
+  if u_id is null then
+    raise exception 'account not found';
+  end if;
+  if u_id = auth.uid() then
+    raise exception 'you cannot delete your own account';
+  end if;
+  if u_admin then
+    raise exception 'admin accounts are protected — remove is_admin first';
+  end if;
+
+  insert into audit_log (actor, action, order_code, detail)
+  values (auth.uid(), 'account:deleted', null, lower(trim(p_email)));
+
+  delete from auth.users where id = u_id;
+
+  return json_build_object('email', lower(trim(p_email)), 'deleted', true);
+end;
+$$;
+
+revoke all on function delete_account(text) from public;
+grant execute on function delete_account(text) to authenticated;
+
+
 -- ---------- 7b. LINK PAST ORDERS TO AN ACCOUNT ----------
 -- Called once after a parent signs in, so their earlier orders (placed
 -- before the account had a session) get attached to it properly.

@@ -26,7 +26,7 @@ input{max-width:100%;}
   <div style="width:100%;max-width:440px">
 
     <div style="text-align:center;margin-bottom:26px">
-      <a href="landing.html" style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.44rem;color:#fff">PSLE Prep <span style="color:#00C6A7">Toolkit</span></a>
+      <a href="index.html" style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.44rem;color:#fff">PSLE Prep <span style="color:#00C6A7">Toolkit</span></a>
       <div style="margin-top:8px;font-size:0.7rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4)">Sign in to continue</div>
     </div>
 
@@ -95,6 +95,21 @@ input{max-width:100%;}
       </div>
     </sc-if>
 
+    <sc-if value="{{ picking }}">
+      <div style="margin-top:18px;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.14);border-radius:20px;padding:24px 22px;animation:pop .18s ease-out">
+        <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.14rem;margin-bottom:5px">Who is studying?</div>
+        <div style="font-size:0.86rem;font-weight:600;color:rgba(255,255,255,0.55);line-height:1.6;margin-bottom:18px">You have access for more than one learner on this account.</div>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <sc-for list="{{ learnerChoices }}" as="c" hint-placeholder-count="2">
+            <button onClick="{{ c.pick }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:3px;width:100%;text-align:left;padding:15px 17px;border-radius:13px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.16);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif" style-hover="border-color:#00C6A7;background:rgba(0,198,167,0.1)">
+              <span style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.02rem;color:#fff">{{ c.name }}</span>
+              <span style="font-size:0.8rem;font-weight:600;color:rgba(255,255,255,0.5)">{{ c.detail }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
     <sc-if value="{{ signedIn }}">
       <div style="margin-top:18px;background:rgba(0,198,167,0.1);border:1.5px solid rgba(0,198,167,0.4);border-radius:16px;padding:22px;text-align:center;animation:pop .2s ease-out">
         <div style="font-size:1.7rem;margin-bottom:8px">✓</div>
@@ -123,7 +138,7 @@ const SUBJECTS = {maths:'Maths', english:'English', setswana:'Setswana', social:
 class Component extends DCLogic {
   state = {
     tab:'parent', email:'', password:'', codeInput:'', error:'', busy:false,
-    signedIn:false, grant:null, googleOn:false, live:false
+    signedIn:false, grant:null, googleOn:false, live:false, choices:null
   };
 
   // If Google bounced the parent back here already signed in, finish the job.
@@ -160,7 +175,7 @@ class Component extends DCLogic {
 
   async redeem(code){
     const db = await this.db();
-    if(!db) return this.setState({busy:false, error:'The sign-in system is unavailable. Please WhatsApp +26774310425.'});
+    if(!db) return this.setState({busy:false, error:'The sign-in system is unavailable. Please WhatsApp 74310425.'});
     try{
       const res = await db.redeemCode(code);
       if(!res || !res.authorised){
@@ -175,21 +190,25 @@ class Component extends DCLogic {
   // Signs in, then finds a usable code on that account.
   async loginWithEmail(email, password){
     const db = await this.db();
-    if(!db) return this.setState({busy:false, error:'The sign-in system is unavailable. Please WhatsApp +26774310425.'});
+    if(!db) return this.setState({busy:false, error:'The sign-in system is unavailable. Please WhatsApp 74310425.'});
     try{
       if(password) await db.signIn(email, password);
       const orders = await db.myOrders();
       if(!orders.length){
         return this.setState({busy:false, error:'You are signed in, but we cannot find an order on this account. If you have an access code, use the Access code tab.'});
       }
-      const usable = orders.find(o => o.status === 'verified');
-      if(!usable){
+      const usable = orders.filter(o => o.status === 'verified');
+      if(!usable.length){
         const pending = orders.find(o => o.status === 'pending-verification');
         return this.setState({busy:false, error: pending
-          ? 'Your payment is not confirmed yet, so the toolkit is still locked. Send your proof of payment to WhatsApp +26774310425 and we will activate it — usually within a few hours.'
-          : 'That access has been switched off. Please WhatsApp +26774310425.'});
+          ? 'Your payment is not confirmed yet, so the toolkit is still locked. Send your proof of payment to WhatsApp 74310425 and we will activate it — usually within a few hours.'
+          : 'That access has been switched off. Please WhatsApp 74310425.'});
       }
-      await this.redeem(usable.code);
+      // More than one child on this account — let the parent choose.
+      if(usable.length > 1){
+        return this.setState({busy:false, choices:usable, error:''});
+      }
+      await this.redeem(usable[0].code);
     }catch(e){
       this.setState({busy:false, error:e.message || 'That email and password do not match.'});
     }
@@ -223,7 +242,7 @@ class Component extends DCLogic {
 
       confirmGoogle: async () => {
         const db = await this.db();
-        if(!db) return this.setState({error:'The sign-in system is unavailable. Please WhatsApp 75562568.'});
+        if(!db) return this.setState({error:'The sign-in system is unavailable. Please WhatsApp 74310425.'});
         try{
           this.setState({busy:true, error:''});
           await db.signInWithGoogle();     // redirects to Google, returns here after
@@ -237,6 +256,14 @@ class Component extends DCLogic {
       onCodeKey: (e) => { if(e.key === 'Enter') this.useCode(); },
       useCode: () => this.useCode(),
 
+      picking: !!(st.choices && st.choices.length) && !st.signedIn,
+      learnerChoices: (st.choices || []).map(o => ({
+        name: o.learner_name || 'Learner',
+        detail: (o.plan_name || '') + (o.subjects && o.subjects.length && o.subjects.length < 6
+          ? ' · ' + o.subjects.map(id => SUBJECTS[id]).filter(Boolean).join(', ')
+          : ' · all six subjects'),
+        pick: () => { this.setState({choices:null, busy:true}); this.redeem(o.code); }
+      })),
       googleOn: st.googleOn,
       adminHint: st.live
         ? 'You will be asked for your admin email and password on the next screen.'
