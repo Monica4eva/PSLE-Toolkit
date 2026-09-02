@@ -363,6 +363,36 @@ export async function saveProgress(code, subject, answered, correct, stars){
   return !error;
 }
 
+// A learner asks for more subjects. Grants nothing — the admin decides.
+export async function requestUpgrade(code, plan, planName, subjects, amount, method){
+  const db = await client();
+  if(!db) throw new Error('The upgrade system is unavailable.');
+  const { data, error } = await db.rpc('request_upgrade', {
+    p_code: code, p_plan: plan, p_plan_name: planName,
+    p_subjects: subjects || [], p_amount: amount || 0, p_method: method || null
+  });
+  if(error) throw new Error(error.message);
+  return data;
+}
+
+// Admin: pending and decided upgrade requests.
+export async function listUpgrades(){
+  const db = await client();
+  if(!db) return [];
+  const { data, error } = await db.rpc('list_upgrades');
+  if(error) throw new Error(error.message);
+  return data || [];
+}
+
+// Admin: approve (unlocks the subjects) or decline (changes nothing).
+export async function decideUpgrade(id, approve){
+  const db = await client();
+  if(!db) return false;
+  const { error } = await db.rpc('decide_upgrade', { p_id: id, p_approve: !!approve });
+  if(error) throw new Error(error.message);
+  return true;
+}
+
 // Anonymous standing — a band only, never a name or a position.
 export async function myStanding(code){
   const db = await client();

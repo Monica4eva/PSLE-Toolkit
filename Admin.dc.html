@@ -98,6 +98,45 @@ input,textarea{max-width:100%;}
     </sc-for>
   </div>
 
+  <sc-if value="{{ hasUpgrades }}">
+    <div style="background:#FFF8F0;border:1.5px solid #F5C77E;border-radius:16px;padding:22px;margin-bottom:18px;box-shadow:0 6px 28px rgba(10,22,40,0.06)">
+      <div style="display:flex;align-items:center;gap:11px;margin-bottom:5px">
+        <span style="font-size:1.3rem">⏳</span>
+        <span style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.08rem;color:#7C4A03">{{ upgradeCount }} upgrade request(s) waiting</span>
+      </div>
+      <div style="font-size:0.86rem;font-weight:600;color:#7C4A03;line-height:1.6;margin-bottom:16px;text-wrap:pretty">These learners have asked for more subjects. Nothing is unlocked until you approve — check the payment first.</div>
+      <div style="display:flex;flex-direction:column;gap:11px">
+        <sc-for list="{{ pendingUpgrades }}" as="u" hint-placeholder-count="2">
+          <div style="background:#fff;border:1.5px solid #FFE0B2;border-radius:14px;padding:18px 20px">
+            <div style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:flex-start">
+              <div style="flex:1;min-width:230px">
+                <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:7px">
+                  <span style="font-family:'Syne',sans-serif;font-weight:900;font-size:1rem;color:#0A1628;letter-spacing:0.5px">{{ u.reference }}</span>
+                  <span style="font-size:0.72rem;font-weight:800;color:#5A6A7A">{{ u.code }}</span>
+                </div>
+                <div style="font-size:0.93rem;font-weight:700;color:#0A1628">{{ u.learner }}</div>
+                <div style="font-size:0.85rem;font-weight:600;color:#5A6A7A;margin-top:2px">{{ u.parent }} · {{ u.phone }}</div>
+                <div style="font-size:0.83rem;font-weight:700;color:#5A6A7A;margin-top:8px">{{ u.nowLine }}</div>
+                <div style="font-size:0.83rem;font-weight:700;color:#00A88E;margin-top:2px">{{ u.wantLine }}</div>
+              </div>
+              <div style="text-align:right;flex-shrink:0">
+                <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.5rem;color:#0A1628;line-height:1">P{{ u.amount }}</div>
+                <div style="font-size:0.78rem;font-weight:700;color:#5A6A7A;margin-top:3px">{{ u.toPlan }}</div>
+                <div style="font-size:0.76rem;font-weight:600;color:#9AA5B1;margin-top:4px">{{ u.method }}</div>
+                <div style="font-size:0.76rem;font-weight:600;color:#9AA5B1">{{ u.date }}</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:15px;padding-top:14px;border-top:1px solid #FFF3E0">
+              <button onClick="{{ u.approve }}" style="padding:10px 20px;border-radius:50px;border:none;background:#00C6A7;color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.84rem;cursor:pointer">✓ Payment received — unlock</button>
+              <button onClick="{{ u.decline }}" style="padding:10px 18px;border-radius:50px;background:#fff;border:1.5px solid rgba(230,57,70,0.35);color:#B91C1C;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.82rem;cursor:pointer">Decline</button>
+              <a href="{{ u.whatsapp }}" target="_blank" style="padding:10px 18px;border-radius:50px;background:#fff;color:#0A1628;border:1.5px solid #E5EAF0;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.82rem">💬 WhatsApp</a>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+
   <sc-if value="{{ showAccounts }}">
     <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:22px;margin-bottom:18px;box-shadow:0 6px 28px rgba(10,22,40,0.06);animation:pop .18s ease-out">
       <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.06rem;color:#0A1628;margin-bottom:4px">Login accounts</div>
@@ -266,7 +305,7 @@ function makeCode(){
 class Component extends DCLogic {
   state = {
     locked:true, pinInput:'', pinError:'', email:'', busy:false, live:null,
-    fresh:0, notifyOn:false, devices:{}, confirmDelete:'',
+    fresh:0, notifyOn:false, devices:{}, confirmDelete:'', upgrades:[],
     showAccounts:false, accounts:[], confirmAccount:'', accountsLoaded:false,
     grants:[], filter:'All', search:'', notice:'',
     showIssue:false, iParent:'', iPhone:'', iLearner:'', iPlan:'full', iSubjects:[], issueError:''
@@ -306,7 +345,10 @@ class Component extends DCLogic {
     try{
       const rows = await db.listOrders();
       try{ this.setState({devices: await db.deviceCounts()}); }catch(e){}
-      const pending = rows.filter(r => (r.status || 'pending-verification') === 'pending-verification').length;
+      let ups = [];
+      try{ ups = await db.listUpgrades(); this.setState({upgrades:ups}); }catch(e){}
+      const pending = rows.filter(r => (r.status || 'pending-verification') === 'pending-verification').length
+        + ups.filter(u => u.status === 'pending-verification').length;
       const prev = this._pending;
       this._pending = pending;
       try{ document.title = (pending ? '(' + pending + ') ' : '') + 'Orders — PSLE Admin'; }catch(e){}
@@ -321,8 +363,8 @@ class Component extends DCLogic {
     this.setState({fresh:n});
     try{
       if(window.Notification && Notification.permission === 'granted'){
-        new Notification(n + (n === 1 ? ' new order' : ' new orders'), {
-          body:'Someone has signed up and is waiting for you to confirm payment.'
+        new Notification(n + (n === 1 ? ' new request' : ' new requests'), {
+          body:'Someone has signed up or asked to upgrade, and is waiting for you to confirm payment.'
         });
       }
     }catch(e){}
@@ -601,6 +643,44 @@ class Component extends DCLogic {
         }, style);
       }),
 
+      // — Upgrade requests. Nothing is unlocked until one is approved here.
+      pendingUpgrades: (st.upgrades || [])
+        .filter(u => u.status === 'pending-verification')
+        .map(u => ({
+          code: u.code,
+          learner: u.learner_name || 'Unnamed learner',
+          parent: u.parent_name || '—',
+          phone: u.phone || 'no number',
+          reference: u.reference,
+          amount: u.amount,
+          toPlan: u.to_plan_name || u.to_plan,
+          method: METHOD_NAMES[u.method] || 'not stated',
+          date: this.fmtDate(u.created_at),
+          nowLine: 'Now: ' + this.subjectNames(u.current_subjects),
+          wantLine: 'Wants: ' + this.subjectNames(u.subjects),
+          whatsapp: this.waLink(u.phone),
+          approve: async () => {
+            const db = await this.db();
+            if(!db) return;
+            try{
+              await db.decideUpgrade(u.id, true);
+              this.setState({notice:'Upgrade approved for ' + u.code});
+              this.load();
+            }catch(e){ this.setState({notice:'Could not approve: ' + (e.message || 'error')}); }
+          },
+          decline: async () => {
+            const db = await this.db();
+            if(!db) return;
+            try{
+              await db.decideUpgrade(u.id, false);
+              this.setState({notice:'Upgrade declined for ' + u.code});
+              this.load();
+            }catch(e){ this.setState({notice:'Could not decline: ' + (e.message || 'error')}); }
+          }
+        })),
+      hasUpgrades: (st.upgrades || []).filter(u => u.status === 'pending-verification').length > 0,
+      upgradeCount: (st.upgrades || []).filter(u => u.status === 'pending-verification').length,
+
       openToolkit: () => this.openAs(null),
 
       showAccounts: st.showAccounts,
@@ -642,7 +722,7 @@ class Component extends DCLogic {
       noAccounts: st.showAccounts && st.accountsLoaded && !(st.accounts || []).length,
 
       fresh: st.fresh > 0,
-      freshLine: st.fresh === 1 ? '1 new order just came in' : st.fresh + ' new orders just came in',
+      freshLine: st.fresh === 1 ? '1 new request just came in' : st.fresh + ' new requests just came in',
       dismissFresh: () => this.setState({fresh:0}),
       showNotifyBtn: !st.notifyOn,
       enableNotify: async () => {

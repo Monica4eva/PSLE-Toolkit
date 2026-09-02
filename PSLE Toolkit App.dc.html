@@ -717,16 +717,22 @@ img,textarea,input{max-width:100%;}
 
             <div style="display:flex;gap:11px">
               <button onClick="{{ upBackToChoose }}" style="padding:14px 22px;border-radius:50px;background:#fff;border:1.5px solid #E5EAF0;color:#5A6A7A;font-family:'Syne',sans-serif;font-weight:900;font-size:0.92rem;cursor:pointer" style-hover="border-color:#00C6A7;color:#0A1628">Back</button>
-              <button onClick="{{ upConfirm }}" style="flex:1;padding:14px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.98rem;cursor:pointer;box-shadow:0 8px 26px rgba(0,198,167,0.28)">I have paid — unlock now</button>
+              <button onClick="{{ upConfirm }}" style="flex:1;padding:14px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.98rem;cursor:pointer;box-shadow:0 8px 26px rgba(0,198,167,0.28)">{{ upConfirmLabel }}</button>
             </div>
           </div>
         </sc-if>
 
         <sc-if value="{{ upDone }}">
           <div style="background:#fff;border:1.5px solid rgba(0,198,167,0.4);border-radius:18px;padding:34px 28px;text-align:center;box-shadow:0 6px 28px rgba(10,22,40,0.08);animation:pop .22s ease-out">
-            <div style="font-size:2.6rem;margin-bottom:10px">🎉</div>
-            <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.5rem;color:#0A1628;margin-bottom:10px">Subjects unlocked!</div>
-            <div style="font-weight:600;color:#5A6A7A;font-size:0.94rem;line-height:1.7;margin-bottom:22px;text-wrap:pretty">{{ upDoneLine }}</div>
+            <div style="font-size:2.6rem;margin-bottom:10px">⏳</div>
+            <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.5rem;color:#0A1628;margin-bottom:10px">{{ upSentTitle }}</div>
+            <div style="font-weight:600;color:#5A6A7A;font-size:0.94rem;line-height:1.7;margin-bottom:18px;text-wrap:pretty">{{ upSentLine }}</div>
+            <div style="background:#0A1628;border-radius:13px;padding:16px 18px;margin-bottom:20px">
+              <div style="font-size:0.66rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:5px">Your reference</div>
+              <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.3rem;color:#00C6A7;letter-spacing:1px">{{ upSentRef }}</div>
+            </div>
+            <a href="{{ upWhatsApp }}" target="_blank" style="display:inline-block;padding:14px 30px;border-radius:50px;background:#25D366;color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.94rem;margin-bottom:12px">💬 Send proof on WhatsApp</a>
+            <div style="font-size:0.82rem;font-weight:600;color:#9AA5B1;line-height:1.6;margin-bottom:20px;text-wrap:pretty">Nothing has changed on your account yet. Once we confirm the payment, sign out and back in and the new subjects will be there.</div>
             <button onClick="{{ upBackToPractice }}" style="padding:14px 32px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.96rem;cursor:pointer">Start practising →</button>
           </div>
         </sc-if>
@@ -1158,7 +1164,7 @@ const PACKAGES = [
 const PAY_METHODS = [
   {id:'orange', name:'Orange Money', icon:'📱', how:'Dial *145#, choose Send Money, enter 74310425 and the amount below.'},
   {id:'myzaka', name:'MyZaka (Mascom)', icon:'💳', how:'Dial *167#, choose Pay Bill, enter 75562568 and the amount below.'},
-  {id:'bank', name:'Bank transfer', icon:'🏦', how:'Transfer to FNB Botswana,Account name: Swift Social Connect pty ltd| Account 62917438667, branch 281267.'}
+  {id:'bank', name:'Bank transfer', icon:'🏦', how:'Transfer to FNB Botswana · Account name: Swift Social Connect Pty Ltd · Account number: 62917438667. Use the reference below as the payment description, then WhatsApp us the proof on 74310425.'}
 ];
 
 function shuffle(a){const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
@@ -1168,6 +1174,7 @@ class Component extends DCLogic {
     locked:true, codeInput:'', codeError:'', remember:true, grantName:'', allowed:null, planName:'',
     unlockCode:'', pricePaid:0,
     upStage:'choose', upTarget:null, upSubjects:[], upMethod:null, upError:'',
+    upBusy:false, upRef:'', upDuplicate:false,
     view:'home', subject:null, level:'All', bank:{}, loaded:false, qTopic:'All topics', std:'All',
     quiz:null, qIndex:0, selected:null, correct:0, quizDone:false,
     progress:{}, stars:0,
@@ -1290,7 +1297,9 @@ class Component extends DCLogic {
     return !!t && t.quota < 6;
   }
 
-  applyUpgrade(){
+  // Sends the request to the owner. Deliberately unlocks NOTHING — the
+  // subjects only change when the payment is confirmed in admin.
+  async applyUpgrade(){
     const st = this.state;
     const t = this.upTargetObj();
     if(!t) return;
@@ -1298,27 +1307,22 @@ class Component extends DCLogic {
     const subjects = t.quota >= 6
       ? SUBJECTS.map(s => s.id)
       : kept.concat(st.upSubjects.filter(id => kept.indexOf(id) < 0)).slice(0, t.quota);
+
+    const db = await this.db();
+    if(!db || !db.requestUpgrade){
+      return this.setState({upError:'We cannot send that request right now. Please WhatsApp 74310425.'});
+    }
+    this.setState({upError:'', upBusy:true});
     try{
-      const raw = localStorage.getItem(GRANTS_KEY);
-      const list = raw ? JSON.parse(raw) : [];
-      const i = list.findIndex(g => (g.code||'').toUpperCase() === (st.unlockCode||'').toUpperCase());
-      if(i >= 0){
-        list[i].subjects = subjects;
-        list[i].planName = t.name;
-        list[i].price = t.price;
-        list[i].upgrades = (list[i].upgrades || []).concat([{to:t.id, paid:t.due, method:st.upMethod, date:new Date().toISOString(), status:'pending-verification'}]);
-        localStorage.setItem(GRANTS_KEY, JSON.stringify(list));
-      }
-    }catch(e){}
-    try{
-      const raw = localStorage.getItem(UNLOCK_KEY);
-      if(raw){
-        const u = JSON.parse(raw);
-        u.subjects = subjects; u.planName = t.name; u.price = t.price;
-        localStorage.setItem(UNLOCK_KEY, JSON.stringify(u));
-      }
-    }catch(e){}
-    this.setState({allowed:subjects, planName:t.name, pricePaid:t.price, upStage:'done'});
+      const res = await db.requestUpgrade(st.unlockCode, t.id, t.name, subjects, t.due, st.upMethod);
+      this.setState({
+        upStage:'sent', upBusy:false,
+        upRef: res && res.reference ? res.reference : '',
+        upDuplicate: !!(res && res.duplicate)
+      });
+    }catch(e){
+      this.setState({upBusy:false, upError:'Could not send the request: ' + (e.message || 'unknown error') + '. Please WhatsApp 74310425.'});
+    }
   }
 
   canUse(id){
@@ -1853,7 +1857,18 @@ class Component extends DCLogic {
       isUpgrade: st.view === 'upgrade',
       upChoose: st.upStage === 'choose',
       upPay: st.upStage === 'pay',
-      upDone: st.upStage === 'done',
+      upDone: st.upStage === 'sent',
+      upSentRef: st.upRef || '',
+      upSentTitle: st.upDuplicate ? 'You already have a request waiting' : 'Request sent',
+      upSentLine: st.upDuplicate
+        ? 'We already have an upgrade request for this code waiting to be checked. There is no need to send another — WhatsApp 74310425 if it is taking too long.'
+        : 'Your request is with us. The new subjects stay locked until we have confirmed your payment — usually within a few hours. Send your proof of payment on WhatsApp quoting the reference below.',
+      upWhatsApp: 'https://wa.me/26774310425?text=' + encodeURIComponent(
+        'Hi! I have paid for an upgrade on The PSLE Prep Toolkit.\n\nReference: ' + (st.upRef || '') +
+        '\nCode: ' + (st.unlockCode || '') +
+        '\nUpgrade to: ' + (this.upTargetObj() ? this.upTargetObj().name : '') +
+        '\nAmount: P' + (this.upTargetObj() ? this.upTargetObj().due : 0)
+      ),
       currentPlanLine: (st.planName || 'Your package') + ' · ' + (st.allowed ? st.allowed.length : 6) + ' of 6 subjects · P' + (st.pricePaid || 0) + ' paid',
       currentSubjectLine: (st.allowed || SUBJECTS.map(s=>s.id))
         .map(id => (SUBJECTS.find(s => s.id === id) || {}).name).filter(Boolean).join(' · '),
@@ -1922,7 +1937,8 @@ class Component extends DCLogic {
         if(!st.upMethod) return this.setState({upError:'Please choose how you paid.'});
         this.applyUpgrade();
       },
-      upDoneLine: 'Your package is now ' + (st.planName || '') + '. The new subjects are unlocked straight away — WhatsApp us the proof of payment on 74310425 with reference UPG-' + (st.unlockCode ? st.unlockCode.replace('PSLE-','') : '') + ' so we can confirm it.',
+      upBusy: st.upBusy,
+      upConfirmLabel: st.upBusy ? 'Sending…' : 'I have paid — send my request',
       upBackToPractice: () => this.setState({view:'practice'}),
       levelPicks: ['All','Easy','Medium','Hard'].map(l => Object.assign({label:l, pick:()=>this.setState({level:l})}, pill(st.level===l))),
       hasTopics: !!st.subject,

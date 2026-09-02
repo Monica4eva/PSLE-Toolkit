@@ -480,6 +480,163 @@ revoke all on function my_standing(text) from public;
 grant execute on function my_standing(text) to anon, authenticated;
 
 
+-- ---------- 6d. UPGRADE REQUESTS ----------
+-- A learner asking for more subjects must NOT be able to unlock them.
+-- The request is stored here as pending; only an admin approving it
+-- changes what the access code opens.
+
+create table if not exists upgrades (
+  id           uuid primary key default gen_random_uuid(),
+  code         text not null,
+  to_plan      text not null check (to_plan in ('single','bundle','full')),
+  to_plan_name text,
+  subjects     text[] not null default '{}',
+  amount       integer not null default 0,
+  method       text,
+  reference    text not null unique,
+  status       text not null default 'pending-verification'
+               check (status in ('pending-verification','verified','declined')),
+  created_at   timestamptz not null default now(),
+  decided_at   timestamptz,
+  decided_by   uuid
+);
+
+create index if not exists upgrades_code_idx   on upgrades (upper(code));
+create index if not exists upgrades_status_idx on upgrades (status);
+
+alter table upgrades enable row level security;
+
+-- No anon or parent access at all. Everything goes through the functions.
+drop policy if exists "admin manages upgrades" on upgrades;
+create policy "admin manages upgrades" on upgrades
+  for all to authenticated
+  using (is_admin()) with check (is_admin());
+
+
+-- A learner requests more subjects. Returns a reference to quote on
+-- WhatsApp. Grants nothing.
+create or replace function request_upgrade(
+  p_code text, p_plan text, p_plan_name text,
+  p_subjects text[], p_amount integer, p_method text
+) returns json
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare r orders; ref text; existing upgrades;
+begin
+  select * into r from orders
+   where upper(code) = upper(trim(p_code)) limit 1;
+  if not found or r.status <> 'verified' then
+    raise exception 'code not active';
+  end if;
+
+  -- One open request at a time, so a learner cannot spam the admin.
+  select * into existing from upgrades
+   where upper(code) = upper(trim(p_code))
+     and status = 'pending-verification'
+   limit 1;
+  if found then
+    return json_build_object('ok', true, 'duplicate', true,
+                             'reference', existing.reference,
+                             'amount', existing.amount);
+  end if;
+
+  ref := 'UPG-' || upper(substr(md5(random()::text), 1, 6));
+
+  insert into upgrades (code, to_plan, to_plan_name, subjects, amount, method, reference)
+  values (upper(trim(p_code)), p_plan, p_plan_name, coalesce(p_subjects, '{}'), greatest(p_amount, 0), p_method, ref);
+
+  insert into audit_log (actor, action, order_code, detail)
+  values (null, 'upgrade:requested', upper(trim(p_code)), p_plan_name || ' / P' || p_amount);
+
+  return json_build_object('ok', true, 'duplicate', false, 'reference', ref, 'amount', greatest(p_amount, 0));
+end;
+$$;
+
+revoke all on function request_upgrade(text, text, text, text[], integer, text) from public;
+grant execute on function request_upgrade(text, text, text, text[], integer, text) to anon, authenticated;
+
+
+-- Admin only: everything waiting for a decision.
+create or replace function list_upgrades()
+returns json
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare result json;
+begin
+  if not is_admin() then
+    raise exception 'not authorised';
+  end if;
+
+  select json_agg(row_to_json(u) order by u.created_at desc) into result
+  from (
+    select g.id, g.code, g.to_plan, g.to_plan_name, g.subjects, g.amount,
+           g.method, g.reference, g.status, g.created_at,
+           o.learner_name, o.parent_name, o.phone,
+           o.subjects as current_subjects, o.price as current_price
+      from upgrades g
+      left join orders o on upper(o.code) = upper(g.code)
+  ) u;
+
+  return coalesce(result, '[]'::json);
+end;
+$$;
+
+revoke all on function list_upgrades() from public;
+grant execute on function list_upgrades() to authenticated;
+
+
+-- Admin only: approve an upgrade. THIS is the only thing that unlocks
+-- subjects. Declining leaves the learner exactly as they were.
+create or replace function decide_upgrade(p_id uuid, p_approve boolean)
+returns json
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare g upgrades;
+begin
+  if not is_admin() then
+    raise exception 'not authorised';
+  end if;
+
+  select * into g from upgrades where id = p_id limit 1;
+  if not found then
+    raise exception 'request not found';
+  end if;
+  if g.status <> 'pending-verification' then
+    raise exception 'already decided';
+  end if;
+
+  if p_approve then
+    update orders
+       set subjects  = g.subjects,
+           plan_name = coalesce(g.to_plan_name, plan_name),
+           plan      = g.to_plan,
+           price     = price + g.amount
+     where upper(code) = upper(g.code);
+  end if;
+
+  update upgrades
+     set status = case when p_approve then 'verified' else 'declined' end,
+         decided_at = now(), decided_by = auth.uid()
+   where id = p_id;
+
+  insert into audit_log (actor, action, order_code, detail)
+  values (auth.uid(), case when p_approve then 'upgrade:approved' else 'upgrade:declined' end,
+          g.code, g.to_plan_name || ' / P' || g.amount);
+
+  return json_build_object('code', g.code, 'approved', p_approve);
+end;
+$$;
+
+revoke all on function decide_upgrade(uuid, boolean) from public;
+grant execute on function decide_upgrade(uuid, boolean) to authenticated;
+
+
 -- ---------- 7a. RESET THE DEVICES ON A CODE ----------
 -- Frees all device slots for one code. Needed when a parent changes
 -- phone, clears their browser, or the slots were used up testing.
