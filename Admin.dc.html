@@ -72,6 +72,7 @@ input,textarea{max-width:100%;}
       <sc-if value="{{ showNotifyBtn }}">
         <button onClick="{{ enableNotify }}" style="padding:11px 20px;border-radius:50px;background:#fff;border:1.5px solid #E5EAF0;color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.84rem;cursor:pointer" style-hover="border-color:#00C6A7">🔔 Turn on alerts</button>
       </sc-if>
+      <button onClick="{{ toggleAccounts }}" style="padding:11px 20px;border-radius:50px;background:#fff;border:1.5px solid #E5EAF0;color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.84rem;cursor:pointer" style-hover="border-color:#00C6A7">{{ accountsLabel }}</button>
       <button onClick="{{ refreshNow }}" style="padding:11px 20px;border-radius:50px;background:#fff;border:1.5px solid #E5EAF0;color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.84rem;cursor:pointer" style-hover="border-color:#00C6A7">↻ Refresh</button>
       <button onClick="{{ openToolkit }}" style="padding:11px 20px;border-radius:50px;background:linear-gradient(135deg,#00C6A7,#00A88E);border:none;color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.84rem;cursor:pointer;box-shadow:0 6px 20px rgba(0,198,167,0.28)">📚 Open the toolkit</button>
       <button onClick="{{ exportCsv }}" style="padding:11px 20px;border-radius:50px;background:#fff;border:1.5px solid #E5EAF0;color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.84rem;cursor:pointer" style-hover="border-color:#00C6A7">⬇ Export CSV</button>
@@ -96,6 +97,36 @@ input,textarea{max-width:100%;}
       </div>
     </sc-for>
   </div>
+
+  <sc-if value="{{ showAccounts }}">
+    <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:22px;margin-bottom:18px;box-shadow:0 6px 28px rgba(10,22,40,0.06);animation:pop .18s ease-out">
+      <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.06rem;color:#0A1628;margin-bottom:4px">Login accounts</div>
+      <div style="font-size:0.85rem;font-weight:600;color:#5A6A7A;line-height:1.6;margin-bottom:16px">Removing a login stops that person signing in with their email and password. Their orders and access codes are kept — delete those separately if you want them gone too.</div>
+      <div style="display:flex;flex-direction:column;gap:9px">
+        <sc-for list="{{ accountRows }}" as="a" hint-placeholder-count="3">
+          <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:13px 15px;border-radius:12px;background:#FAFBFD;border:1.5px solid #E5EAF0">
+            <div style="flex:1;min-width:200px">
+              <div style="font-size:0.92rem;font-weight:800;color:#0A1628;word-break:break-all">{{ a.email }}</div>
+              <div style="font-size:0.78rem;font-weight:600;color:#5A6A7A;margin-top:2px">{{ a.meta }}</div>
+            </div>
+            <sc-if value="{{ a.protected }}">
+              <span style="font-size:0.76rem;font-weight:800;color:#00806B;background:#E0FAF5;border-radius:50px;padding:6px 13px;white-space:nowrap">Protected</span>
+            </sc-if>
+            <sc-if value="{{ a.confirming }}">
+              <button onClick="{{ a.cancel }}" style="padding:9px 15px;border-radius:50px;background:#fff;border:1.5px solid #E5EAF0;color:#5A6A7A;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.8rem;cursor:pointer;white-space:nowrap">Keep it</button>
+            </sc-if>
+            <button onClick="{{ a.run }}" style="padding:9px 16px;border-radius:50px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.8rem;white-space:nowrap;background:{{ a.bg }};color:{{ a.color }};border:{{ a.border }}">{{ a.label }}</button>
+          </div>
+        </sc-for>
+      </div>
+      <sc-if value="{{ loadingAccounts }}">
+        <div style="font-size:0.88rem;font-weight:600;color:#5A6A7A">Loading accounts…</div>
+      </sc-if>
+      <sc-if value="{{ noAccounts }}">
+        <div style="font-size:0.88rem;font-weight:600;color:#5A6A7A">No login accounts yet.</div>
+      </sc-if>
+    </div>
+  </sc-if>
 
   <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:18px 20px;margin-bottom:18px;box-shadow:0 6px 28px rgba(10,22,40,0.06);display:flex;gap:16px;align-items:center;flex-wrap:wrap">
     <div style="display:flex;gap:7px;flex-wrap:wrap">
@@ -160,6 +191,9 @@ input,textarea{max-width:100%;}
               <div style="font-size:0.94rem;font-weight:700;color:#0A1628">{{ o.learner }} · {{ o.std }}</div>
               <div style="font-size:0.86rem;font-weight:600;color:#5A6A7A;margin-top:3px">{{ o.parent }} · {{ o.phone }}</div>
               <div style="font-size:0.84rem;font-weight:700;color:#00A88E;margin-top:7px">{{ o.subjectLine }}</div>
+              <sc-if value="{{ o.deviceLine }}">
+                <div style="font-size:0.78rem;font-weight:700;color:#5A6A7A;margin-top:4px">📱 {{ o.deviceLine }}</div>
+              </sc-if>
               <sc-if value="{{ o.upgradeLine }}">
                 <div style="margin-top:8px;font-size:0.8rem;font-weight:700;color:#7C4A03;background:#FFF8F0;border:1px solid #FFE0B2;border-radius:9px;padding:8px 11px;display:inline-block">{{ o.upgradeLine }}</div>
               </sc-if>
@@ -171,6 +205,9 @@ input,textarea{max-width:100%;}
               <div style="font-size:0.76rem;font-weight:600;color:#9AA5B1;margin-top:2px">{{ o.date }}</div>
             </div>
           </div>
+          <sc-if value="{{ o.confirming }}">
+            <div style="margin-top:14px;background:#FEF2F2;border:1.5px solid rgba(230,57,70,0.35);border-radius:11px;padding:12px 15px;font-size:0.85rem;font-weight:700;color:#B91C1C;line-height:1.55">This erases the order, its access code and the learner's saved progress. It cannot be undone. To simply block access instead, use Revoke.</div>
+          </sc-if>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;padding-top:15px;border-top:1px solid #EEF2F8">
             <sc-for list="{{ o.actions }}" as="a" hint-placeholder-count="3">
               <button onClick="{{ a.run }}" style="padding:9px 17px;border-radius:50px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.82rem;background:{{ a.bg }};color:{{ a.color }};border:{{ a.border }}">{{ a.label }}</button>
@@ -229,7 +266,8 @@ function makeCode(){
 class Component extends DCLogic {
   state = {
     locked:true, pinInput:'', pinError:'', email:'', busy:false, live:null,
-    fresh:0, notifyOn:false,
+    fresh:0, notifyOn:false, devices:{}, confirmDelete:'',
+    showAccounts:false, accounts:[], confirmAccount:'', accountsLoaded:false,
     grants:[], filter:'All', search:'', notice:'',
     showIssue:false, iParent:'', iPhone:'', iLearner:'', iPlan:'full', iSubjects:[], issueError:''
   };
@@ -267,6 +305,7 @@ class Component extends DCLogic {
     if(!db) return this.setState({grants:[]});
     try{
       const rows = await db.listOrders();
+      try{ this.setState({devices: await db.deviceCounts()}); }catch(e){}
       const pending = rows.filter(r => (r.status || 'pending-verification') === 'pending-verification').length;
       const prev = this._pending;
       this._pending = pending;
@@ -351,7 +390,7 @@ class Component extends DCLogic {
 
   waLink(phone){
     const digits = (phone || '').replace(/[^0-9]/g,'');
-    if(!digits) return 'https://wa.me/26775562568';
+    if(!digits) return 'https://wa.me/26774310425';
     return 'https://wa.me/' + (digits.length <= 8 ? '267' + digits : digits);
   }
 
@@ -507,6 +546,35 @@ class Component extends DCLogic {
         }, bg:'#fff', color:'#0A1628', border:'1.5px solid #E5EAF0'});
         actions.push({label:'👁 View as learner', run: () => this.openAs(g),
           bg:'#fff', color:'#0A1628', border:'1.5px solid #E5EAF0'});
+        // Two-step delete so one stray tap cannot wipe a paying customer.
+        if(st.confirmDelete === g.code){
+          actions.push({label:'⚠ Yes, delete for good', run: async () => {
+            const db = await this.db();
+            if(!db) return;
+            try{
+              await db.deleteOrder(g.code);
+              this.setState({confirmDelete:'', notice:'Deleted ' + g.code});
+              this.load();
+            }catch(e){ this.setState({notice:'Could not delete: ' + (e.message || 'error')}); }
+          }, bg:'#E63946', color:'#fff', border:'1.5px solid #E63946'});
+          actions.push({label:'Keep it', run: () => this.setState({confirmDelete:''}),
+            bg:'#fff', color:'#5A6A7A', border:'1.5px solid #E5EAF0'});
+        } else {
+          actions.push({label:'🗑 Delete', run: () => this.setState({confirmDelete:g.code}),
+            bg:'#fff', color:'#B91C1C', border:'1.5px solid rgba(230,57,70,0.35)'});
+        }
+        const used = (st.devices || {})[String(g.code||'').toUpperCase()] || 0;
+        if(used){
+          actions.push({label:'↺ Free devices (' + used + ')', run: async () => {
+            const db = await this.db();
+            if(!db) return;
+            try{
+              const n = await db.resetDevices(g.code);
+              this.setState({notice:'Freed ' + n + ' device slot(s) on ' + g.code});
+              this.load();
+            }catch(e){ this.setState({notice:'Could not free devices: ' + (e.message || 'error')}); }
+          }, bg:'#fff', color:'#B45309', border:'1.5px solid #FFE0B2'});
+        }
 
         return Object.assign({
           code:g.code || '—',
@@ -520,6 +588,11 @@ class Component extends DCLogic {
           reference:g.reference || '—',
           date:this.fmtDate(g.created),
           subjectLine:this.subjectNames(g.subjects),
+          confirming: st.confirmDelete === g.code,
+          deviceLine: (() => {
+            const used = (st.devices || {})[String(g.code||'').toUpperCase()] || 0;
+            return used ? used + ' of 3 devices in use' : '';
+          })(),
           upgradeLine: ups.length
             ? 'Upgraded ' + ups.length + '× · last top-up P' + (ups[ups.length-1].paid || 0) + ' (' + (ups[ups.length-1].status || 'pending') + ')'
             : '',
@@ -529,6 +602,44 @@ class Component extends DCLogic {
       }),
 
       openToolkit: () => this.openAs(null),
+
+      showAccounts: st.showAccounts,
+      accountsLabel: st.showAccounts ? '× Close accounts' : '👥 Login accounts',
+      toggleAccounts: async () => {
+        if(st.showAccounts) return this.setState({showAccounts:false, confirmAccount:''});
+        this.setState({showAccounts:true, accountsLoaded:false});
+        const db = await this.db();
+        if(!db) return this.setState({accountsLoaded:true});
+        try{ this.setState({accounts: await db.listAccounts(), accountsLoaded:true}); }
+        catch(e){ this.setState({accountsLoaded:true, notice:'Could not load accounts: ' + (e.message || 'error')}); }
+      },
+      accountRows: (st.accounts || []).map(a => {
+        const confirming = st.confirmAccount === a.email;
+        return {
+          email: a.email,
+          meta: (a.is_admin ? 'Admin · ' : '')
+            + (a.order_count === 1 ? '1 order' : a.order_count + ' orders')
+            + ' · joined ' + this.fmtDate(a.created_at),
+          protected: !!a.is_admin,
+          confirming,
+          label: confirming ? '⚠ Yes, remove login' : '🗑 Remove login',
+          bg: confirming ? '#E63946' : '#fff',
+          color: confirming ? '#fff' : '#B91C1C',
+          border: confirming ? '1.5px solid #E63946' : '1.5px solid rgba(230,57,70,0.35)',
+          run: async () => {
+            if(!confirming) return this.setState({confirmAccount:a.email});
+            const db = await this.db();
+            if(!db) return;
+            try{
+              await db.deleteAccount(a.email);
+              this.setState({confirmAccount:'', accounts: await db.listAccounts(), notice:'Removed login for ' + a.email});
+            }catch(e){ this.setState({confirmAccount:'', notice:'Could not remove: ' + (e.message || 'error')}); }
+          },
+          cancel: () => this.setState({confirmAccount:''})
+        };
+      }),
+      loadingAccounts: st.showAccounts && !st.accountsLoaded,
+      noAccounts: st.showAccounts && st.accountsLoaded && !(st.accounts || []).length,
 
       fresh: st.fresh > 0,
       freshLine: st.fresh === 1 ? '1 new order just came in' : st.fresh + ' new orders just came in',

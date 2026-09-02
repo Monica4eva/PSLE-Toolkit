@@ -131,15 +131,15 @@ export async function redeemCode(code){
 export function reasonMessage(reason, extra){
   switch(reason){
     case 'pending':
-      return 'This code is not active yet — we still need to confirm your payment. Send your proof of payment to WhatsApp 75562568 and we will switch it on, usually within a few hours.';
+      return 'This code is not active yet — we still need to confirm your payment. Send your proof of payment to WhatsApp 74310425 and we will switch it on, usually within a few hours.';
     case 'revoked':
-      return 'This code is no longer active. Please WhatsApp 75562568 so we can sort it out.';
+      return 'This code is no longer active. Please WhatsApp 74310425 so we can sort it out.';
     case 'expired':
-      return 'This code has expired. WhatsApp 75562568 if you think that is wrong.';
+      return 'This code has expired. WhatsApp 74310425 if you think that is wrong.';
     case 'device-limit':
-      return 'This code is already in use on ' + ((extra && extra.limit) || DEVICE_LIMIT) + ' devices. WhatsApp 75562568 if you need it moved to a new phone or tablet.';
+      return 'This code is already in use on ' + ((extra && extra.limit) || DEVICE_LIMIT) + ' devices. WhatsApp 74310425 if you need it moved to a new phone or tablet.';
     default:
-      return 'That code was not recognised. Check for typos, or WhatsApp 75562568 for help.';
+      return 'That code was not recognised. Check for typos, or WhatsApp 74310425 for help.';
   }
 }
 
@@ -160,6 +160,61 @@ export async function listOrders(){
     }));
   }
   return readLocal(GRANTS_KEY).slice().reverse();
+}
+
+// Admin: how many device slots each code has used.
+export async function deviceCounts(){
+  const db = await client();
+  if(!db) return {};
+  const { data, error } = await db.from('devices').select('code');
+  if(error) return {};
+  const out = {};
+  (data || []).forEach(d => {
+    const k = String(d.code || '').toUpperCase();
+    out[k] = (out[k] || 0) + 1;
+  });
+  return out;
+}
+
+// Admin: free every device slot on a code.
+export async function resetDevices(code){
+  const db = await client();
+  if(!db) return 0;
+  const { data, error } = await db.rpc('reset_devices', { p_code: code });
+  if(error) throw new Error(error.message);
+  return data || 0;
+}
+
+// Admin: who has signed up, and how many orders each holds.
+export async function listAccounts(){
+  const db = await client();
+  if(!db) return [];
+  const { data, error } = await db.rpc('list_accounts');
+  if(error) throw new Error(error.message);
+  return data || [];
+}
+
+// Admin: remove someone's ability to sign in. Orders are kept.
+export async function deleteAccount(email){
+  const db = await client();
+  if(!db) return false;
+  const { error } = await db.rpc('delete_account', { p_email: email });
+  if(error) throw new Error(error.message);
+  return true;
+}
+
+// Admin: permanently remove an order, its devices and its progress.
+export async function deleteOrder(code){
+  const db = await client();
+  if(db){
+    const { error } = await db.rpc('delete_order', { p_code: code });
+    if(error) throw new Error(error.message);
+    return true;
+  }
+  const keep = readLocal(GRANTS_KEY)
+    .filter(g => String(g.code||'').toUpperCase() !== String(code).toUpperCase());
+  writeLocal(GRANTS_KEY, keep);
+  return true;
 }
 
 export async function setOrderStatus(code, status){
