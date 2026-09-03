@@ -36,20 +36,39 @@ input,textarea{max-width:100%;}
         <div style="margin-top:7px;font-size:0.7rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4)">Orders &amp; access codes</div>
       </div>
       <div style="background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.14);border-radius:18px;padding:26px">
-        <sc-if value="{{ live }}">
+        <sc-if value="{{ askPassword }}" hint-placeholder-val="{{ true }}">
           <div>
-            <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:9px">Admin email</div>
-            <input onChange="{{ onEmail }}" value="{{ email }}" placeholder="you@example.com" style="width:100%;padding:14px 16px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.18);background:rgba(10,22,40,0.7);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.94rem;margin-bottom:14px" style-focus="outline:none;border-color:#00C6A7">
+            <sc-if value="{{ live }}">
+              <div>
+                <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:9px">Admin email</div>
+                <input onChange="{{ onEmail }}" value="{{ email }}" placeholder="you@example.com" style="width:100%;padding:14px 16px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.18);background:rgba(10,22,40,0.7);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.94rem;margin-bottom:14px" style-focus="outline:none;border-color:#00C6A7">
+              </div>
+            </sc-if>
+            <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:9px">{{ passwordLabel }}</div>
+            <input onChange="{{ onPin }}" onKeyDown="{{ onPinKey }}" value="{{ pinInput }}" type="password" placeholder="••••••" style="width:100%;padding:14px 16px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.18);background:rgba(10,22,40,0.7);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.94rem" style-focus="outline:none;border-color:#00C6A7">
+            <sc-if value="{{ pinError }}">
+              <div style="margin-top:13px;background:rgba(230,57,70,0.14);border:1.5px solid rgba(230,57,70,0.4);color:#FFB3B8;border-radius:10px;padding:11px 14px;font-size:0.85rem;font-weight:700">{{ pinError }}</div>
+            </sc-if>
+            <button onClick="{{ submitPin }}" style="width:100%;margin-top:15px;padding:14px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.98rem;cursor:pointer">{{ signInLabel }}</button>
+            <sc-if value="{{ offline }}">
+              <div style="margin-top:13px;font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.4);line-height:1.6">{{ offlineNote }}</div>
+            </sc-if>
           </div>
         </sc-if>
-        <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:9px">{{ passwordLabel }}</div>
-        <input onChange="{{ onPin }}" onKeyDown="{{ onPinKey }}" value="{{ pinInput }}" type="password" placeholder="••••••" style="width:100%;padding:14px 16px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.18);background:rgba(10,22,40,0.7);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.94rem" style-focus="outline:none;border-color:#00C6A7">
-        <sc-if value="{{ pinError }}">
-          <div style="margin-top:13px;background:rgba(230,57,70,0.14);border:1.5px solid rgba(230,57,70,0.4);color:#FFB3B8;border-radius:10px;padding:11px 14px;font-size:0.85rem;font-weight:700">{{ pinError }}</div>
-        </sc-if>
-        <button onClick="{{ submitPin }}" style="width:100%;margin-top:15px;padding:14px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.98rem;cursor:pointer">{{ signInLabel }}</button>
-        <sc-if value="{{ offline }}">
-          <div style="margin-top:13px;font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.4);line-height:1.6">{{ offlineNote }}</div>
+
+        <sc-if value="{{ onCodeStep }}" hint-placeholder-val="{{ false }}">
+          <div style="animation:pop .18s ease-out">
+            <div style="text-align:center;font-size:1.7rem;margin-bottom:8px">🔒</div>
+            <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.06rem;color:#fff;text-align:center;margin-bottom:6px">Enter your code</div>
+            <div style="font-size:0.85rem;font-weight:600;color:rgba(255,255,255,0.55);line-height:1.6;text-align:center;margin-bottom:18px;text-wrap:pretty">Open your authenticator app and type the six digits showing for The PSLE Prep Toolkit.</div>
+            <input onChange="{{ onMfaCode }}" onKeyDown="{{ onMfaKey }}" value="{{ mfaCode }}" inputmode="numeric" placeholder="000000" style="width:100%;padding:16px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.18);background:rgba(10,22,40,0.7);color:#fff;font-family:'Syne',sans-serif;font-weight:900;font-size:1.5rem;letter-spacing:9px;text-align:center" style-focus="outline:none;border-color:#00C6A7">
+            <sc-if value="{{ pinError }}">
+              <div style="margin-top:13px;background:rgba(230,57,70,0.14);border:1.5px solid rgba(230,57,70,0.4);color:#FFB3B8;border-radius:10px;padding:11px 14px;font-size:0.85rem;font-weight:700;line-height:1.55">{{ pinError }}</div>
+            </sc-if>
+            <button onClick="{{ submitMfa }}" style="width:100%;margin-top:15px;padding:14px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.98rem;cursor:pointer">{{ mfaLabel }}</button>
+            <button onClick="{{ backToPassword }}" style="width:100%;margin-top:10px;padding:11px;border-radius:50px;background:none;border:1.5px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.6);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.84rem;cursor:pointer">← Start again</button>
+            <div style="margin-top:14px;font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.38);line-height:1.6;text-wrap:pretty">Lost your phone? See the note at the bottom of admin-2fa.sql to switch this off from Supabase.</div>
+          </div>
         </sc-if>
       </div>
       <div style="margin-top:18px;text-align:center;font-size:0.84rem;font-weight:600;color:rgba(255,255,255,0.42)">
@@ -266,7 +285,81 @@ input,textarea{max-width:100%;}
     </div>
   </sc-if>
 
-  <div style="margin-top:26px;font-size:0.82rem;font-weight:600;color:#9AA5B1;line-height:1.7;max-width:640px">Orders are stored in this browser only. Verifying or revoking here affects codes on this device — once a shared backend exists, this same view will manage every parent's access.</div>
+  <div style="margin-top:24px;background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:22px;box-shadow:0 6px 28px rgba(10,22,40,0.06)">
+    <button onClick="{{ toggleSec }}" style="display:flex;align-items:center;gap:12px;width:100%;background:none;border:none;padding:0;cursor:pointer;text-align:left;font-family:'Plus Jakarta Sans',sans-serif">
+      <span style="flex:1;font-family:'Syne',sans-serif;font-weight:900;font-size:1.06rem;color:#0A1628">Security</span>
+      <span style="font-size:0.78rem;font-weight:800;padding:5px 12px;border-radius:50px;background:{{ secStatusBg }};border:{{ secStatusBorder }};color:{{ secStatusColor }}">{{ secStatusLabel }}</span>
+      <span style="font-size:0.8rem;color:#9AA5B1">▾</span>
+    </button>
+
+    <sc-if value="{{ secOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:18px;padding-top:18px;border-top:1px solid #EEF2F8">
+        <div style="font-size:0.89rem;font-weight:600;color:#5A6A7A;line-height:1.7;margin-bottom:16px;text-wrap:pretty">{{ secStatusNote }}</div>
+
+        <sc-if value="{{ secError }}">
+          <div style="background:#FEF2F2;border:1.5px solid rgba(230,57,70,0.35);color:#B91C1C;border-radius:11px;padding:12px 15px;font-size:0.86rem;font-weight:700;line-height:1.55;margin-bottom:14px">{{ secError }}</div>
+        </sc-if>
+
+        <sc-if value="{{ mfaOff }}" hint-placeholder-val="{{ false }}">
+          <div>
+            <sc-if value="{{ notStarted }}" hint-placeholder-val="{{ false }}">
+              <div>
+                <div style="background:#FAFBFD;border:1px solid #E5EAF0;border-radius:12px;padding:16px 18px;margin-bottom:15px">
+                  <div style="font-size:0.7rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#5A6A7A;margin-bottom:9px">First, get the app</div>
+                  <div style="font-size:0.88rem;font-weight:600;color:#374151;line-height:1.7;text-wrap:pretty">On your phone, install <strong>Google Authenticator</strong> from the Play Store or App Store. It is free, works offline and needs no account. <strong>Microsoft Authenticator</strong> and <strong>Authy</strong> work just as well if you already have one.</div>
+                </div>
+                <button onClick="{{ beginEnroll }}" style="padding:13px 26px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.92rem;cursor:pointer">{{ startLabel }}</button>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ enrollStarted }}" hint-placeholder-val="{{ false }}">
+              <div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));gap:16px;align-items:start">
+                  <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:13px;padding:16px;text-align:center">
+                    <div style="font-size:0.7rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#5A6A7A;margin-bottom:11px">1 · Scan this</div>
+                    <img src="{{ enrollQr }}" alt="QR code for your authenticator app" style="width:100%;max-width:190px;height:auto;border-radius:8px">
+                    <div style="margin-top:11px;font-size:0.8rem;font-weight:600;color:#5A6A7A;line-height:1.55">In the app tap <strong>+</strong> → <strong>Scan a QR code</strong>.</div>
+                  </div>
+                  <div>
+                    <div style="font-size:0.7rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#5A6A7A;margin-bottom:9px">Cannot scan?</div>
+                    <div style="font-size:0.84rem;font-weight:600;color:#5A6A7A;line-height:1.6;margin-bottom:8px">Choose “Enter a setup key” and type this instead:</div>
+                    <div style="background:#0A1628;border-radius:10px;padding:12px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:0.84rem;color:#7BF3DE;word-break:break-all;line-height:1.6">{{ enrollSecret }}</div>
+
+                    <div style="margin-top:18px;font-size:0.7rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#5A6A7A;margin-bottom:9px">2 · Enter the six digits</div>
+                    <input onChange="{{ onEnrollCode }}" onKeyDown="{{ onEnrollKey }}" value="{{ enrollCode }}" inputmode="numeric" placeholder="000000" style="width:100%;padding:14px;border-radius:11px;border:1.5px solid #E5EAF0;background:#FAFBFD;color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:1.3rem;letter-spacing:7px;text-align:center" style-focus="outline:none;border-color:#00C6A7;background:#fff">
+                    <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:13px">
+                      <button onClick="{{ finishEnroll }}" style="flex:1;min-width:170px;padding:13px 20px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.9rem;cursor:pointer">{{ enrollLabel }}</button>
+                      <button onClick="{{ cancelEnroll }}" style="padding:13px 20px;border-radius:50px;background:#fff;border:1.5px solid #E5EAF0;color:#5A6A7A;font-family:'Syne',sans-serif;font-weight:900;font-size:0.9rem;cursor:pointer">Cancel</button>
+                    </div>
+                  </div>
+                </div>
+                <div style="margin-top:16px;background:#FFF8F0;border:1.5px solid #FFE0B2;border-radius:12px;padding:14px 16px;font-size:0.85rem;font-weight:600;color:#7C4A03;line-height:1.65;text-wrap:pretty">⚠ Keep that setup key somewhere safe and private — written down at home is fine. If you lose your phone it is the quickest way back in. Never send it to anyone.</div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ mfaOn }}" hint-placeholder-val="{{ false }}">
+          <div>
+            <sc-if value="{{ secNotConfirmingOff }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ armRemove }}" style="padding:11px 22px;border-radius:50px;background:#fff;border:1.5px solid rgba(230,57,70,0.35);color:#B91C1C;font-family:'Syne',sans-serif;font-weight:900;font-size:0.86rem;cursor:pointer" style-hover="background:#FEF2F2">Switch two-step verification off</button>
+            </sc-if>
+            <sc-if value="{{ secConfirmOff }}">
+              <div>
+                <div style="background:#FEF2F2;border:1.5px solid rgba(230,57,70,0.35);border-radius:12px;padding:14px 16px;font-size:0.87rem;font-weight:700;color:#B91C1C;line-height:1.6;margin-bottom:13px;text-wrap:pretty">Without this, anyone who learns your password can verify payments, issue free codes and read every parent's phone number. Only switch it off if you are changing to a new phone.</div>
+                <div style="display:flex;gap:9px;flex-wrap:wrap">
+                  <button onClick="{{ removeMfa }}" style="padding:12px 22px;border-radius:50px;border:none;background:#E63946;color:#fff;font-family:'Syne',sans-serif;font-weight:900;font-size:0.86rem;cursor:pointer">Yes, switch it off</button>
+                  <button onClick="{{ cancelRemove }}" style="padding:12px 22px;border-radius:50px;background:#fff;border:1.5px solid #E5EAF0;color:#5A6A7A;font-family:'Syne',sans-serif;font-weight:900;font-size:0.86rem;cursor:pointer">Keep it on</button>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
+  </div>
+
+  <div style="margin-top:20px;font-size:0.82rem;font-weight:600;color:#9AA5B1;line-height:1.7;max-width:640px">Orders live in your Supabase database, so verifying or revoking here takes effect on every parent's device. Every approval, decline and deletion is written to the audit log with your name against it.</div>
 
 </div>
 </sc-if>
@@ -306,6 +399,9 @@ class Component extends DCLogic {
   state = {
     locked:true, pinInput:'', pinError:'', email:'', busy:false, live:null,
     fresh:0, notifyOn:false, devices:{}, confirmDelete:'', upgrades:[],
+    mfaStep:false, mfaFactor:null, mfaCode:'', mfaOn:false,
+    enrollQr:'', enrollSecret:'', enrollFactor:null, enrollCode:'',
+    secBusy:false, secError:'', secConfirmOff:false, secOpen:false,
     showAccounts:false, accounts:[], confirmAccount:'', accountsLoaded:false,
     grants:[], filter:'All', search:'', notice:'',
     showIssue:false, iParent:'', iPhone:'', iLearner:'', iPlan:'full', iSubjects:[], issueError:''
@@ -324,7 +420,7 @@ class Component extends DCLogic {
     if(live){
       try{
         const admin = await db.isAdmin();
-        if(admin){ this.setState({locked:false}); this.load(); }
+        if(admin){ this.setState({locked:false}); this.afterUnlock(); }
       }catch(e){}
       return;   // not signed in — show the login
     }
@@ -508,6 +604,55 @@ class Component extends DCLogic {
       onPinKey: (e) => { if(e.key === 'Enter') this.signIn(); },
       submitPin: () => this.signIn(),
       signInLabel: st.busy ? 'Signing in…' : 'Open admin →',
+
+      // — Sign-in step two —
+      onCodeStep: st.mfaStep,
+      askPassword: !st.mfaStep,
+      mfaCode: st.mfaCode,
+      onMfaCode: (e) => this.setState({mfaCode:e.target.value.replace(/[^0-9]/g,'').slice(0,6), pinError:''}),
+      onMfaKey: (e) => { if(e.key === 'Enter') this.submitMfa(); },
+      submitMfa: () => this.submitMfa(),
+      mfaLabel: st.busy ? 'Checking…' : 'Verify and open admin →',
+      backToPassword: async () => {
+        const db = await this.db();
+        if(db){ try{ await db.signOut(); }catch(e){} }
+        this.setState({mfaStep:false, mfaCode:'', pinInput:'', pinError:''});
+      },
+
+      // — Security panel —
+      secOpen: st.secOpen,
+      secClosed: !st.secOpen,
+      toggleSec: () => this.setState({secOpen:!st.secOpen, secError:''}),
+      mfaOn: st.mfaOn,
+      mfaOff: !st.mfaOn,
+      secStatusLabel: st.mfaOn ? '🔒 Two-step verification is ON' : '⚠ Two-step verification is OFF',
+      secStatusColor: st.mfaOn ? '#00806B' : '#B45309',
+      secStatusBg: st.mfaOn ? '#E0FAF5' : '#FFF8F0',
+      secStatusBorder: st.mfaOn ? '1.5px solid rgba(0,198,167,0.4)' : '1.5px solid #FFE0B2',
+      secStatusNote: st.mfaOn
+        ? 'Signing in needs your password and a six-digit code from your phone. Payments cannot be verified without it, even by someone who has your password.'
+        : 'Right now your password is the only thing protecting the money side of this site. Setting this up takes two minutes and needs a free app on your phone.',
+      secError: st.secError,
+      secBusy: st.secBusy,
+
+      enrollStarted: !!st.enrollQr,
+      notStarted: !st.enrollQr,
+      enrollQr: st.enrollQr,
+      enrollSecret: st.enrollSecret,
+      enrollCode: st.enrollCode,
+      onEnrollCode: (e) => this.setState({enrollCode:e.target.value.replace(/[^0-9]/g,'').slice(0,6), secError:''}),
+      onEnrollKey: (e) => { if(e.key === 'Enter') this.finishEnroll(); },
+      beginEnroll: () => this.beginEnroll(),
+      finishEnroll: () => this.finishEnroll(),
+      enrollLabel: st.secBusy ? 'Checking…' : 'Turn on two-step verification',
+      startLabel: st.secBusy ? 'Preparing…' : '🔐 Set up two-step verification',
+      cancelEnroll: () => this.setState({enrollQr:'', enrollSecret:'', enrollFactor:null, enrollCode:'', secError:''}),
+
+      secConfirmOff: st.secConfirmOff,
+      secNotConfirmingOff: !st.secConfirmOff,
+      armRemove: () => this.setState({secConfirmOff:true, secError:''}),
+      cancelRemove: () => this.setState({secConfirmOff:false}),
+      removeMfa: () => this.removeMfa(),
       lockAdmin: async () => {
         try{ sessionStorage.removeItem(ADMIN_KEY); }catch(e){}
         const db = await this.db();
@@ -765,15 +910,90 @@ class Component extends DCLogic {
     this.setState({pinError:'', busy:true});
     try{
       await db.signIn(email, this.state.pinInput);
+
+      // Password accepted — but if a phone is enrolled, that is only half of it.
+      const m = await db.mfaNeeded();
+      if(m.needed){
+        return this.setState({busy:false, mfaStep:true, mfaFactor:m.factorId, mfaCode:'', pinError:''});
+      }
+
       const admin = await db.isAdmin();
       if(!admin){
         await db.signOut();
         return this.setState({busy:false, pinError:'That account is not an admin. Run the is_admin step in the setup guide.'});
       }
       this.setState({locked:false, pinInput:'', pinError:'', busy:false});
-      this.load();
+      this.afterUnlock();
     }catch(e){
       this.setState({busy:false, pinError:e.message || 'That email and password do not match.'});
+    }
+  }
+
+  // Second step of signing in: the six digits from the phone.
+  async submitMfa(){
+    const db = await this.db();
+    if(!db) return;
+    const code = (this.state.mfaCode || '').replace(/\s/g,'');
+    if(code.length < 6) return this.setState({pinError:'Enter all six digits.'});
+    this.setState({busy:true, pinError:''});
+    try{
+      await db.mfaSubmitCode(this.state.mfaFactor, code);
+      const admin = await db.isAdmin();
+      if(!admin){
+        await db.signOut();
+        return this.setState({busy:false, mfaStep:false, pinError:'That account is not an admin.'});
+      }
+      this.setState({locked:false, mfaStep:false, busy:false, pinInput:'', mfaCode:'', pinError:''});
+      this.afterUnlock();
+    }catch(e){
+      this.setState({busy:false, mfaCode:'', pinError:e.message || 'That code was not accepted.'});
+    }
+  }
+
+  // Loads the orders plus the 2FA status shown in the security panel.
+  async afterUnlock(){
+    this.load();
+    const db = await this.db();
+    if(!db || !db.mfaState) return;
+    try{ this.setState({mfaOn: (await db.mfaState()).on}); }catch(e){}
+  }
+
+  async beginEnroll(){
+    const db = await this.db();
+    if(!db) return;
+    this.setState({secBusy:true, secError:''});
+    try{
+      const r = await db.mfaBeginEnroll();
+      this.setState({secBusy:false, enrollQr:r.qr, enrollSecret:r.secret, enrollFactor:r.factorId, enrollCode:''});
+    }catch(e){
+      this.setState({secBusy:false, secError:e.message || 'Could not start the setup.'});
+    }
+  }
+
+  async finishEnroll(){
+    const db = await this.db();
+    if(!db) return;
+    const code = (this.state.enrollCode || '').replace(/\s/g,'');
+    if(code.length < 6) return this.setState({secError:'Enter all six digits from the app.'});
+    this.setState({secBusy:true, secError:''});
+    try{
+      await db.mfaFinishEnroll(this.state.enrollFactor, code);
+      this.setState({secBusy:false, mfaOn:true, enrollQr:'', enrollSecret:'', enrollFactor:null, enrollCode:'', notice:'Two-step verification is on'});
+    }catch(e){
+      this.setState({secBusy:false, secError:e.message || 'That code was not accepted.'});
+    }
+  }
+
+  async removeMfa(){
+    const db = await this.db();
+    if(!db) return;
+    this.setState({secBusy:true, secError:''});
+    try{
+      const st = await db.mfaState();
+      if(st.factorId) await db.mfaRemove(st.factorId);
+      this.setState({secBusy:false, mfaOn:false, secConfirmOff:false, notice:'Two-step verification is off'});
+    }catch(e){
+      this.setState({secBusy:false, secError:e.message || 'Could not switch it off.'});
     }
   }
 

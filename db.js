@@ -375,6 +375,74 @@ export async function requestUpgrade(code, plan, planName, subjects, amount, met
   return data;
 }
 
+// ---------- TWO-STEP VERIFICATION (admin) ----------
+// Uses Supabase's built-in TOTP factors — the same six-digit codes as
+// Google Authenticator. The password alone is never enough once a factor
+// is enrolled, because is_admin() in the database also requires it.
+
+// Does this signed-in session still owe a 2FA code?
+export async function mfaNeeded(){
+  const db = await client();
+  if(!db) return {needed:false, factorId:null};
+  const { data, error } = await db.auth.mfa.getAuthenticatorAssuranceLevel();
+  if(error || !data) return {needed:false, factorId:null};
+  if(data.currentLevel === 'aal2' || data.nextLevel !== 'aal2') return {needed:false, factorId:null};
+  const list = await db.auth.mfa.listFactors();
+  const totp = (list.data && list.data.totp) || [];
+  const v = totp.find(f => f.status === 'verified');
+  return {needed:!!v, factorId: v ? v.id : null};
+}
+
+// Finish signing in by entering the code from the phone.
+export async function mfaSubmitCode(factorId, code){
+  const db = await client();
+  if(!db) throw new Error('The admin system is unavailable.');
+  const { error } = await db.auth.mfa.challengeAndVerify({ factorId, code: String(code).replace(/\s/g,'') });
+  if(error) throw new Error('That code was not accepted. Check the six digits on your phone and try again.');
+  return true;
+}
+
+// Is 2FA already set up on this account?
+export async function mfaState(){
+  const db = await client();
+  if(!db) return {on:false, factorId:null};
+  const { data, error } = await db.auth.mfa.listFactors();
+  if(error || !data) return {on:false, factorId:null};
+  const v = (data.totp || []).find(f => f.status === 'verified');
+  const p = (data.totp || []).find(f => f.status === 'unverified');
+  return {on:!!v, factorId: v ? v.id : null, pendingId: p ? p.id : null};
+}
+
+// Step 1 of setting it up: returns a QR code to scan.
+export async function mfaBeginEnroll(){
+  const db = await client();
+  if(!db) throw new Error('The admin system is unavailable.');
+  // Clear any half-finished attempt so a retry always works.
+  const st = await mfaState();
+  if(st.pendingId){ try{ await db.auth.mfa.unenroll({ factorId: st.pendingId }); }catch(e){} }
+  const { data, error } = await db.auth.mfa.enroll({ factorType:'totp', friendlyName:'Admin phone ' + Date.now() });
+  if(error) throw new Error(error.message);
+  return { factorId: data.id, qr: data.totp.qr_code, secret: data.totp.secret };
+}
+
+// Step 2: confirm the first code, which activates the factor.
+export async function mfaFinishEnroll(factorId, code){
+  const db = await client();
+  if(!db) throw new Error('The admin system is unavailable.');
+  const { error } = await db.auth.mfa.challengeAndVerify({ factorId, code: String(code).replace(/\s/g,'') });
+  if(error) throw new Error('That code was not accepted. Make sure you scanned the QR code, then enter the six digits showing now.');
+  return true;
+}
+
+// Switch 2FA off again (asks for a current code first, via the caller).
+export async function mfaRemove(factorId){
+  const db = await client();
+  if(!db) throw new Error('The admin system is unavailable.');
+  const { error } = await db.auth.mfa.unenroll({ factorId });
+  if(error) throw new Error(error.message);
+  return true;
+}
+
 // Admin: pending and decided upgrade requests.
 export async function listUpgrades(){
   const db = await client();
