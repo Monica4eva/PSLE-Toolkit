@@ -461,6 +461,45 @@ export async function decideUpgrade(id, approve){
   return true;
 }
 
+// ---------- FREE SAMPLE LEADS ----------
+
+// A visitor signs up to try the sample. Stores nothing sensitive and
+// grants no access — it is only a name and a number to follow up with.
+export async function captureLead(name, phone, email, learner, standard){
+  const db = await client();
+  if(!db) throw new Error('We cannot save your details right now. Please WhatsApp 74310425.');
+  const { data, error } = await db.rpc('capture_lead', {
+    p_name: name, p_phone: phone, p_email: email || null,
+    p_learner: learner || null, p_standard: standard || null
+  });
+  if(error) throw new Error(error.message);
+  return data;
+}
+
+export async function recordSampleScore(id, score, total){
+  const db = await client();
+  if(!db || !id) return false;
+  const { error } = await db.rpc('record_sample_score', { p_id:id, p_score:score|0, p_total:total|0 });
+  return !error;
+}
+
+// Admin: the follow-up list.
+export async function listLeads(){
+  const db = await client();
+  if(!db) return [];
+  const { data, error } = await db.rpc('list_leads');
+  if(error) throw new Error(error.message);
+  return data || [];
+}
+
+export async function deleteLead(id){
+  const db = await client();
+  if(!db) return false;
+  const { error } = await db.rpc('delete_lead', { p_id:id });
+  if(error) throw new Error(error.message);
+  return true;
+}
+
 // Anonymous standing — a band only, never a name or a position.
 export async function myStanding(code){
   const db = await client();

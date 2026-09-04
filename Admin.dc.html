@@ -286,6 +286,61 @@ input,textarea{max-width:100%;}
   </sc-if>
 
   <div style="margin-top:24px;background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:22px;box-shadow:0 6px 28px rgba(10,22,40,0.06)">
+    <button onClick="{{ toggleLeads }}" style="display:flex;align-items:center;gap:12px;width:100%;background:none;border:none;padding:0;cursor:pointer;text-align:left;font-family:'Plus Jakarta Sans',sans-serif">
+      <span style="flex:1;font-family:'Syne',sans-serif;font-weight:900;font-size:1.06rem;color:#0A1628">Free sample — follow-up list</span>
+      <span style="font-size:0.78rem;font-weight:800;padding:5px 12px;border-radius:50px;background:#FFF8F0;border:1.5px solid #FFE0B2;color:#B45309;white-space:nowrap">{{ leadHotCount }} warm</span>
+      <span style="font-size:0.8rem;color:#9AA5B1">▾</span>
+    </button>
+
+    <sc-if value="{{ leadsOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:18px;padding-top:18px;border-top:1px solid #EEF2F8">
+        <div style="font-size:0.88rem;font-weight:700;color:#0A1628;margin-bottom:4px">{{ leadSummary }}</div>
+        <div style="font-size:0.85rem;font-weight:600;color:#5A6A7A;line-height:1.6;margin-bottom:16px;text-wrap:pretty">Anyone who finished all 30 questions has spent fifteen minutes with your product. Those are the people to message first.</div>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px">
+          <sc-for list="{{ leadFilters }}" as="f" hint-placeholder-count="4">
+            <button onClick="{{ f.pick }}" style="padding:8px 15px;border-radius:50px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.8rem;background:{{ f.bg }};color:{{ f.color }};border:{{ f.border }}">{{ f.label }}</button>
+          </sc-for>
+          <button onClick="{{ exportLeads }}" style="margin-left:auto;padding:8px 15px;border-radius:50px;background:#fff;border:1.5px solid #E5EAF0;color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.8rem;cursor:pointer" style-hover="border-color:#00C6A7">⬇ CSV</button>
+        </div>
+
+        <sc-if value="{{ hasLeads }}">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ leads }}" as="l" hint-placeholder-count="3">
+              <div style="border:1.5px solid {{ l.cardBorder }};border-radius:14px;padding:16px 18px;background:#FAFBFD">
+                <div style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:flex-start">
+                  <div style="flex:1;min-width:200px">
+                    <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:5px">
+                      <span style="font-family:'Syne',sans-serif;font-weight:900;font-size:1rem;color:#0A1628">{{ l.name }}</span>
+                      <span style="font-size:0.66rem;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;padding:4px 10px;border-radius:50px;background:{{ l.badgeBg }};color:{{ l.badgeColor }}">{{ l.badge }}</span>
+                    </div>
+                    <div style="font-size:0.86rem;font-weight:700;color:#0A1628">{{ l.phone }}</div>
+                    <div style="font-size:0.83rem;font-weight:600;color:#5A6A7A;margin-top:2px">{{ l.email }}</div>
+                    <div style="font-size:0.83rem;font-weight:600;color:#5A6A7A;margin-top:5px">{{ l.learnerLine }}</div>
+                  </div>
+                  <div style="text-align:right;flex-shrink:0">
+                    <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.06rem;color:{{ l.scoreColor }};line-height:1.2">{{ l.scoreLine }}</div>
+                    <div style="font-size:0.76rem;font-weight:700;color:#9AA5B1;margin-top:3px">{{ l.attemptLine }}</div>
+                    <div style="font-size:0.76rem;font-weight:600;color:#9AA5B1">{{ l.date }}</div>
+                  </div>
+                </div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;padding-top:13px;border-top:1px solid #EEF2F8">
+                  <a href="{{ l.whatsapp }}" target="_blank" style="padding:9px 17px;border-radius:50px;background:#25D366;color:#0A1628;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.82rem">💬 Message on WhatsApp</a>
+                  <button onClick="{{ l.remove }}" style="padding:9px 15px;border-radius:50px;background:#fff;border:1.5px solid #E5EAF0;color:#9AA5B1;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.8rem;cursor:pointer" style-hover="border-color:#E63946;color:#B91C1C">Remove</button>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ noLeads }}">
+          <div style="background:#FAFBFD;border:1px dashed #CBD5E1;border-radius:13px;padding:26px;text-align:center;font-size:0.88rem;font-weight:600;color:#5A6A7A;line-height:1.65;text-wrap:pretty">Nobody has tried the free sample yet. Share <strong>psletoolkit.com/Free Sample.dc.html</strong> on Facebook and in your WhatsApp replies — everyone who signs up appears here with a number you can message.</div>
+        </sc-if>
+      </div>
+    </sc-if>
+  </div>
+
+  <div style="margin-top:16px;background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:22px;box-shadow:0 6px 28px rgba(10,22,40,0.06)">
     <button onClick="{{ toggleSec }}" style="display:flex;align-items:center;gap:12px;width:100%;background:none;border:none;padding:0;cursor:pointer;text-align:left;font-family:'Plus Jakarta Sans',sans-serif">
       <span style="flex:1;font-family:'Syne',sans-serif;font-weight:900;font-size:1.06rem;color:#0A1628">Security</span>
       <span style="font-size:0.78rem;font-weight:800;padding:5px 12px;border-radius:50px;background:{{ secStatusBg }};border:{{ secStatusBorder }};color:{{ secStatusColor }}">{{ secStatusLabel }}</span>
@@ -399,6 +454,7 @@ class Component extends DCLogic {
   state = {
     locked:true, pinInput:'', pinError:'', email:'', busy:false, live:null,
     fresh:0, notifyOn:false, devices:{}, confirmDelete:'', upgrades:[],
+    leads:[], leadsOpen:false, leadFilter:'Not yet bought',
     mfaStep:false, mfaFactor:null, mfaCode:'', mfaOn:false,
     enrollQr:'', enrollSecret:'', enrollFactor:null, enrollCode:'',
     secBusy:false, secError:'', secConfirmOff:false, secOpen:false,
@@ -443,6 +499,7 @@ class Component extends DCLogic {
       try{ this.setState({devices: await db.deviceCounts()}); }catch(e){}
       let ups = [];
       try{ ups = await db.listUpgrades(); this.setState({upgrades:ups}); }catch(e){}
+      try{ this.setState({leads: await db.listLeads()}); }catch(e){}
       const pending = rows.filter(r => (r.status || 'pending-verification') === 'pending-verification').length
         + ups.filter(u => u.status === 'pending-verification').length;
       const prev = this._pending;
@@ -825,6 +882,82 @@ class Component extends DCLogic {
         })),
       hasUpgrades: (st.upgrades || []).filter(u => u.status === 'pending-verification').length > 0,
       upgradeCount: (st.upgrades || []).filter(u => u.status === 'pending-verification').length,
+
+      // — Free-sample leads: your follow-up list —
+      leadsOpen: st.leadsOpen,
+      toggleLeads: () => this.setState({leadsOpen:!st.leadsOpen}),
+      leadCount: (st.leads || []).length,
+      leadHotCount: (st.leads || []).filter(l => !l.has_bought && l.finished).length,
+      leadSummary: (() => {
+        const all = st.leads || [];
+        if(!all.length) return 'Nobody has tried the free sample yet.';
+        const bought = all.filter(l => l.has_bought).length;
+        const finished = all.filter(l => l.finished).length;
+        return all.length + ' tried it · ' + finished + ' finished all 30 · ' + bought + ' went on to buy';
+      })(),
+      leadFilters: ['Not yet bought','Finished all 30','Bought','Everyone'].map(f => Object.assign({
+        label: f,
+        pick: () => this.setState({leadFilter:f})
+      }, pill(st.leadFilter === f))),
+      leads: (() => {
+        let rows = (st.leads || []).slice();
+        if(st.leadFilter === 'Not yet bought') rows = rows.filter(l => !l.has_bought);
+        else if(st.leadFilter === 'Finished all 30') rows = rows.filter(l => l.finished && !l.has_bought);
+        else if(st.leadFilter === 'Bought') rows = rows.filter(l => l.has_bought);
+        return rows.map(l => {
+          const pct = (l.total ? Math.round((l.score || 0) / l.total * 100) : null);
+          return {
+            name: l.name || 'No name',
+            phone: l.phone || '—',
+            email: l.email || 'no email',
+            learnerLine: (l.learner_name ? l.learner_name : 'Learner not named') + ' · ' + (l.standard || 'standard not given'),
+            scoreLine: l.finished ? (l.score || 0) + '/' + l.total + ' (' + pct + '%)' : 'did not finish',
+            scoreColor: !l.finished ? '#9AA5B1' : pct >= 70 ? '#00806B' : pct >= 40 ? '#B45309' : '#B91C1C',
+            attemptLine: l.attempts > 1 ? 'came back ' + l.attempts + '×' : 'first visit',
+            date: this.fmtDate(l.created_at),
+            badge: l.has_bought ? 'Bought' : l.finished ? 'Warm — finished' : 'Started only',
+            badgeBg: l.has_bought ? '#E0FAF5' : l.finished ? '#FFF8F0' : '#F5F7FA',
+            badgeColor: l.has_bought ? '#00806B' : l.finished ? '#B45309' : '#5A6A7A',
+            cardBorder: l.has_bought ? 'rgba(0,198,167,0.4)' : '#E5EAF0',
+            whatsapp: 'https://wa.me/267' + String(l.phone || '').replace(/^267/, '') + '?text=' + encodeURIComponent(
+              'Dumela ' + (l.name || '') + '! You tried the 30 free questions on psletoolkit.com'
+              + (l.finished ? ' and scored ' + (l.score || 0) + '/' + l.total : '')
+              + '. Is ' + (l.learner_name || 'your child') + ' sitting the PSLE next month? Happy to answer any questions.'
+            ),
+            remove: async () => {
+              const db = await this.db();
+              if(!db) return;
+              try{ await db.deleteLead(l.id); this.load(); }
+              catch(e){ this.setState({notice:'Could not delete: ' + (e.message || 'error')}); }
+            }
+          };
+        });
+      })(),
+      hasLeads: (() => {
+        let rows = (st.leads || []);
+        if(st.leadFilter === 'Not yet bought') rows = rows.filter(l => !l.has_bought);
+        else if(st.leadFilter === 'Finished all 30') rows = rows.filter(l => l.finished && !l.has_bought);
+        else if(st.leadFilter === 'Bought') rows = rows.filter(l => l.has_bought);
+        return rows.length > 0;
+      })(),
+      noLeads: !(st.leads || []).length,
+      exportLeads: () => {
+        const all = st.leads || [];
+        const head = ['Name','Phone','Email','Learner','Standard','Score','Total','Finished','Attempts','Bought','First seen'];
+        const rows = all.map(l => [
+          l.name, l.phone, l.email, l.learner_name, l.standard,
+          l.score, l.total, l.finished ? 'yes' : 'no', l.attempts,
+          l.has_bought ? 'yes' : 'no', l.created_at
+        ].map(v => '"' + String(v == null ? '' : v).replace(/"/g,'""') + '"').join(','));
+        try{
+          const blob = new Blob([[head.join(',')].concat(rows).join('\n')], {type:'text/csv'});
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'psle-free-sample-leads.csv';
+          a.click();
+          this.setState({notice:'Exported ' + all.length + ' leads'});
+        }catch(e){}
+      },
 
       openToolkit: () => this.openAs(null),
 

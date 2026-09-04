@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Try 30 free PSLE questions — The PSLE Prep Toolkit</title>
+<meta name="description" content="Try thirty real PSLE practice questions free, with full explanations. All six subjects. No payment needed.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Plus Jakarta Sans',sans-serif;background:#0A1628;color:#fff;-webkit-text-size-adjust:100%;}
+*{box-sizing:border-box;}
+@keyframes pop{0%{transform:scale(.97);opacity:0}100%{transform:scale(1);opacity:1}}
+a{color:#00C6A7;text-decoration:none;}
+a:hover{color:#7BF3DE;}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:radial-gradient(circle at 50% 0%,#16305A 0%,#0A1628 55%);padding:0 0 60px">
+  <div style="max-width:680px;margin:0 auto;padding:22px 18px 0">
+
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:26px">
+      <a href="index.html" style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.02rem;color:#fff;line-height:1.2">PSLE Prep <span style="color:#00C6A7">Toolkit</span></a>
+      <a href="Get Access.dc.html" style="padding:9px 16px;border-radius:50px;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.18);font-weight:800;font-size:0.8rem;color:#fff;white-space:nowrap">Get full access</a>
+    </div>
+
+    <sc-if value="{{ isIntro }}" hint-placeholder-val="{{ true }}">
+      <div style="animation:pop .2s ease-out">
+        <div style="display:inline-block;background:rgba(0,198,167,0.16);border:1.5px solid rgba(0,198,167,0.4);color:#00C6A7;font-weight:800;font-size:0.68rem;letter-spacing:1.6px;text-transform:uppercase;padding:6px 14px;border-radius:50px;margin-bottom:16px">Free · nothing to pay</div>
+        <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(1.75rem,7vw,2.6rem);line-height:1.12;letter-spacing:-0.6px;margin:0 0 14px;text-wrap:pretty">Try 30 real PSLE questions, free</h1>
+        <p style="font-weight:600;font-size:clamp(0.96rem,3.6vw,1.06rem);color:rgba(255,255,255,0.72);line-height:1.7;margin:0 0 20px;text-wrap:pretty">Five questions from each of the six subjects, with a full explanation after every answer — exactly like the 2,000+ questions inside the toolkit. See the quality for yourself before you spend a thebe. Takes about fifteen minutes.</p>
+
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px">
+          <sc-for list="{{ subjectTags }}" as="s" hint-placeholder-count="6">
+            <span style="padding:8px 14px;border-radius:50px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.14);font-size:0.83rem;font-weight:700;color:rgba(255,255,255,0.8)">{{ s }}</span>
+          </sc-for>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.14);border-radius:18px;padding:clamp(20px,5vw,26px)">
+          <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.14rem;margin-bottom:6px">Where should we send your results?</div>
+          <div style="font-size:0.87rem;font-weight:600;color:rgba(255,255,255,0.55);line-height:1.6;margin-bottom:18px;text-wrap:pretty">Just so we know who you are — then straight into the questions. We will never share your details with anyone.</div>
+
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <sc-for list="{{ fields }}" as="f" hint-placeholder-count="4">
+              <div>
+                <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:7px">{{ f.label }}</div>
+                <input onChange="{{ f.onChange }}" value="{{ f.value }}" placeholder="{{ f.placeholder }}" style="width:100%;min-height:52px;padding:14px 16px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.16);background:rgba(10,22,40,0.7);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:1rem" style-focus="outline:none;border-color:#00C6A7">
+              </div>
+            </sc-for>
+
+            <div>
+              <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:8px">Which standard is your child in?</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <sc-for list="{{ stdPicks }}" as="s" hint-placeholder-count="3">
+                  <button onClick="{{ s.pick }}" style="min-height:46px;padding:11px 18px;border-radius:50px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.86rem;background:{{ s.bg }};color:{{ s.color }};border:{{ s.border }}">{{ s.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <sc-if value="{{ formError }}">
+            <div style="margin-top:15px;background:rgba(230,57,70,0.14);border:1.5px solid rgba(230,57,70,0.4);color:#FFB3B8;border-radius:11px;padding:12px 15px;font-size:0.86rem;font-weight:700;line-height:1.55">{{ formError }}</div>
+          </sc-if>
+
+          <button onClick="{{ begin }}" style="width:100%;margin-top:18px;padding:18px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(1rem,4vw,1.1rem);cursor:pointer;box-shadow:0 10px 32px rgba(0,198,167,0.35)">{{ beginLabel }}</button>
+          <div style="margin-top:13px;text-align:center;font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.38);line-height:1.6">No payment, no card, no app to install. See our <a href="Legal.dc.html" style="color:rgba(255,255,255,0.55)">privacy notice</a>.</div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isQuiz }}">
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px">
+          <div style="font-weight:800;font-size:0.84rem;color:rgba(255,255,255,0.7)">{{ header }}</div>
+          <div style="font-weight:800;font-size:0.84rem;color:#00C6A7;white-space:nowrap">{{ scoreLine }}</div>
+        </div>
+        <div style="height:7px;border-radius:50px;background:rgba(255,255,255,0.12);overflow:hidden;margin-bottom:20px">
+          <div style="height:100%;border-radius:50px;background:linear-gradient(90deg,#00C6A7,#38BDF8);transition:width .3s;width:{{ pct }}"></div>
+        </div>
+
+        <div style="background:#fff;border-radius:18px;padding:clamp(20px,5vw,30px);box-shadow:0 16px 44px rgba(0,0,0,0.28)">
+          <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:14px">
+            <span style="display:inline-block;background:#E0FAF5;color:#00806B;font-weight:800;font-size:0.66rem;letter-spacing:1.3px;text-transform:uppercase;padding:5px 12px;border-radius:50px">{{ qSubject }}</span>
+            <span style="display:inline-block;background:#FFF3E0;color:#B45309;font-weight:800;font-size:0.66rem;letter-spacing:1.3px;text-transform:uppercase;padding:5px 12px;border-radius:50px">{{ qLevel }}</span>
+          </div>
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.12rem,4.6vw,1.34rem);color:#0A1628;line-height:1.45;margin-bottom:20px;text-wrap:pretty">{{ qText }}</div>
+
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <sc-for list="{{ options }}" as="o" hint-placeholder-count="4">
+              <button onClick="{{ o.pick }}" style="display:flex;align-items:center;gap:13px;min-height:56px;padding:14px 16px;border-radius:13px;cursor:pointer;text-align:left;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:clamp(0.92rem,3.7vw,1rem);line-height:1.45;transition:all .15s;background:{{ o.bg }};border:{{ o.border }};color:{{ o.color }}">
+                <span style="width:30px;height:30px;flex-shrink:0;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:900;font-size:0.86rem;background:{{ o.tagBg }};color:{{ o.tagColor }}">{{ o.tag }}</span>
+                <span>{{ o.text }}</span>
+              </button>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ answered }}">
+            <div style="margin-top:20px;padding:17px 19px;border-radius:14px;animation:pop .2s ease-out;background:{{ fbBg }};border:{{ fbBorder }}">
+              <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1rem;margin-bottom:7px;color:{{ fbColor }}">{{ fbTitle }}</div>
+              <div style="font-size:clamp(0.9rem,3.6vw,0.95rem);font-weight:600;color:#374151;line-height:1.7;text-wrap:pretty">{{ explanation }}</div>
+              <button onClick="{{ next }}" style="width:100%;margin-top:16px;padding:15px;border-radius:50px;border:none;background:#0A1628;color:#00C6A7;font-family:'Syne',sans-serif;font-weight:900;font-size:0.96rem;cursor:pointer">{{ nextLabel }}</button>
+            </div>
+          </sc-if>
+        </div>
+
+        <div style="margin-top:16px;text-align:center;font-size:0.8rem;font-weight:600;color:rgba(255,255,255,0.35);line-height:1.6">{{ remainingLine }}</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isDone }}">
+      <div style="animation:pop .22s ease-out">
+        <div style="background:#fff;border-radius:20px;padding:clamp(24px,6vw,34px);text-align:center;box-shadow:0 16px 44px rgba(0,0,0,0.28);margin-bottom:18px">
+          <div style="font-size:2.8rem;margin-bottom:8px">{{ resultEmoji }}</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(1.3rem,5.5vw,1.7rem);color:#0A1628;margin-bottom:6px">{{ resultTitle }}</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(2.4rem,11vw,3.2rem);color:#00A88E;line-height:1;margin:14px 0">{{ resultScore }}</div>
+          <div style="font-weight:600;color:#5A6A7A;font-size:clamp(0.92rem,3.7vw,0.98rem);line-height:1.7;text-wrap:pretty">{{ resultLine }}</div>
+
+          <div style="margin-top:20px;padding-top:18px;border-top:1px solid #EEF2F8">
+            <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:#5A6A7A;margin-bottom:12px">How your child did by subject</div>
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <sc-for list="{{ breakdown }}" as="b" hint-placeholder-count="6">
+                <div style="display:flex;align-items:center;gap:11px">
+                  <span style="min-width:118px;text-align:left;font-size:0.85rem;font-weight:700;color:#0A1628">{{ b.name }}</span>
+                  <span style="flex:1;height:8px;border-radius:50px;background:#EEF2F8;overflow:hidden;display:block"><span style="display:block;height:100%;border-radius:50px;background:{{ b.colour }};width:{{ b.pct }}"></span></span>
+                  <span style="min-width:42px;text-align:right;font-size:0.82rem;font-weight:800;color:#5A6A7A">{{ b.label }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <sc-if value="{{ weakestLine }}">
+              <div style="margin-top:14px;background:#FFF8F0;border:1px solid #FFE0B2;border-radius:11px;padding:13px 15px;font-size:0.87rem;font-weight:700;color:#7C4A03;line-height:1.6;text-wrap:pretty">{{ weakestLine }}</div>
+            </sc-if>
+          </div>
+        </div>
+
+        <div style="background:linear-gradient(135deg,rgba(0,198,167,0.14),rgba(56,189,248,0.1));border:1.5px solid rgba(0,198,167,0.4);border-radius:20px;padding:clamp(22px,5.5vw,30px)">
+          <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(1.2rem,5vw,1.5rem);line-height:1.2;margin-bottom:12px;text-wrap:pretty">That was 30 questions. There are <span style="color:#00C6A7">2,029</span> more.</div>
+          <div style="font-weight:600;font-size:clamp(0.92rem,3.7vw,1rem);color:rgba(255,255,255,0.75);line-height:1.7;margin-bottom:20px;text-wrap:pretty">Every one has an explanation like the ones you just read, organised topic by topic so your child can work through a whole chapter. Plus a study timer, exam tips, daily checklists, a composition planner with feedback, a spelling game, study posters and progress tracking.</div>
+
+          <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:22px">
+            <sc-for list="{{ plans }}" as="p" hint-placeholder-count="3">
+              <div style="display:flex;align-items:center;gap:13px;padding:14px 16px;border-radius:13px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14)">
+                <span style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.16rem;color:#00C6A7;min-width:62px">P{{ p.price }}</span>
+                <span style="flex:1;font-size:0.9rem;font-weight:700;color:rgba(255,255,255,0.86);line-height:1.5">{{ p.name }}</span>
+              </div>
+            </sc-for>
+          </div>
+
+          <a href="Get Access.dc.html" style="display:block;width:100%;padding:18px;border-radius:50px;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(1rem,4vw,1.1rem);text-align:center;box-shadow:0 10px 32px rgba(0,198,167,0.35)">Unlock the full toolkit →</a>
+          <a href="{{ waLink }}" target="_blank" style="display:block;width:100%;margin-top:10px;padding:15px;border-radius:50px;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.2);color:#fff;font-family:'Syne',sans-serif;font-weight:900;font-size:0.94rem;text-align:center">💬 Ask me a question first</a>
+          <div style="margin-top:16px;text-align:center;font-size:0.82rem;font-weight:600;color:rgba(255,255,255,0.45);line-height:1.65">{{ daysLine }}</div>
+        </div>
+
+        <button onClick="{{ restart }}" style="width:100%;margin-top:14px;padding:13px;border-radius:50px;background:none;border:1.5px solid rgba(255,255,255,0.16);color:rgba(255,255,255,0.55);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.86rem;cursor:pointer">Try the 30 questions again</button>
+      </div>
+    </sc-if>
+
+    <div style="margin-top:28px;text-align:center;font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.32);line-height:1.7;text-wrap:pretty">
+      An independent study resource — not affiliated with or endorsed by BEC or the Ministry of Education.<br>
+      <a href="Legal.dc.html" style="color:rgba(255,255,255,0.45)">Disclaimer &amp; privacy</a> · <a href="index.html" style="color:rgba(255,255,255,0.45)">Home</a>
+    </div>
+
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:900}}">
+// A fixed, curated sample — five questions from each of the six subjects.
+// Deliberately self-contained: it shares no storage and no code path with
+// the paid toolkit, so it can never be used as a way in.
+const SAMPLE = [
+  // ── Maths ──
+  {s:'Maths', l:'Easy', q:'What is 3/4 of 240?', o:['160','180','200','120'], a:1,
+   e:'Divide 240 by 4 to get 60, then multiply by 3: 60 × 3 = 180.'},
+  {s:'Maths', l:'Medium', q:'What is 25% of P640?', o:['P160','P150','P170','P180'], a:0,
+   e:'25% is the same as one quarter. 640 ÷ 4 = 160.'},
+  {s:'Maths', l:'Medium', q:'The perimeter of a square is 36 cm. What is its area?', o:['81 cm²','36 cm²','72 cm²','144 cm²'], a:0,
+   e:'Each side is 36 ÷ 4 = 9 cm. Area = 9 × 9 = 81 cm².'},
+  {s:'Maths', l:'Hard', q:'Neo scored 18 out of 25. What is her percentage?', o:['68%','72%','75%','78%'], a:1,
+   e:'18/25 = 72/100, because 25 × 4 = 100 and 18 × 4 = 72. So 72%. That shortcut beats long division.'},
+  {s:'Maths', l:'Hard', q:'A tank holds 4.5 litres. How many 250 ml cups can be filled?', o:['15','18','20','22'], a:1,
+   e:'4.5 litres = 4 500 ml. 4 500 ÷ 250 = 18 cups. Always convert to the same unit first.'},
+
+  // ── English ──
+  {s:'English', l:'Easy', q:'What is the plural of "child"?', o:['childs','childes','children','childrens'], a:2,
+   e:'"Child" is an irregular noun — the plural is "children", never "childrens".'},
+  {s:'English', l:'Medium', q:'Which word is an adverb? "She answered the question carefully."', o:['She','answered','question','carefully'], a:3,
+   e:'"Carefully" describes how she answered, so it is an adverb. Adverbs often end in -ly.'},
+  {s:'English', l:'Medium', q:'What does the idiom "to pull someone\'s leg" mean?', o:['To hurt them','To joke with them','To help them','To race them'], a:1,
+   e:'It means to tease or joke with someone. Idioms never mean what the words literally say.'},
+  {s:'English', l:'Hard', q:'Change to reported speech: He said, "I am tired."', o:['He said he is tired.','He said he was tired.','He says he was tired.','He said I was tired.'], a:1,
+   e:'In reported speech the present tense "am" moves back to the past tense "was".'},
+  {s:'English', l:'Hard', q:'Choose the correct comparison: This paper was ____ than the last one.', o:['more easy','easyer','easier','most easy'], a:2,
+   e:'Short adjectives add -er. "Easy" drops the y and becomes "easier" — never "more easy".'},
+
+  // ── Setswana ──
+  {s:'Setswana', l:'Easy', q:'Tlhopha leina la bontsi la "ngwana".', o:['bangwana','bana','ngwanana','bongwana'], a:1,
+   e:'Leina "ngwana" mo bontsing ke "bana".'},
+  {s:'Setswana', l:'Easy', q:'Setswana sa "school" ke eng?', o:['sekolo','setlhare','setswalo','sediba'], a:0,
+   e:'"School" ke "sekolo" mo Setswaneng.'},
+  {s:'Setswana', l:'Medium', q:'Seane "Mmangwana o tshwara thipa ka fa bogaleng" se raya eng?', o:['Mmè o rata dilwana','Mmè o itshokela ngwana wa gagwe','Ngwana o tshaba thipa','Mmè o tshaba ngwana'], a:1,
+   e:'Se supa gore mmè o ka itshokela dipogisego dingwe le dingwe go thusa ngwana wa gagwe.'},
+  {s:'Setswana', l:'Medium', q:'Tlhopha lediri mo polelong: "Kgosi o bua le batho."', o:['Kgosi','bua','batho','le'], a:1,
+   e:'"Bua" ke lediri ka gonne e supa tiro.'},
+  {s:'Setswana', l:'Hard', q:'Bontsi jwa "lekgetlo" ke eng?', o:['makgetlo','dikgetlo','bokgetlo','lekgetlong'], a:0,
+   e:'Maina a a simolola ka "le-" mo bontsing a simolola ka "ma-": lekgetlo → makgetlo.'},
+
+  // ── Science ──
+  {s:'Science', l:'Easy', q:'Which part of a plant takes in water from the soil?', o:['Leaf','Stem','Root','Flower'], a:2,
+   e:'Roots absorb water and dissolved minerals from the soil, then the stem carries them up.'},
+  {s:'Science', l:'Easy', q:'What are the three states of matter?', o:['Solid, liquid, gas','Hot, cold, warm','Hard, soft, wet','Big, small, medium'], a:0,
+   e:'Matter exists as a solid, a liquid or a gas. Heating and cooling change it from one to another.'},
+  {s:'Science', l:'Medium', q:'What happens to water during evaporation?', o:['Liquid becomes gas','Gas becomes liquid','Liquid becomes solid','Solid becomes gas'], a:0,
+   e:'Heat turns liquid water into water vapour, a gas. That is the first stage of the water cycle.'},
+  {s:'Science', l:'Medium', q:'Which material is a good conductor of electricity?', o:['Rubber','Copper','Plastic','Wood'], a:1,
+   e:'Metals like copper conduct electricity, which is why wires are made of copper. Rubber and plastic are insulators.'},
+  {s:'Science', l:'Hard', q:'A complete circuit must have a source, wires and a…', o:['switch only','load such as a bulb','magnet','battery holder'], a:1,
+   e:'Current needs a complete path through a load — a bulb, motor or buzzer — for the circuit to do useful work.'},
+
+  // ── Social Studies ──
+  {s:'Social Studies', l:'Easy', q:'In which year did Botswana gain independence?', o:['1956','1960','1966','1976'], a:2,
+   e:'Botswana became independent on 30 September 1966, with Sir Seretse Khama as the first President.'},
+  {s:'Social Studies', l:'Easy', q:'What is the capital city of Botswana?', o:['Francistown','Gaborone','Maun','Serowe'], a:1,
+   e:'Gaborone became the capital in 1966, when Botswana gained independence.'},
+  {s:'Social Studies', l:'Medium', q:'Which desert covers a large part of Botswana?', o:['Sahara','Namib','Kalahari','Karoo'], a:2,
+   e:'The Kalahari (Kgalagadi) covers roughly two thirds of the country.'},
+  {s:'Social Studies', l:'Medium', q:'What is a kgotla used for?', o:['Farming','Community meetings and disputes','Storing grain','Trading cattle'], a:1,
+   e:'The kgotla is the traditional meeting place where the community discusses matters and settles disputes, led by the kgosi.'},
+  {s:'Social Studies', l:'Hard', q:'Which country does NOT share a border with Botswana?', o:['Namibia','Zimbabwe','Zambia','Angola'], a:3,
+   e:'Botswana borders Namibia, Zimbabwe, South Africa and Zambia. Angola lies further north.'},
+
+  // ── Agriculture ──
+  {s:'Agriculture', l:'Easy', q:'Which soil type holds the most water?', o:['Sandy soil','Clay soil','Gravel','Loam'], a:1,
+   e:'Clay has very small particles packed tightly together, so it holds water. Sandy soil drains fast.'},
+  {s:'Agriculture', l:'Easy', q:'What is the main purpose of irrigation?', o:['To kill pests','To supply water to crops','To plough the land','To sell crops'], a:1,
+   e:'Irrigation supplies water to crops when rainfall is not enough — important in a dry country like Botswana.'},
+  {s:'Agriculture', l:'Medium', q:'Why do farmers practise crop rotation?', o:['To keep the soil fertile','To make fields look neat','To use fewer seeds','To grow taller plants'], a:0,
+   e:'Different crops use different nutrients, so rotating them keeps the soil fertile and breaks the pest cycle.'},
+  {s:'Agriculture', l:'Medium', q:'Which of these is an indigenous Botswana cattle breed?', o:['Tswana','Jersey','Friesian','Angus'], a:0,
+   e:'The Tswana breed is indigenous and well suited to hot, dry conditions.'},
+  {s:'Agriculture', l:'Hard', q:'Which practice best reduces soil erosion on a slope?', o:['Ploughing up and down the slope','Contour ploughing','Removing all grass','Burning the field'], a:1,
+   e:'Contour ploughing follows the shape of the land, slowing water so it cannot wash the soil away.'}
+];
+
+const PLANS = [
+  {price:75,  name:'One subject — pick your weakest'},
+  {price:160, name:'Any three subjects'},
+  {price:300, name:'All six subjects + every module'}
+];
+
+const SUBJECT_ORDER = ['Maths','English','Setswana','Science','Social Studies','Agriculture'];
+
+// Formspree email alerts — switched off; leads go to Supabase instead,
+// which has no monthly submission limit. Put the endpoint back here to
+// re-enable it alongside the database.
+const FORMSPREE = '';
+
+// Fire-and-forget: a parent must never be blocked from the questions
+// because an alert failed to send.
+function notifyFormspree(payload){
+  if(!FORMSPREE) return;
+  try{
+    fetch(FORMSPREE, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'Accept':'application/json' },
+      body: JSON.stringify(payload)
+    }).catch(() => {});
+  }catch(e){}
+}
+
+class Component extends DCLogic {
+  state = {
+    stage:'intro', i:0, selected:null, correct:0, marks:{},
+    name:'', phone:'', email:'', learner:'', std:'Standard 7',
+    formError:'', saving:false, leadId:null
+  };
+
+  async db(){
+    if(!this._db){ try{ this._db = await import('./db.js'); }catch(e){ this._db = null; } }
+    return this._db;
+  }
+
+  async start(){
+    const st = this.state;
+    if(st.name.trim().length < 2) return this.setState({formError:'Please enter your name.'});
+    const digits = st.phone.replace(/[^0-9]/g,'');
+    if(digits.length < 7) return this.setState({formError:'Please enter a WhatsApp number we can reach you on.'});
+    if(st.email.trim() && st.email.indexOf('@') < 0) return this.setState({formError:'That email address does not look right. You can leave it blank.'});
+
+    this.setState({saving:true, formError:''});
+
+    // Email alert to you, with everything needed to follow up.
+    notifyFormspree({
+      _subject: 'Free sample started — ' + st.name.trim() + ' (' + st.std + ')',
+      name: st.name.trim(),
+      whatsapp: digits,
+      email: st.email.trim() || 'not given',
+      learner: st.learner.trim() || 'not given',
+      standard: st.std,
+      source: 'Free sample — 30 questions',
+      started_at: new Date().toLocaleString('en-GB'),
+      follow_up: 'https://wa.me/267' + digits.replace(/^267/, '')
+    });
+
+    const db = await this.db();
+    let leadId = null;
+    if(db && db.captureLead){
+      try{
+        const res = await db.captureLead(st.name.trim(), digits, st.email.trim(), st.learner.trim(), st.std);
+        leadId = res && res.id ? res.id : null;
+      }catch(e){
+        // Never block a parent from trying the questions because a save failed.
+        console.warn('[sample] lead not saved:', e.message);
+      }
+    }
+    this.setState({saving:false, leadId, stage:'quiz', i:0, selected:null, correct:0, marks:{}});
+  }
+
+  async finish(){
+    this.setState({stage:'done'});
+    const db = await this.db();
+    if(db && db.recordSampleScore && this.state.leadId){
+      try{ await db.recordSampleScore(this.state.leadId, this.state.correct, SAMPLE.length); }catch(e){}
+    }
+  }
+
+  daysToExam(){
+    const diff = Math.ceil((new Date('2026-10-05') - new Date()) / 86400000);
+    return diff > 0 ? diff : 0;
+  }
+
+  renderVals(){
+    const st = this.state;
+    const teal = '#00C6A7';
+    const q = SAMPLE[st.i];
+    const answered = st.selected !== null;
+    const isRight = answered && st.selected === q.a;
+    const last = st.i + 1 >= SAMPLE.length;
+    const days = this.daysToExam();
+    const left = SAMPLE.length - st.i - 1;
+
+    const field = (key, label, placeholder) => ({
+      label, placeholder, value: st[key],
+      onChange: (e) => { const p = {}; p[key] = e.target.value; p.formError = ''; this.setState(p); }
+    });
+
+    const pill = (on) => ({
+      bg: on ? teal : 'rgba(255,255,255,0.07)',
+      color: on ? '#0A1628' : 'rgba(255,255,255,0.72)',
+      border: on ? '1.5px solid ' + teal : '1.5px solid rgba(255,255,255,0.16)'
+    });
+
+    // Per-subject breakdown for the results screen.
+    const breakdown = SUBJECT_ORDER.map(name => {
+      const total = SAMPLE.filter(x => x.s === name).length;
+      const got = (st.marks[name] || 0);
+      const pct = total ? Math.round(got / total * 100) : 0;
+      return {
+        name, label: got + '/' + total, pct: pct + '%',
+        colour: pct >= 80 ? '#00C6A7' : pct >= 50 ? '#38BDF8' : '#F5C77E',
+        score: pct
+      };
+    });
+    const weakest = breakdown.slice().sort((a, b) => a.score - b.score)[0];
+
+    return {
+      isIntro: st.stage === 'intro',
+      isQuiz:  st.stage === 'quiz',
+      isDone:  st.stage === 'done',
+
+      subjectTags: ['🔢 Maths','📖 English','🌍 Setswana','🔬 Science','🏛️ Social Studies','🌱 Agriculture'],
+      fields: [
+        field('name', 'Your name', 'e.g. Kelebogile'),
+        field('phone', 'WhatsApp number', 'e.g. 71234567'),
+        field('email', 'Email (optional)', 'e.g. you@gmail.com'),
+        field('learner', "Your child's first name (optional)", 'e.g. Neo')
+      ],
+      stdPicks: ['Standard 7','Standard 6','Standard 5'].map(s =>
+        Object.assign({label:s, pick: () => this.setState({std:s, formError:''})}, pill(st.std === s))),
+      formError: st.formError,
+      beginLabel: st.saving ? 'One moment…' : 'Start the 30 questions →',
+      begin: () => this.start(),
+
+      header: 'Question ' + (st.i + 1) + ' of ' + SAMPLE.length,
+      scoreLine: st.correct + ' correct',
+      pct: Math.round(st.i / SAMPLE.length * 100) + '%',
+      qSubject: q.s,
+      qLevel: q.l,
+      qText: q.q,
+      remainingLine: left > 0
+        ? left + (left === 1 ? ' question left' : ' questions left') + ' · your answers are not saved anywhere'
+        : 'Last question',
+
+      options: q.o.map((t, k) => {
+        const right = k === q.a, chosen = k === st.selected;
+        let bg = '#fff', border = '1.5px solid #E5EAF0', color = '#111827',
+            tagBg = '#EEF2F8', tagColor = '#5A6A7A';
+        if(answered && right){ bg = '#E0FAF5'; border = '2px solid ' + teal; tagBg = teal; tagColor = '#0A1628'; }
+        else if(answered && chosen){ bg = '#FEF2F2'; border = '2px solid #E63946'; tagBg = '#E63946'; tagColor = '#fff'; }
+        else if(answered){ color = '#9AA5B1'; }
+        return {
+          text:t, tag:'ABCD'[k], bg, border, color, tagBg, tagColor,
+          pick: () => {
+            if(this.state.selected !== null) return;
+            const ok = k === q.a;
+            const marks = Object.assign({}, this.state.marks);
+            if(ok) marks[q.s] = (marks[q.s] || 0) + 1;
+            this.setState({selected:k, correct:this.state.correct + (ok ? 1 : 0), marks});
+          }
+        };
+      }),
+
+      answered,
+      fbBg: isRight ? '#E0FAF5' : '#FEF2F2',
+      fbBorder: isRight ? '1.5px solid rgba(0,198,167,0.5)' : '1.5px solid rgba(230,57,70,0.35)',
+      fbColor: isRight ? '#00806B' : '#B91C1C',
+      fbTitle: isRight ? '✓ Correct — well done!' : '✗ Not quite. Here is why:',
+      explanation: q.e,
+      nextLabel: last ? 'See my results →' : 'Next question →',
+      next: () => {
+        if(last) this.finish();
+        else this.setState({i:this.state.i + 1, selected:null});
+      },
+
+      resultEmoji: st.correct >= 24 ? '🌟' : st.correct >= 15 ? '👍' : '💪',
+      resultTitle: st.correct >= 24 ? 'Excellent work!' : st.correct >= 15 ? 'A solid start' : 'Plenty to work on',
+      resultScore: st.correct + ' / ' + SAMPLE.length,
+      resultLine: st.correct >= 24
+        ? 'That is a strong result across all six subjects. The full toolkit will stretch your child on the harder topics.'
+        : st.correct >= 15
+        ? 'A fair result across six subjects. The gaps you just saw are exactly what practice fixes — and every question explains itself.'
+        : 'Do not be discouraged: these came from six different subjects at three difficulty levels. This is precisely why practice with explanations matters before October.',
+      breakdown,
+      weakestLine: weakest && weakest.score < 100
+        ? 'Weakest subject: ' + weakest.name + ' (' + weakest.label + '). If you start with one subject at P75, start there.'
+        : '',
+      restart: () => this.setState({stage:'quiz', i:0, selected:null, correct:0, marks:{}}),
+
+      plans: PLANS,
+      daysLine: days
+        ? days + ' days until the PSLE · access until 31 October 2026'
+        : 'Access until 31 October 2026',
+      waLink: 'https://wa.me/26774310425?text=' + encodeURIComponent(
+        'Hi! I am ' + (st.name.trim() || 'a parent') + '. I have just done the 30 free questions on psletoolkit.com'
+        + (st.stage === 'done' ? ' and scored ' + st.correct + '/' + SAMPLE.length : '')
+        + '. I would like to know more.'
+      )
+    };
+  }
+}
+
+</script>
+</body>
+</html>
