@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Plus Jakarta Sans',sans-serif;background:#F5F7FA;color:#111827;}
+*{box-sizing:border-box;}
+a{color:#00A88E;text-decoration:none;}
+a:hover{color:#00806B;text-decoration:underline;}
+</style>
+</helmet>
+
+<div style="min-height:100vh">
+
+  <nav style="position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 26px;background:rgba(10,22,40,0.94);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.09)">
+    <a href="index.html" style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.02rem;color:#fff">PSLE Prep <span style="color:#00C6A7">Toolkit</span></a>
+    <a href="index.html" style="font-size:0.84rem;font-weight:700;color:rgba(255,255,255,0.6)">← Back to the website</a>
+  </nav>
+
+  <div style="max-width:800px;margin:0 auto;padding:38px 24px 80px">
+
+    <div style="display:inline-block;background:#E0FAF5;color:#00A88E;font-weight:800;font-size:0.68rem;letter-spacing:1.8px;text-transform:uppercase;padding:5px 13px;border-radius:50px;margin-bottom:13px">Legal</div>
+    <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(1.7rem,5vw,2.3rem);color:#0A1628;letter-spacing:-0.6px;line-height:1.15;margin:0 0 10px">Disclaimer, Privacy &amp; Data Protection</h1>
+    <p style="font-weight:600;color:#5A6A7A;font-size:0.96rem;line-height:1.7;margin:0 0 30px;max-width:620px;text-wrap:pretty">Written in plain language so parents can actually read it. Last updated {{ updated }}.</p>
+
+    <div style="background:#FFF8F0;border:1.5px solid #F5C77E;border-radius:16px;padding:26px;margin-bottom:22px">
+      <h2 style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.2rem;color:#7C4A03;margin:0 0 12px">Disclaimer</h2>
+      <p style="font-weight:600;color:#7C4A03;font-size:0.95rem;line-height:1.8;margin:0;text-wrap:pretty">The PSLE Prep Toolkit is an independent study resource and is not affiliated with, endorsed by, or connected to the Botswana Examinations Council (BEC) or the Ministry of Education and Skills Development. &ldquo;PSLE&rdquo; refers only to the exam this platform helps learners prepare for. Content is based on publicly available syllabus outlines and is meant to supplement, not replace, school teaching and official materials.</p>
+    </div>
+
+    <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:26px;margin-bottom:22px;box-shadow:0 6px 28px rgba(10,22,40,0.06)">
+      <h2 style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.2rem;color:#0A1628;margin:0 0 6px">No guarantee of results</h2>
+      <p style="font-weight:600;color:#374151;font-size:0.94rem;line-height:1.8;margin:0;text-wrap:pretty">Practising with this toolkit does not guarantee any particular exam result, grade or place at a secondary school. Our questions are written to reflect the style and level of the PSLE, but they are <strong>not</strong> past papers and they are not the questions your child will sit. Exam performance depends on many things beyond any study resource.</p>
+    </div>
+
+    <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:26px;margin-bottom:22px;box-shadow:0 6px 28px rgba(10,22,40,0.06)">
+      <h2 style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.2rem;color:#0A1628;margin:0 0 6px">About the content</h2>
+      <p style="font-weight:600;color:#374151;font-size:0.94rem;line-height:1.8;margin:0 0 12px;text-wrap:pretty">All questions and explanations are original material written for this toolkit, based on publicly available syllabus outlines for Standard 6 and 7. We do not reproduce copyrighted textbooks or examination papers.</p>
+      <p style="font-weight:600;color:#374151;font-size:0.94rem;line-height:1.8;margin:0 0 12px;text-wrap:pretty">We check our content carefully, but with over two thousand questions some errors are inevitable. The composition feedback tool judges structure, length and accuracy only — it cannot mark imagination or ideas, and it is not a substitute for a teacher reading your child's work.</p>
+      <p style="font-weight:600;color:#374151;font-size:0.94rem;line-height:1.8;margin:0;text-wrap:pretty">If you or your child's teacher spot a mistake, please tell us on WhatsApp <a href="https://wa.me/26774310425">74310425</a>. We correct errors as quickly as we can and we are grateful for them being pointed out.</p>
+    </div>
+
+    <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:26px;margin-bottom:22px;box-shadow:0 6px 28px rgba(10,22,40,0.06)">
+      <h2 style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.2rem;color:#0A1628;margin:0 0 14px">Privacy Notice</h2>
+
+      <h3 style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#0A1628;margin:0 0 8px">What we collect</h3>
+      <p style="font-weight:600;color:#374151;font-size:0.94rem;line-height:1.8;margin:0 0 10px">We deliberately collect as little as possible:</p>
+      <ul style="margin:0 0 18px;padding-left:20px;display:flex;flex-direction:column;gap:7px">
+        <sc-for list="{{ collected }}" as="c" hint-placeholder-count="5">
+          <li style="font-weight:600;color:#374151;font-size:0.93rem;line-height:1.7;text-wrap:pretty"><strong>{{ c.what }}</strong> — {{ c.why }}</li>
+        </sc-for>
+      </ul>
+
+      <h3 style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#0A1628;margin:0 0 8px">What we do not collect</h3>
+      <p style="font-weight:600;color:#374151;font-size:0.94rem;line-height:1.8;margin:0 0 18px;text-wrap:pretty">We do not ask for your child's date of birth, home address, identity number, school name or photograph. We do not ask for or store your card details, PIN or mobile money password — payments happen entirely through your own bank or mobile money service, never through this website. We do not use advertising trackers and we do not sell or share your information with anyone for marketing.</p>
+
+      <h3 style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#0A1628;margin:0 0 8px">Children's information</h3>
+      <p style="font-weight:600;color:#374151;font-size:0.94rem;line-height:1.8;margin:0 0 18px;text-wrap:pretty">Accounts are bought and controlled by a parent or guardian, not by the child. We ask only for a learner's first name and standard, so the app can greet them and keep their practice separate from a sibling's. A child never enters personal information into this toolkit, and their scores are never shown to other learners or ranked against them by name.</p>
+
+      <h3 style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#0A1628;margin:0 0 8px">Who can see it</h3>
+      <p style="font-weight:600;color:#374151;font-size:0.94rem;line-height:1.8;margin:0;text-wrap:pretty">Only the owner of The Bright Minds, in order to confirm payments and provide support. Access to our records requires a password and a second verification code. Passwords are stored in a scrambled (hashed) form that nobody — including us — can read.</p>
+    </div>
+
+    <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:26px;margin-bottom:22px;box-shadow:0 6px 28px rgba(10,22,40,0.06)">
+      <h2 style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.2rem;color:#0A1628;margin:0 0 14px">Data Protection</h2>
+
+      <h3 style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#0A1628;margin:0 0 8px">Where it is kept</h3>
+      <p style="font-weight:600;color:#374151;font-size:0.94rem;line-height:1.8;margin:0 0 18px;text-wrap:pretty">Your information is held in a secured database provided by Supabase, and the website is delivered over an encrypted (HTTPS) connection. Because these are international services, your information may be stored on servers outside Botswana. We keep it only as described here and never for advertising.</p>
+
+      <h3 style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#0A1628;margin:0 0 8px">How long we keep it</h3>
+      <p style="font-weight:600;color:#374151;font-size:0.94rem;line-height:1.8;margin:0 0 18px;text-wrap:pretty">Access records are kept while your access is valid and for a reasonable period afterwards, so that we can help if you return or query a payment. You may ask us to delete your details at any time.</p>
+
+      <h3 style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#0A1628;margin:0 0 8px">Your rights</h3>
+      <p style="font-weight:600;color:#374151;font-size:0.94rem;line-height:1.8;margin:0 0 10px">In line with Botswana's Data Protection Act, you may ask us to:</p>
+      <ul style="margin:0 0 18px;padding-left:20px;display:flex;flex-direction:column;gap:7px">
+        <sc-for list="{{ rights }}" as="r" hint-placeholder-count="4">
+          <li style="font-weight:600;color:#374151;font-size:0.93rem;line-height:1.7;text-wrap:pretty">{{ r }}</li>
+        </sc-for>
+      </ul>
+      <p style="font-weight:600;color:#374151;font-size:0.94rem;line-height:1.8;margin:0;text-wrap:pretty">To make any of these requests, WhatsApp <a href="https://wa.me/26774310425">74310425</a>. We will respond as soon as we reasonably can.</p>
+    </div>
+
+    <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:16px;padding:26px;margin-bottom:22px;box-shadow:0 6px 28px rgba(10,22,40,0.06)">
+      <h2 style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.2rem;color:#0A1628;margin:0 0 6px">Payments, access and refunds</h2>
+      <p style="font-weight:600;color:#374151;font-size:0.94rem;line-height:1.8;margin:0 0 12px;text-wrap:pretty">Access is confirmed by hand once we have seen your proof of payment, usually within a few hours. Nothing unlocks before then — including upgrades to extra subjects.</p>
+      <p style="font-weight:600;color:#374151;font-size:0.94rem;line-height:1.8;margin:0 0 12px;text-wrap:pretty">One access code is for one family and may be used on up to three devices. Sharing a code beyond your own household may result in it being switched off.</p>
+      <p style="font-weight:600;color:#374151;font-size:0.94rem;line-height:1.8;margin:0;text-wrap:pretty">If something goes wrong — a payment not recognised, access not working, or you are unhappy with what you received — message us on WhatsApp <a href="https://wa.me/26774310425">74310425</a> and we will put it right or discuss a refund.</p>
+    </div>
+
+    <div style="background:linear-gradient(135deg,#0A1628,#162C52);border-radius:16px;padding:26px;border:1.5px solid rgba(0,198,167,0.28)">
+      <h2 style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.2rem;color:#00C6A7;margin:0 0 10px">Who we are</h2>
+      <p style="font-weight:600;color:rgba(255,255,255,0.78);font-size:0.94rem;line-height:1.8;margin:0 0 14px;text-wrap:pretty">The PSLE Prep Toolkit is a product of <strong style="color:#fff">The Bright Minds</strong>, Botswana. For anything at all — questions, corrections, privacy requests or complaints — message us on WhatsApp <a href="https://wa.me/26774310425" style="color:#00C6A7">74310425</a>.</p>
+      <a href="index.html" style="display:inline-block;padding:13px 26px;border-radius:50px;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.92rem">← Back to the website</a>
+    </div>
+
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:900,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  renderVals(){
+    return {
+      updated: 'September 2026',
+      collected: [
+        {what:'Parent name and WhatsApp number', why:'so we can confirm your payment and reach you about your access'},
+        {what:'Parent email address and password', why:'so you can sign in; the password is stored scrambled, never in readable form'},
+        {what:'Learner first name and standard', why:'so the app can greet your child and keep their progress separate from a sibling\u2019s'},
+        {what:'Your payment reference', why:'so we can match your payment to your order'},
+        {what:'Practice progress \u2014 questions answered, scores, stars', why:'so your child does not lose their work when they change device'}
+      ],
+      rights: [
+        'Tell you what information we hold about you and your child',
+        'Correct anything that is wrong',
+        'Delete your account and your child\u2019s progress',
+        'Stop using your information, and explain why we hold what we do'
+      ]
+    };
+  }
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+doc-page:not(:defined){visibility:hidden}
+body{margin:0;font-family:'Plus Jakarta Sans',sans-serif;}
+*{box-sizing:border-box;}
+a{color:#00A88E;}
+a:hover{color:#00806B;}
+</style>
+<script src="./doc-page.js"></script>
+</helmet>
+
+<doc-page margin="0.6in">
+
+  <div style="border-bottom:3px solid #0A1628;padding-bottom:14px;margin-bottom:14px">
+    <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:19pt;color:#0A1628;line-height:1.15">Setswana — Tlhatlhobo ya Dipotso</div>
+    <div style="font-size:10pt;font-weight:700;color:#5A6A7A;margin-top:5px">Setswana question bank · review sheet for a Setswana teacher</div>
+    <div style="font-size:9.5pt;font-weight:600;color:#5A6A7A;margin-top:9px">{{ docSub }}</div>
+  </div>
+
+  <div style="background:#FFF8F0;border:1.5px solid #F5C77E;border-radius:6px;padding:13px 15px;margin-bottom:14px;break-inside:avoid">
+    <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:10.5pt;color:#7C4A03;margin-bottom:6px">Please read this first</div>
+    <div style="font-size:9.5pt;font-weight:600;color:#7C4A03;line-height:1.6">These questions were written by someone who is <strong>not</strong> a Setswana speaker, working from reference material. Please assume there are mistakes rather than looking for them. Wrong answers, clumsy phrasing, spelling that does not match what schools teach, and proverbs or idioms whose meaning is not quite right — all of it needs your eye. Standard 6 and 7 learners will study from this.</div>
+  </div>
+
+  <div style="background:#F5F7FA;border:1px solid #CBD5E1;border-radius:6px;padding:13px 15px;margin-bottom:16px;break-inside:avoid">
+    <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:10.5pt;color:#0A1628;margin-bottom:6px">Tsela ya go tlhatlhoba / How to mark</div>
+    <div style="font-size:9.5pt;font-weight:600;color:#374151;line-height:1.6">Karabo e e tshwailweng e bonwa ka ✓ mme e kwadilwe ka mokwalo o mokima. Bala potso, netefatsa gore ✓ e mo karabong e e siameng, mme o lebe gore tlhaloso e ruta sentle.<br><br>The marked answer is shown in bold with a ✓. Ring anything wrong and write the correction in the margin. <strong>Please note the question number</strong> (e.g. SET-042) — that is what we use to fix it. If the same mistake repeats across many questions, one note about the pattern is more useful than marking every one.</div>
+  </div>
+
+  <sc-for list="{{ groups }}" as="g" hint-placeholder-count="6">
+    <div style="break-inside:avoid;margin-top:18px;margin-bottom:8px;border-bottom:1.5px solid #00A88E;padding-bottom:5px">
+      <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:12pt;color:#00806B">{{ g.topic }}</div>
+      <div style="font-size:8.5pt;font-weight:700;color:#5A6A7A;margin-top:2px">{{ g.meta }}</div>
+    </div>
+    <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="6">
+      <div style="break-inside:avoid;margin-bottom:11px;padding-bottom:9px;border-bottom:1px dotted #CBD5E1">
+        <div style="display:flex;gap:9px;align-items:baseline">
+          <span style="font-family:'Syne',sans-serif;font-weight:900;font-size:9.5pt;color:#00A88E;min-width:40px">{{ it.num }}</span>
+          <span style="font-size:10.5pt;font-weight:700;color:#111827;line-height:1.45;flex:1">{{ it.q }}</span>
+          <span style="font-size:7.5pt;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;color:#5A6A7A;border:1px solid #CBD5E1;border-radius:20px;padding:2px 7px;white-space:nowrap">{{ it.level }}</span>
+        </div>
+        <div style="margin:5px 0 0 49px;display:flex;flex-direction:column;gap:2px">
+          <sc-for list="{{ it.opts }}" as="o" hint-placeholder-count="4">
+            <div style="font-size:9.5pt;line-height:1.4;color:{{ o.color }};font-weight:{{ o.weight }}">{{ o.text }}</div>
+          </sc-for>
+        </div>
+        <div style="margin:5px 0 0 49px;font-size:9pt;font-weight:600;color:#475569;line-height:1.45;font-style:italic">Tlhaloso: {{ it.exp }}</div>
+      </div>
+    </sc-for>
+  </sc-for>
+
+  <div style="margin-top:24px;padding-top:12px;border-top:2px solid #0A1628;break-inside:avoid">
+    <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:11pt;color:#0A1628;margin-bottom:8px">Kakaretso / Overall comments</div>
+    <div style="font-size:9.5pt;font-weight:600;color:#5A6A7A;line-height:1.6;margin-bottom:10px">Anything you noticed across the whole bank — spelling conventions, tone marks, level suitability for Standard 6 and 7, topics that are missing:</div>
+    <div style="border:1px solid #CBD5E1;border-radius:5px;height:110px"></div>
+    <div style="margin-top:12px;font-size:9pt;font-weight:700;color:#5A6A7A">Reviewed by: ________________________________  ·  Date: ______________  ·  School: ________________________________</div>
+    <div style="margin-top:14px;font-size:8.5pt;font-weight:700;color:#5A6A7A;line-height:1.5">{{ footerLine }} · Please return marked pages to The Bright Minds · WhatsApp 74310425</div>
+  </div>
+
+</doc-page>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+const PARTS = ['./bank-setswana.js','./bank-setswana-p2.js','./bank-setswana-p3.js','./bank-setswana-p4.js'];
+
+class Component extends DCLogic {
+  state = { rows:[], loading:true };
+
+  async componentDidMount(){
+    let rows = [];
+    for(const p of PARTS){
+      try{
+        const mod = await import(p);
+        (mod.default || []).forEach(r => rows.push({
+          q:r.q, opts:r.o || [], a:r.a, exp:r.e, level:r.l, topic:r.t, std:r.s
+        }));
+      }catch(e){}
+    }
+    this.setState({rows, loading:false});
+  }
+
+  renderVals(){
+    const st = this.state;
+
+    const byTopic = [];
+    const index = {};
+    st.rows.forEach((r, i) => {
+      const key = r.topic || 'Unsorted';
+      if(index[key] === undefined){ index[key] = byTopic.length; byTopic.push({topic:key, items:[], levels:{}}); }
+      const grp = byTopic[index[key]];
+      grp.levels[r.level || '—'] = (grp.levels[r.level || '—'] || 0) + 1;
+      grp.items.push({
+        num: 'SET-' + String(i + 1).padStart(3, '0'),
+        q: r.q || '(missing question text)',
+        level: r.level || '—',
+        exp: r.exp || '(no explanation — needs writing)',
+        opts: (r.opts || []).map((t, k) => ({
+          text: (k === r.a ? '✓  ' : '     ') + 'ABCD'[k] + '.  ' + t,
+          color: k === r.a ? '#00806B' : '#374151',
+          weight: k === r.a ? '800' : '500'
+        }))
+      });
+    });
+
+    const groups = byTopic.map(g => {
+      const lv = ['Easy','Medium','Hard'].map(l => g.levels[l] ? l + ' ' + g.levels[l] : null).filter(Boolean).join(' · ');
+      return {
+        topic: g.topic,
+        meta: g.items.length + ' dipotso' + (lv ? ' · ' + lv : ''),
+        items: g.items
+      };
+    });
+
+    const missing = st.rows.filter(r => !r.exp || !r.q || !(r.opts || []).length || r.a == null).length;
+
+    return {
+      groups,
+      docSub: st.loading
+        ? 'Loading…'
+        : st.rows.length + ' questions across ' + groups.length + ' topics · The PSLE Prep Toolkit · Standard 6 & 7',
+      footerLine: st.loading ? '' :
+        'Setswana bank: ' + st.rows.length + ' questions'
+        + (missing ? ' · ' + missing + ' have missing fields' : '')
+    };
+  }
+}
+
+</script>
+</body>
+</html>
