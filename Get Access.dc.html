@@ -31,9 +31,9 @@ input,textarea,select{max-width:100%;}
         <div style="margin-top:6px;font-size:0.7rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4)">Secure your child's access</div>
       </div>
       <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
-        <a href="Legal.dc.html" style="font-size:0.84rem;font-weight:700;color:rgba(255,255,255,0.55)">Privacy</a>
-        <a href="Sign In.dc.html" style="font-size:0.84rem;font-weight:700;color:rgba(255,255,255,0.55)">Already have access? Sign in</a>
-        <a href="index.html" style="font-size:0.84rem;font-weight:700;color:rgba(255,255,255,0.55)">← Website</a>
+        <a href="/legal" style="font-size:0.84rem;font-weight:700;color:rgba(255,255,255,0.55)">Privacy</a>
+        <a href="/signin" style="font-size:0.84rem;font-weight:700;color:rgba(255,255,255,0.55)">Already have access? Sign in</a>
+        <a href="/" style="font-size:0.84rem;font-weight:700;color:rgba(255,255,255,0.55)">← Website</a>
       </div>
     </div>
 
@@ -124,7 +124,7 @@ input,textarea,select{max-width:100%;}
           <sc-if value="{{ detailsError }}">
             <div style="background:rgba(230,57,70,0.14);border:1.5px solid rgba(230,57,70,0.4);color:#FFB3B8;border-radius:11px;padding:12px 15px;font-size:0.86rem;font-weight:700">{{ detailsError }}</div>
           </sc-if>
-          <div style="font-size:0.8rem;font-weight:600;color:rgba(255,255,255,0.45);line-height:1.65;text-wrap:pretty">We use these details only to confirm your payment, give you access and support you. We never sell or share them. See our <a href="Legal.dc.html" style="color:#00C6A7;font-weight:800">Privacy Notice</a>.</div>
+          <div style="font-size:0.8rem;font-weight:600;color:rgba(255,255,255,0.45);line-height:1.65;text-wrap:pretty">We use these details only to confirm your payment, give you access and support you. We never sell or share them. See our <a href="/legal" style="color:#00C6A7;font-weight:800">Privacy Notice</a>.</div>
           <div style="display:flex;gap:11px;margin-top:4px">
             <button onClick="{{ backFromDetails }}" style="padding:14px 22px;border-radius:50px;background:none;border:1.5px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.75);font-family:'Syne',sans-serif;font-weight:900;font-size:0.92rem;cursor:pointer" style-hover="border-color:#00C6A7;color:#fff">Back</button>
             <button onClick="{{ toPayment }}" style="flex:1;padding:14px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.98rem;cursor:pointer;box-shadow:0 8px 26px rgba(0,198,167,0.3)">Continue to payment →</button>
@@ -219,7 +219,7 @@ input,textarea,select{max-width:100%;}
         </div>
 
         <div style="display:flex;gap:11px;justify-content:center;flex-wrap:wrap">
-          <a href="Sign In.dc.html" style="padding:15px 32px;border-radius:50px;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.98rem;box-shadow:0 8px 26px rgba(0,198,167,0.3)">Sign in and start →</a>
+          <a href="/signin" style="padding:15px 32px;border-radius:50px;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.98rem;box-shadow:0 8px 26px rgba(0,198,167,0.3)">Sign in and start →</a>
           <button onClick="{{ startOver }}" style="padding:15px 26px;border-radius:50px;background:none;border:1.5px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.75);font-family:'Syne',sans-serif;font-weight:900;font-size:0.98rem;cursor:pointer" style-hover="border-color:#00C6A7;color:#fff">Add another child</button>
         </div>
       </div>

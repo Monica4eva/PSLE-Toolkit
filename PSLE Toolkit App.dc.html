@@ -64,8 +64,8 @@ img,textarea,input{max-width:100%;}
         <button onClick="{{ submitCode }}" style="width:100%;margin-top:16px;padding:15px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:1rem;cursor:pointer;box-shadow:0 8px 26px rgba(0,198,167,0.3)">Unlock my toolkit →</button>
       </div>
       <div style="margin-top:20px;text-align:center;font-size:0.86rem;font-weight:600;color:rgba(255,255,255,0.45);line-height:1.8">
-        Signing in with an email instead? <a href="Sign In.dc.html" style="color:#00C6A7;font-weight:800">Use the sign-in page</a><br>
-        No code yet? <a href="Get Access.dc.html" style="color:#00C6A7;font-weight:800">Get access here</a><br>
+        Signing in with an email instead? <a href="/signin" style="color:#00C6A7;font-weight:800">Use the sign-in page</a><br>
+        No code yet? <a href="/get-access" style="color:#00C6A7;font-weight:800">Get access here</a><br>
         Lost your code? WhatsApp <a href="https://wa.me/26774310425" style="color:#00C6A7;font-weight:800">74310425</a>
       </div>
     </div>
@@ -77,7 +77,7 @@ img,textarea,input{max-width:100%;}
 
   <aside data-side style="width:262px;flex-shrink:0;background:#0A1628;padding:26px 18px 30px;display:flex;flex-direction:column;gap:26px;position:sticky;top:0;height:100vh;overflow-y:auto">
     <div data-brand>
-      <a href="index.html" title="Back to the website" style="display:block;font-family:'Syne',sans-serif;font-weight:900;font-size:1.12rem;color:#fff;line-height:1.2;text-decoration:none" style-hover="color:#00C6A7">PSLE Prep<br><span style="color:#00C6A7">Toolkit</span></a>
+      <a href="/" title="Back to the website" style="display:block;font-family:'Syne',sans-serif;font-weight:900;font-size:1.12rem;color:#fff;line-height:1.2;text-decoration:none" style-hover="color:#00C6A7">PSLE Prep<br><span style="color:#00C6A7">Toolkit</span></a>
       <div data-brand-sub style="margin-top:10px;font-size:0.7rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,0.38)">Standard 6 &amp; 7 · Botswana</div>
     </div>
 
@@ -99,7 +99,7 @@ img,textarea,input{max-width:100%;}
     </div>
 
     <div data-exits style="display:flex;flex-direction:column;gap:7px">
-      <a href="index.html" style="display:flex;align-items:center;gap:9px;padding:10px 13px;border-radius:11px;border:1.5px solid rgba(255,255,255,0.12);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.82rem;color:rgba(255,255,255,0.5)" style-hover="border-color:rgba(255,255,255,0.3);color:rgba(255,255,255,0.85)">
+      <a href="/" style="display:flex;align-items:center;gap:9px;padding:10px 13px;border-radius:11px;border:1.5px solid rgba(255,255,255,0.12);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.82rem;color:rgba(255,255,255,0.5)" style-hover="border-color:rgba(255,255,255,0.3);color:rgba(255,255,255,0.85)">
         <span>🏠</span><span>Back to website</span>
       </a>
       <button onClick="{{ lockApp }}" style="display:flex;align-items:center;gap:9px;width:100%;padding:10px 13px;border-radius:11px;background:none;border:1.5px solid rgba(255,255,255,0.12);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.82rem;color:rgba(255,255,255,0.5)" style-hover="border-color:rgba(255,255,255,0.3);color:rgba(255,255,255,0.8)">
@@ -116,7 +116,7 @@ img,textarea,input{max-width:100%;}
       <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:#0A1628;border:1.5px solid rgba(0,198,167,0.35);border-radius:14px;padding:13px 18px;margin-bottom:22px">
         <span style="font-size:1.05rem">👁</span>
         <span style="flex:1;min-width:200px;font-size:0.86rem;font-weight:700;color:#00C6A7">{{ previewLabel }}</span>
-        <a href="Admin.dc.html" style="padding:9px 18px;border-radius:50px;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);color:#fff;font-family:'Syne',sans-serif;font-weight:900;font-size:0.8rem">← Back to admin</a>
+        <a href="/admin" style="padding:9px 18px;border-radius:50px;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);color:#fff;font-family:'Syne',sans-serif;font-weight:900;font-size:0.8rem">← Back to admin</a>
       </div>
     </sc-if>
 
@@ -814,7 +814,7 @@ img,textarea,input{max-width:100%;}
           <span style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.2rem;color:#00C6A7;line-height:1">{{ daysLeft }}</span>
           <span style="font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.55)">days left</span>
         </div>
-        <a href="index.html" style="padding:8px 13px;border-radius:50px;border:1.5px solid rgba(255,255,255,0.18);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.76rem;color:rgba(255,255,255,0.6);white-space:nowrap">🏠 Website</a>
+        <a href="/" style="padding:8px 13px;border-radius:50px;border:1.5px solid rgba(255,255,255,0.18);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.76rem;color:rgba(255,255,255,0.6);white-space:nowrap">🏠 Website</a>
         <button onClick="{{ lockApp }}" style="padding:8px 13px;border-radius:50px;background:none;border:1.5px solid rgba(255,255,255,0.18);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.76rem;color:rgba(255,255,255,0.6);white-space:nowrap">🔒 Sign out</button>
       </div>
     </div>

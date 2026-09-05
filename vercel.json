@@ -1,0 +1,19 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/free",        "destination": "/Free Sample.dc.html" },
+    { "source": "/sample",      "destination": "/Free Sample.dc.html" },
+    { "source": "/try",         "destination": "/Free Sample.dc.html" },
+    { "source": "/signin",      "destination": "/Sign In.dc.html" },
+    { "source": "/login",       "destination": "/Sign In.dc.html" },
+    { "source": "/get-access",  "destination": "/Get Access.dc.html" },
+    { "source": "/buy",         "destination": "/Get Access.dc.html" },
+    { "source": "/toolkit",     "destination": "/PSLE Toolkit App.dc.html" },
+    { "source": "/app",         "destination": "/PSLE Toolkit App.dc.html" },
+    { "source": "/admin",       "destination": "/Admin.dc.html" },
+    { "source": "/legal",       "destination": "/Legal.dc.html" },
+    { "source": "/privacy",     "destination": "/Legal.dc.html" },
+    { "source": "/disclaimer",  "destination": "/Legal.dc.html" }
+  ]
+}
