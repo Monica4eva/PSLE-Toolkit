@@ -431,13 +431,15 @@ const SUBJECTS = [
   {id:'setswana', name:'Setswana', emoji:'🌍'},
   {id:'social', name:'Social Studies', emoji:'🏛️'},
   {id:'science', name:'Science', emoji:'🔬'},
-  {id:'agric', name:'Agriculture', emoji:'🌱'}
+  {id:'agric', name:'Agriculture', emoji:'🌱'},
+  {id:'moral', name:'Moral Education', emoji:'🤝'},
+  {id:'religious', name:'Religious Studies', emoji:'🕊️'}
 ];
 
 const PLANS = [
   {id:'single', name:'Single Subject', price:75, quota:1},
   {id:'bundle', name:'3-Subject Bundle', price:160, quota:3},
-  {id:'full', name:'Full Toolkit Access', price:300, quota:6}
+  {id:'full', name:'Full Toolkit Access', price:300, quota:8}
 ];
 
 const METHOD_NAMES = {orange:'Orange Money', myzaka:'MyZaka', bank:'Bank transfer', cash:'Cash / manual'};
@@ -543,7 +545,7 @@ class Component extends DCLogic {
     if(!st.iLearner.trim()) return this.setState({issueError:'Enter the learner\'s name.'});
     if(!st.iParent.trim()) return this.setState({issueError:'Enter the parent\'s name.'});
     const quota = this.planQuota(st.iPlan);
-    const subjects = quota >= 6 ? SUBJECTS.map(s => s.id) : st.iSubjects;
+    const subjects = quota >= SUBJECTS.length ? SUBJECTS.map(s => s.id) : st.iSubjects;
     if(subjects.length !== quota) return this.setState({issueError:'Choose exactly ' + quota + ' subject' + (quota === 1 ? '' : 's') + '.'});
     const plan = PLANS.find(p => p.id === st.iPlan);
     const code = makeCode();
@@ -597,8 +599,8 @@ class Component extends DCLogic {
   }
 
   subjectNames(ids){
-    if(!Array.isArray(ids) || !ids.length) return 'All six subjects';
-    if(ids.length >= 6) return 'All six subjects';
+    if(!Array.isArray(ids) || !ids.length) return 'All ' + SUBJECTS.length + ' subjects';
+    if(ids.length >= SUBJECTS.length) return 'All ' + SUBJECTS.length + ' subjects';
     return ids.map(id => (SUBJECTS.find(s => s.id === id) || {}).name).filter(Boolean).join(' · ');
   }
 

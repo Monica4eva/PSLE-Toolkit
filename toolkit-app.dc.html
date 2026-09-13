@@ -390,13 +390,27 @@ img,textarea,input{max-width:100%;}
         <p style="font-weight:600;color:#5A6A7A;font-size:0.95rem;margin:0 0 26px">Nerves are normal. Use these before you study and before you sit the paper.</p>
         <div data-two-col style="display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start">
           <div style="background:linear-gradient(135deg,#0A1628,#162C52);border-radius:18px;padding:30px;color:#fff;text-align:center;border:1.5px solid rgba(0,198,167,0.28)">
-            <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:#00C6A7;margin-bottom:22px">Breathing exercise</div>
+            <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:#00C6A7;margin-bottom:14px">Breathing exercise</div>
+            <div style="display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-bottom:16px">
+              <sc-for list="{{ breathPatterns }}" as="p" hint-placeholder-count="4">
+                <button onClick="{{ p.pick }}" style="padding:8px 14px;border-radius:50px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.78rem;background:{{ p.bg }};color:{{ p.color }};border:{{ p.border }}">{{ p.label }} <span style="opacity:0.7">{{ p.note }}</span></button>
+              </sc-for>
+            </div>
             <div style="height:190px;display:flex;align-items:center;justify-content:center">
-              <div style="width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(0,198,167,0.55),rgba(0,198,167,0.07));border:2px solid rgba(0,198,167,0.5);display:flex;align-items:center;justify-content:center;animation:breathe 8s ease-in-out infinite">
-                <span style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.05rem;color:#fff">{{ breathPhase }}</span>
+              <div style="width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(0,198,167,0.55),rgba(0,198,167,0.07));border:2px solid rgba(0,198,167,0.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transform:scale({{ breathScale }});will-change:transform">
+                <span style="font-family:'Syne',sans-serif;font-weight:900;font-size:1rem;color:#fff;text-align:center;padding:0 12px;line-height:1.25">{{ breathPhase }}</span>
+                <span style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.5rem;color:#00C6A7;line-height:1">{{ breathCount }}</span>
               </div>
             </div>
-            <div style="font-size:0.9rem;font-weight:700;color:rgba(255,255,255,0.7);line-height:1.7;margin-top:18px">Breathe in for 4, hold for 4, out for 4.<br>Follow the circle five times.</div>
+            <div style="font-size:0.8rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#00C6A7;margin-top:6px">{{ breathCycle }}</div>
+            <div style="display:flex;gap:10px;justify-content:center;margin-top:16px">
+              <button onClick="{{ toggleBreath }}" style="padding:12px 28px;border-radius:50px;border:none;background:linear-gradient(135deg,#00C6A7,#00A88E);color:#0A1628;font-family:'Syne',sans-serif;font-weight:900;font-size:0.9rem;cursor:pointer">{{ breathBtn }}</button>
+              <button onClick="{{ resetBreath }}" style="padding:12px 20px;border-radius:50px;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.2);color:#fff;font-family:'Syne',sans-serif;font-weight:900;font-size:0.9rem;cursor:pointer">Reset</button>
+            </div>
+            <sc-if value="{{ breathDoneNote }}">
+              <div style="margin-top:14px;background:rgba(0,198,167,0.14);border:1.5px solid rgba(0,198,167,0.4);border-radius:11px;padding:12px 14px;font-size:0.85rem;font-weight:700;color:#7BF3DE;line-height:1.6">{{ breathDoneNote }}</div>
+            </sc-if>
+            <div style="font-size:0.84rem;font-weight:600;color:rgba(255,255,255,0.55);line-height:1.65;margin-top:14px;text-wrap:pretty">{{ breathHint }}</div>
           </div>
           <div style="display:flex;flex-direction:column;gap:16px">
             <div style="background:#fff;border:1.5px solid #E5EAF0;border-radius:18px;padding:26px;box-shadow:0 6px 28px rgba(10,22,40,0.08)">
@@ -831,16 +845,20 @@ const SUBJECTS = [
   {id:'setswana', name:'Setswana', emoji:'🌍'},
   {id:'social', name:'Social Studies', emoji:'🏛️'},
   {id:'science', name:'Science', emoji:'🔬'},
-  {id:'agric', name:'Agriculture', emoji:'🌱'}
+  {id:'agric', name:'Agriculture', emoji:'🌱'},
+  {id:'moral', name:'Moral Education', emoji:'🤝'},
+  {id:'religious', name:'Religious Studies', emoji:'🕊️'}
 ];
 
 const PARTS = {
-  science: ['./bank-science.js','./bank-science-p2.js','./bank-science-p3.js'],
+  science: ['./bank-science.js','./bank-science-p2.js','./bank-science-p3.js','./bank-science-p4.js'],
   maths: ['./bank-maths.js','./bank-maths-p2.js','./bank-maths-p3.js'],
-  english: ['./bank-english.js','./bank-english-p2.js','./bank-english-p3.js','./bank-english-p4.js'],
-  setswana: ['./bank-setswana.js','./bank-setswana-p2.js','./bank-setswana-p3.js','./bank-setswana-p4.js'],
-  social: ['./bank-social.js','./bank-social-p2.js','./bank-social-p3.js'],
-  agric: ['./bank-agriculture.js','./bank-agriculture-p2.js','./bank-agriculture-p3.js','./bank-agriculture-p4.js']
+  english: ['./bank-english.js','./bank-english-p2.js','./bank-english-p3.js','./bank-english-p4.js','./bank-english-p5.js'],
+  setswana: ['./bank-setswana.js','./bank-setswana-p2.js','./bank-setswana-p3.js','./bank-setswana-p4.js','./bank-setswana-p5.js'],
+  social: ['./bank-social.js','./bank-social-p2.js','./bank-social-p3.js','./bank-social-p4.js'],
+  agric: ['./bank-agriculture.js','./bank-agriculture-p2.js','./bank-agriculture-p3.js','./bank-agriculture-p4.js','./bank-agriculture-p5.js'],
+  moral: ['./bank-moral.js','./bank-moral-p2.js'],
+  religious: ['./bank-religious.js','./bank-religious-p2.js']
 };
 
 const LEGACY = {
@@ -906,7 +924,9 @@ const TIPS = [
   {id:'setswana', name:'Setswana', emoji:'🌍', tips:['Ithute maele le diane — a tlhola a tlhagelela mo tlhatlhobong.','Ela tlhoko dikarolo tsa puo: leina, lediri, letlhaodi.','Bala dikwalo tsa Setswana kgatlhanong le go ithuta ka tlhogo fela.','Kwala dipolelo di di khutshwane tse di feletseng sentle.','Dirisa bontsi le bongwe fa o tshwantshanya maina.']},
   {id:'social', name:'Social Studies', emoji:'🏛️', tips:['Know the map of Botswana: districts, main towns and neighbouring countries.','Learn key dates: 1966 independence, and the leaders in order.','Understand the kgotla, the three arms of government and the role of a chief.','Link causes to effects — exams often ask "why", not just "what".','Draw simple maps from memory once a week.']},
   {id:'science', name:'Science', emoji:'🔬', tips:['Learn the water cycle and life cycles as diagrams, not paragraphs.','Know your key words: evaporation, condensation, conductor, insulator.','Practise reading tables and bar graphs — there is always at least one.','Do simple safe experiments at home; you remember what you do.','Explain answers in cause-and-effect sentences.']},
-  {id:'agric', name:'Agriculture', emoji:'🌱', tips:['Know the three soil types and what each is good for.','Learn the difference between crop rotation, mixed farming and monoculture.','Understand pest control methods and why some are safer than others.','Learn common livestock diseases and their prevention.','Connect farming practices to Botswana\'s dry climate.']}
+  {id:'agric', name:'Agriculture', emoji:'🌱', tips:['Know the three soil types and what each is good for.','Learn the difference between crop rotation, mixed farming and monoculture.','Understand pest control methods and why some are safer than others.','Learn common livestock diseases and their prevention.','Connect farming practices to Botswana\'s dry climate.']},
+  {id:'moral', name:'Moral Education', emoji:'🤝', tips:['Learn the five national principles: democracy, development, self-reliance, unity and botho.','Answer with reasons, not just opinions — say WHY something is right or wrong.','Learn the difference between a right and a responsibility, with examples of each.','For "what would you do" questions, give the safe and honest answer and explain it.','Use real examples from home, school and the kgotla.']},
+  {id:'religious', name:'Religious Studies', emoji:'🕊️', tips:['Learn the holy book, place of worship and main festival for each religion.','Christianity, Islam and Judaism all trace back to Abraham — remember that link.','Know what African Traditional Religion teaches about Modimo and badimo.','Learn the Five Pillars of Islam and the Ten Commandments by heart.','Write respectfully about every faith, even one you do not follow.']}
 ];
 
 const POSTERS = [
@@ -993,6 +1013,39 @@ const AFFIRMATIONS = [
   'I will read every question twice before I answer.'
 ];
 
+const EASE = p => p < 0.5 ? 2*p*p : 1 - Math.pow(-2*p + 2, 2) / 2;
+
+const BREATH = [
+  {id:'box', label:'Box breathing', note:'4 · 4 · 4 · 4',
+   hint:'Used by athletes and pilots before something that matters. Steady and easy to remember.',
+   steps:[
+     {label:'Breathe in', secs:4, scale:1.12},
+     {label:'Hold', secs:4, scale:1.12},
+     {label:'Breathe out', secs:4, scale:0.72},
+     {label:'Hold', secs:4, scale:0.72}
+   ]},
+  {id:'calm', label:'Calming breath', note:'4 · 7 · 8',
+   hint:'The long breath out is what settles a racing heart. Best when you feel panicky.',
+   steps:[
+     {label:'Breathe in', secs:4, scale:1.12},
+     {label:'Hold', secs:7, scale:1.12},
+     {label:'Breathe out slowly', secs:8, scale:0.7}
+   ]},
+  {id:'simple', label:'Simple breath', note:'5 · 5',
+   hint:'Nothing to remember. Good for the minute before the paper is handed out.',
+   steps:[
+     {label:'Breathe in', secs:5, scale:1.12},
+     {label:'Breathe out', secs:5, scale:0.72}
+   ]},
+  {id:'focus', label:'Focus breath', note:'6 · 2 · 6',
+   hint:'Slow and even. Use this before you start studying, not after.',
+   steps:[
+     {label:'Breathe in', secs:6, scale:1.12},
+     {label:'Hold', secs:2, scale:1.12},
+     {label:'Breathe out', secs:6, scale:0.72}
+   ]}
+];
+
 const ROUTINE = ['Sleep early the night before — no late studying.','Eat breakfast. Your brain needs food to think.','Pack your bag the night before.','Arrive early so you are not rushing.','Breathe five slow breaths before you open the paper.','Read every instruction twice before answering.'];
 
 const DAILY = ['Practise one MCQ round','Revise Maths for 20 minutes','Read aloud for 10 minutes','Learn 5 new words','Do a Setswana exercise','Revise one Science topic','Check homework','Say my affirmation'];
@@ -1013,7 +1066,13 @@ const TOPIC_TIPS = {
   animal:['Describe it physically before anything happens.','Give it a name if it had one.','Tell one event involving it — not its whole life.','Say how you felt about it, honestly.'],
   school:['Start at the gate. First impressions are strong openings.','Describe one face that was kind, and one that was not.','Show the fear of not knowing where to sit.','End with how you felt walking home.'],
   helped:['Say clearly what was needed before you helped.','Describe what you actually did, step by step.','Include what the person said or did in return.','End with how helping changed how you see yourself.'],
-  dream:['Say what you want to be in the first paragraph.','Give the reason — a person or event that started it.','Say what you are doing NOW towards it. This is the best paragraph.','End with the difference you want to make.']
+  dream:['Say what you want to be in the first paragraph.','Give the reason — a person or event that started it.','Say what you are doing NOW towards it. This is the best paragraph.','End with the difference you want to make.'],
+  money:['Say what it was and why it mattered before you lose it.','Describe the searching — where you looked, how it felt.','Include what someone said to you about it.','End with whether you found it, and what you learned about being careful.'],
+  night:['Start with lying awake, not with going to bed.','Use the sounds of the night — dogs, wind, a clock, someone snoring.','Say what thoughts kept coming back. This is the heart of it.','End with morning, and how you felt facing the day.'],
+  quarrel:['Say plainly what the quarrel was about.','Give both sides — a good writer shows the other person fairly.','Include real words that were said.','End honestly: admit your part, and say whether it was mended.'],
+  stranger:['Describe the situation you were in first, so the help matters.','Describe the stranger — face, clothes, voice, age.','Say what they did, exactly, and what they said.','End with whether you ever saw them again, and what you carry from it.'],
+  gift:['Do not open the gift in the first line. Build up to it.','Describe who gave it and what it cost them to give.','Describe the gift closely — colour, weight, smell.','End with why it still means something to you now.'],
+  proud:['Start before the moment — the work, the nerves, the practice.','Describe the moment itself slowly.','Describe your family: their faces, what they said, who cried.','End with how it changed the way you see yourself.']
 };
 
 const TOPICS = [
@@ -1030,7 +1089,13 @@ const TOPICS = [
   {id:'animal', label:'An animal I will never forget', hint:'Describe it, then tell what happened.'},
   {id:'school', label:'My first day at a new school', hint:'How you felt entering, and leaving.'},
   {id:'helped', label:'The day I helped someone', hint:'What was needed, what you did.'},
-  {id:'dream', label:'What I want to be one day', hint:'Say why, and what you are doing now.'}
+  {id:'dream', label:'What I want to be one day', hint:'Say why, and what you are doing now.'},
+  {id:'money', label:'The day I lost something important', hint:'Show the searching, not just the loss.'},
+  {id:'night', label:'A night I could not sleep', hint:'Use the dark, the sounds, your thoughts.'},
+  {id:'quarrel', label:'A quarrel I will never forget', hint:'Both sides. Say what you got wrong too.'},
+  {id:'stranger', label:'A stranger who helped me', hint:'Describe them. Say why you trusted them.'},
+  {id:'gift', label:'The best gift I ever received', hint:'Who gave it, and why it mattered so much.'},
+  {id:'proud', label:'The day I made my family proud', hint:'Build up to the moment, then their faces.'}
 ];
 
 const BOXES = [
@@ -1158,7 +1223,7 @@ const UNLOCK_KEY = 'psle-unlocked';
 const PACKAGES = [
   {id:'single', name:'Single Subject', price:75, quota:1},
   {id:'bundle', name:'3-Subject Bundle', price:160, quota:3},
-  {id:'full', name:'Full Toolkit Access', price:300, quota:6}
+  {id:'full', name:'Full Toolkit Access', price:300, quota:8}
 ];
 
 const PAY_METHODS = [
@@ -1178,8 +1243,8 @@ class Component extends DCLogic {
     view:'home', subject:null, level:'All', bank:{}, loaded:false, qTopic:'All topics', std:'All',
     quiz:null, qIndex:0, selected:null, correct:0, quizDone:false,
     progress:{}, stars:0,
-    affIndex:0, breathStep:0,
-    timerSecs:1800, timerLeft:1800, timerRunning:false,
+    affIndex:0, breathRunning:false, breathStart:null, breathBanked:0, breathPattern:'box', beat:0,
+    timerSecs:1800, timerFrozen:1800, timerEndsAt:null, timerRunning:false,
     openTip:'maths',
     checked:{},
     topic:'day', plan:{}, mark:null, myAff:[], affDraft:'', affError:'', openPoster:null,
@@ -1237,7 +1302,7 @@ class Component extends DCLogic {
     }
 
     const name = res.learner || '';
-    const allowed = (Array.isArray(res.subjects) && res.subjects.length && res.subjects.length < 6) ? res.subjects : null;
+    const allowed = this.allowedFrom(res);
     const planName = res.planName || '';
     const price = res.price || 0;
     if(this.state.remember){
@@ -1304,7 +1369,7 @@ class Component extends DCLogic {
     const t = this.upTargetObj();
     if(!t) return;
     const kept = st.allowed || [];
-    const subjects = t.quota >= 6
+    const subjects = t.quota >= SUBJECTS.length
       ? SUBJECTS.map(s => s.id)
       : kept.concat(st.upSubjects.filter(id => kept.indexOf(id) < 0)).slice(0, t.quota);
 
@@ -1325,6 +1390,20 @@ class Component extends DCLogic {
     }
   }
 
+  // Which subjects a redeemed code opens. Returns null for "everything".
+  // Orders bought before Moral Education and Religious Studies existed store
+  // only six ids, so a full-access purchase must not be read as partial —
+  // those parents already paid for everything there is.
+  allowedFrom(res){
+    if(!res) return null;
+    const subs = Array.isArray(res.subjects) ? res.subjects : [];
+    if(!subs.length) return null;
+    const full = res.plan === 'full' || /full/i.test(res.planName || '');
+    if(full) return null;
+    if(subs.length >= SUBJECTS.length) return null;
+    return subs;
+  }
+
   canUse(id){
     const a = this.state.allowed;
     return !a || a.indexOf(id) >= 0;
@@ -1341,10 +1420,12 @@ class Component extends DCLogic {
     if(!u || !u.code) return;
 
     // Admin previews are granted by the admin dashboard, not by a payment.
+    // Runs through allowedFrom() so a full-access preview looks the same
+    // here as it does for the parent who bought it.
     if(u.admin === true){
       this.setState({
         locked:false, grantName:u.learner || '',
-        allowed: Array.isArray(u.subjects) && u.subjects.length ? u.subjects : null,
+        allowed: this.allowedFrom(u),
         planName: u.planName || '', unlockCode: (u.code||'').toUpperCase(), pricePaid: u.price || 0
       });
       return this.loadLocal(u.code);
@@ -1360,7 +1441,7 @@ class Component extends DCLogic {
       }
       this.setState({
         locked:false, grantName:res.learner || '',
-        allowed: (Array.isArray(res.subjects) && res.subjects.length && res.subjects.length < 6) ? res.subjects : null,
+        allowed: this.allowedFrom(res),
         planName: res.planName || '', unlockCode: res.code, pricePaid: res.price || 0
       });
       this.loadLocal(res.code);
@@ -1371,16 +1452,48 @@ class Component extends DCLogic {
   componentDidMount(){
     this.restoreSession();
     this.loadBanks();
-    this.tick = setInterval(()=>{
-      this.setState(s => {
-        const next = {breathStep:(s.breathStep+1)%3};
-        if(s.timerRunning && s.timerLeft>0) next.timerLeft = s.timerLeft-1;
-        if(s.timerRunning && s.timerLeft<=1) next.timerRunning = false;
-        return next;
-      });
-    }, 1000);
   }
-  componentWillUnmount(){ clearInterval(this.tick); }
+
+  // A self-healing heartbeat. renderVals() re-arms it on every render, so
+  // even if a remount or hot reload kills the pending timeout the next paint
+  // brings it back. Nothing is counted — both the study timer and the
+  // breathing exercise read the real clock — so a missed beat costs nothing.
+  heartbeat(){
+    if(this._beatPending) return;
+    if(!this.state.timerRunning && !this.state.breathRunning) return;
+    this._beatPending = setTimeout(() => {
+      this._beatPending = null;
+      if(this.state.timerRunning && this.timerLeft() <= 0){
+        this.setState({timerRunning:false, timerEndsAt:null, timerFrozen:0});
+      } else {
+        this.forceUpdate();
+      }
+    }, this.state.breathRunning ? 120 : 500);
+  }
+
+  // Seconds left on the study timer, from the wall clock.
+  timerLeft(){
+    const st = this.state;
+    if(!st.timerRunning || !st.timerEndsAt) return st.timerFrozen != null ? st.timerFrozen : st.timerSecs;
+    return Math.max(0, Math.round((st.timerEndsAt - Date.now()) / 1000));
+  }
+
+  setTimerLength(secs){
+    this.setState({timerSecs:secs, timerFrozen:secs, timerRunning:false, timerEndsAt:null});
+  }
+
+  toggleTimer(){
+    const st = this.state;
+    if(st.timerRunning){
+      this.setState({timerRunning:false, timerFrozen:this.timerLeft(), timerEndsAt:null});
+    } else {
+      const left = st.timerFrozen != null ? st.timerFrozen : st.timerSecs;
+      if(left <= 0) return this.setState({timerFrozen:st.timerSecs});
+      this.setState({timerRunning:true, timerEndsAt: Date.now() + left * 1000});
+    }
+  }
+
+  componentWillUnmount(){ clearTimeout(this._beatPending); this._beatPending = null; }
 
   // Each learner's work is stored under their OWN access code, so two
   // children sharing one phone never see each other's stars or progress.
@@ -1567,7 +1680,66 @@ class Component extends DCLogic {
     else this.setState({qIndex:this.state.qIndex+1, selected:null});
   }
 
-  fmt(s){ const m=Math.floor(s/60), r=s%60; return m+':'+String(r).padStart(2,'0'); }
+  // Works out which breathing phase we are in right now, how many seconds
+  // are left of it, and how big the circle should be.
+  // Elapsed breathing seconds, measured against the real clock rather than
+  // counted ticks — so it stays correct even if the tab is left in the
+  // background and the interval is throttled.
+  breathElapsed(){ return Math.floor(this.breathExact()); }
+
+  breathExact(){
+    const st = this.state;
+    const banked = st.breathBanked || 0;
+    if(!st.breathRunning || !st.breathStart) return banked / 1000;
+    return (banked + (Date.now() - st.breathStart)) / 1000;
+  }
+
+  toggleBreath(){
+    const st = this.state;
+    if(st.breathRunning){
+      this.setState({
+        breathRunning: false,
+        breathBanked: (st.breathBanked || 0) + (st.breathStart ? Date.now() - st.breathStart : 0),
+        breathStart: null
+      });
+    } else {
+      this.setState({breathRunning: true, breathStart: Date.now()});
+    }
+  }
+
+  breathNow(){
+    const st = this.state;
+    const p = BREATH.find(x => x.id === st.breathPattern) || BREATH[0];
+    const cycle = p.steps.reduce((t, s) => t + s.secs, 0);
+    const round = Math.floor(this.breathExact() / cycle) + 1;
+    // Fractional seconds, so the circle moves smoothly rather than in jumps.
+    const exact = this.breathExact();
+    let into = exact % cycle;
+    for(let i = 0; i < p.steps.length; i++){
+      const s = p.steps[i];
+      if(into < s.secs){
+        const from = p.steps[(i - 1 + p.steps.length) % p.steps.length].scale;
+        const prog = Math.max(0, Math.min(1, into / s.secs));
+        const scale = from + (s.scale - from) * EASE(prog);
+        return {
+          label: s.label,
+          left: Math.max(1, Math.ceil(s.secs - into)),
+          scale: Math.round(scale * 1000) / 1000,
+          round: Math.min(round, 5), hint: p.hint,
+          done: round > 5 ? 'Five rounds done. Notice how your body feels now.' : ''
+        };
+      }
+      into -= s.secs;
+    }
+    const s0 = p.steps[0];
+    return {label:s0.label, left:s0.secs, scale:s0.scale, round:1, hint:p.hint, done:''};
+  }
+
+  fmt(s){
+    const h = Math.floor(s/3600), m = Math.floor((s%3600)/60), r = s%60;
+    if(h) return h+':'+String(m).padStart(2,'0')+':'+String(r).padStart(2,'0');
+    return m+':'+String(r).padStart(2,'0');
+  }
 
   // Structural feedback on a composition. It checks the things that CAN be
   // checked fairly — length, paragraphing, openings, endings, description,
@@ -1666,6 +1838,7 @@ class Component extends DCLogic {
   }
 
   renderVals(){
+    this.heartbeat();          // keeps the clock alive for as long as we paint
     const st = this.state;
     const learner = st.grantName || this.props.learnerName || 'Learner';
     const teal = '#00C6A7';
@@ -1747,7 +1920,7 @@ class Component extends DCLogic {
       },
 
       adminPreview: (st.planName || '').indexOf('admin') >= 0,
-      previewLabel: st.allowed ? 'Admin preview · seeing ' + st.allowed.length + ' subject(s)' : 'Admin preview · all six subjects unlocked',
+      previewLabel: st.allowed ? 'Admin preview · seeing ' + st.allowed.length + ' subject(s)' : 'Admin preview · all ' + SUBJECTS.length + ' subjects unlocked',
 
       // — What this learner has accomplished. Their own record, not a
       //   comparison against other children.
@@ -1835,13 +2008,40 @@ class Component extends DCLogic {
       })(),
       nextAffirmation: () => this.setState({affIndex: st.affIndex+1}),
       routine: ROUTINE,
-      breathPhase: ['Breathe in','Hold','Breathe out'][st.breathStep],
+      // — Breathing. Real timed phases, so the words, the countdown and the
+      //   circle all agree with each other.
+      breathPatterns: BREATH.map(p => {
+        const on = st.breathPattern === p.id;
+        return {
+          label: p.label, note: p.note,
+          bg: on ? teal : 'rgba(255,255,255,0.08)',
+          color: on ? '#0A1628' : 'rgba(255,255,255,0.8)',
+          border: on ? '1.5px solid '+teal : '1.5px solid rgba(255,255,255,0.18)',
+          pick: () => this.setState({breathPattern:p.id, breathStart: st.breathRunning ? Date.now() : null, breathBanked:0})
+        };
+      })
+      ,
+      breathPhase: this.breathNow().label,
+      breathCount: st.breathRunning ? this.breathNow().left : '',
+      breathScale: this.breathNow().scale,
+      breathCycle: st.breathRunning
+        ? 'Round ' + this.breathNow().round + ' of 5'
+        : 'Tap start when you are ready',
+      breathHint: this.breathNow().hint,
+      breathRunning: st.breathRunning,
+      breathIdle: !st.breathRunning,
+      breathBtn: st.breathRunning ? 'Pause' : (st.breathBanked ? 'Carry on' : 'Start breathing'),
+      toggleBreath: () => this.toggleBreath(),
+      resetBreath: () => this.setState({breathRunning:false, breathStart:null, breathBanked:0}),
+      breathDoneNote: this.breathNow().done,
 
       subjectPicks: SUBJECTS.map(s => {
         const open = this.canUse(s.id);
         return {
           name:s.name, emoji: open ? s.emoji : '🔒',
-          count: open ? this.rows(s.id).length + ' questions' : 'Locked',
+          count: open
+            ? (st.loaded ? this.rows(s.id).length + ' questions' : 'Loading…')
+            : 'Locked',
           bg: open ? '#fff' : '#F3F5F8',
           opacity: open ? '1' : '0.7',
           border: st.subject===s.id && open ? '2px solid '+teal : '1.5px solid #E5EAF0',
@@ -1850,7 +2050,7 @@ class Component extends DCLogic {
       }),
       hasLocked: !!st.allowed && st.allowed.length < SUBJECTS.length,
       lockedLine: st.allowed
-        ? 'Your ' + (st.planName || 'package') + ' covers ' + st.allowed.length + ' of the 6 subjects.'
+        ? 'Your ' + (st.planName || 'package') + ' covers ' + st.allowed.length + ' of the ' + SUBJECTS.length + ' subjects.'
         : '',
       goUpgrade: () => this.setState({view:'upgrade', upStage:'choose', upTarget:null, upSubjects:[], upMethod:null, upError:''}),
 
@@ -1869,12 +2069,12 @@ class Component extends DCLogic {
         '\nUpgrade to: ' + (this.upTargetObj() ? this.upTargetObj().name : '') +
         '\nAmount: P' + (this.upTargetObj() ? this.upTargetObj().due : 0)
       ),
-      currentPlanLine: (st.planName || 'Your package') + ' · ' + (st.allowed ? st.allowed.length : 6) + ' of 6 subjects · P' + (st.pricePaid || 0) + ' paid',
+      currentPlanLine: (st.planName || 'Your package') + ' · ' + (st.allowed ? st.allowed.length : SUBJECTS.length) + ' of ' + SUBJECTS.length + ' subjects · P' + (st.pricePaid || 0) + ' paid',
       currentSubjectLine: (st.allowed || SUBJECTS.map(s=>s.id))
         .map(id => (SUBJECTS.find(s => s.id === id) || {}).name).filter(Boolean).join(' · '),
       upOptions: this.upgradeOptions().map(p => ({
         name:p.name, quota:p.quota, due:p.due,
-        subtitle: p.quota >= 6 ? 'All six subjects' : 'Any ' + p.quota + ' subjects',
+        subtitle: p.quota >= SUBJECTS.length ? 'All ' + SUBJECTS.length + ' subjects' : 'Any ' + p.quota + ' subjects',
         bg: st.upTarget === p.id ? 'rgba(0,198,167,0.10)' : '#fff',
         border: st.upTarget === p.id ? '2px solid ' + teal : '1.5px solid #E5EAF0',
         pick: () => this.setState({upTarget:p.id, upSubjects:[], upError:''})
@@ -2018,12 +2218,12 @@ class Component extends DCLogic {
       resultScore: st.correct+' / '+(this.props.questionsPerRound ?? 5),
       resultLine: st.correct >= 4 ? 'You are on track. Try the Hard level next and see how you do.' : 'Read the explanations again, then run the same round. Repeating is how marks are made.',
 
-      clock: this.fmt(st.timerLeft),
-      timerState: st.timerRunning ? 'Running — stay focused' : st.timerLeft===0 ? 'Time is up' : 'Ready when you are',
+      clock: this.fmt(this.timerLeft()),
+      timerState: st.timerRunning ? 'Running — stay focused' : this.timerLeft() === 0 ? 'Time is up' : 'Ready when you are',
       timerBtn: st.timerRunning ? 'Pause' : 'Start',
-      toggleTimer: () => this.setState({timerRunning: !st.timerRunning}),
-      resetTimer: () => this.setState({timerRunning:false, timerLeft:st.timerSecs}),
-      timerPresets: [10,20,30,45,60].map(m => Object.assign({label:m+' min', pick:()=>this.setState({timerSecs:m*60, timerLeft:m*60, timerRunning:false})}, (() => {
+      toggleTimer: () => this.toggleTimer(),
+      resetTimer: () => this.setState({timerRunning:false, timerEndsAt:null, timerFrozen:st.timerSecs}),
+      timerPresets: [10,20,30,45,60,90].map(m => Object.assign({label: m >= 90 ? '1 h 30' : m+' min', pick:()=>this.setTimerLength(m*60)}, (() => {
         const on = st.timerSecs===m*60;
         return {bg: on ? teal : 'rgba(255,255,255,0.08)', color: on ? '#0A1628' : 'rgba(255,255,255,0.8)', border: on ? '1.5px solid '+teal : '1.5px solid rgba(255,255,255,0.18)'};
       })())),

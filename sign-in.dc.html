@@ -133,7 +133,8 @@ const GRANTS_KEY = 'psle-access-grants';
 const ACCOUNTS_KEY = 'psle-accounts';
 const UNLOCK_KEY = 'psle-unlocked';
 
-const SUBJECTS = {maths:'Maths', english:'English', setswana:'Setswana', social:'Social Studies', science:'Science', agric:'Agriculture'};
+const SUBJECTS = {maths:'Maths', english:'English', setswana:'Setswana', social:'Social Studies', science:'Science', agric:'Agriculture', moral:'Moral Education', religious:'Religious Studies'};
+const SUBJECT_COUNT = 8;
 
 class Component extends DCLogic {
   state = {
@@ -226,9 +227,9 @@ class Component extends DCLogic {
       pick: () => this.setState({tab:id, error:'', signedIn:false})
     });
 
-    const subjectLine = g && Array.isArray(g.subjects) && g.subjects.length && g.subjects.length < 6
+    const subjectLine = g && Array.isArray(g.subjects) && g.subjects.length && g.subjects.length < SUBJECT_COUNT
       ? g.subjects.map(id => SUBJECTS[id]).filter(Boolean).join(' · ')
-      : 'All six subjects';
+      : 'All ' + SUBJECT_COUNT + ' subjects';
 
     return {
       tabs: [tab('parent','Parent'), tab('code','Access code'), tab('admin','Admin')],
@@ -259,9 +260,9 @@ class Component extends DCLogic {
       picking: !!(st.choices && st.choices.length) && !st.signedIn,
       learnerChoices: (st.choices || []).map(o => ({
         name: o.learner_name || 'Learner',
-        detail: (o.plan_name || '') + (o.subjects && o.subjects.length && o.subjects.length < 6
+        detail: (o.plan_name || '') + (o.subjects && o.subjects.length && o.subjects.length < SUBJECT_COUNT
           ? ' · ' + o.subjects.map(id => SUBJECTS[id]).filter(Boolean).join(', ')
-          : ' · all six subjects'),
+          : ' · all ' + SUBJECT_COUNT + ' subjects'),
         pick: () => { this.setState({choices:null, busy:true}); this.redeem(o.code); }
       })),
       googleOn: st.googleOn,

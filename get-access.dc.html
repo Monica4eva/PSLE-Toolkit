@@ -246,7 +246,7 @@ const ACCOUNTS_KEY = 'psle-accounts';
 
 const PLANS = [
   {id:'single', name:'Single Subject', price:75, tag:'One subject, until October.', features:['Full MCQ bank for 1 subject','Study tips & strategies','Progress tracking','Study timer']},
-  {id:'full', name:'Full Toolkit Access', price:300, tag:'All 6 subjects, until October.', badge:'Best value', features:['All 6 subject question banks','2 000+ MCQ questions','Writing & spelling tools','Timer, checklists & planner','Affirmations & calm tools','Study guide posters','Works on any device']},
+  {id:'full', name:'Full Toolkit Access', price:300, tag:'All 8 subjects, until October.', badge:'Best value', features:['All 8 subject question banks','2 400+ MCQ questions','Writing & spelling tools','Timer, checklists & planner','Affirmations & calm tools','Study guide posters','Works on any device']},
   {id:'bundle', name:'3-Subject Bundle', price:160, tag:'Choose any three subjects.', features:['MCQ banks for 3 subjects','Study tips for chosen subjects','Progress tracking','Study timer & checklists','Affirmations & calm tools']}
 ];
 
@@ -256,7 +256,9 @@ const SUBJECTS = [
   {id:'setswana', name:'Setswana', emoji:'🌍'},
   {id:'social', name:'Social Studies', emoji:'🏛️'},
   {id:'science', name:'Science', emoji:'🔬'},
-  {id:'agric', name:'Agriculture', emoji:'🌱'}
+  {id:'agric', name:'Agriculture', emoji:'🌱'},
+  {id:'moral', name:'Moral Education', emoji:'🤝'},
+  {id:'religious', name:'Religious Studies', emoji:'🕊️'}
 ];
 
 const ALL_SUBJECTS = SUBJECTS.map(s => s.id);
@@ -287,7 +289,7 @@ class Component extends DCLogic {
 
   planObj(){ return PLANS.find(p => p.id === this.state.plan) || PLANS[0]; }
 
-  quota(){ return this.state.plan === 'single' ? 1 : this.state.plan === 'bundle' ? 3 : 6; }
+  quota(){ return this.state.plan === 'single' ? 1 : this.state.plan === 'bundle' ? 3 : SUBJECTS.length; }
 
   needsSubjectChoice(){ return this.state.plan !== 'full'; }
 
@@ -375,7 +377,7 @@ class Component extends DCLogic {
       subjectHeading: st.plan === 'single' ? 'Which subject?' : 'Choose any three subjects',
       subjectSub: st.plan === 'single'
         ? 'Your child gets the full question bank and study tips for the one subject you choose. You can add more later.'
-        : 'Pick the three subjects your child most needs. The other three stay locked until you upgrade.',
+        : 'Pick the three subjects your child most needs. The rest stay locked until you upgrade.',
       subjectCount: st.subjects.length + ' of ' + this.quota() + ' chosen',
       subjectError: st.subjectError,
       subjectPicks: SUBJECTS.map(s => {
@@ -436,7 +438,7 @@ class Component extends DCLogic {
       detailsError: st.detailsError,
       backToPlan: () => this.setState({step:'plan'}),
       backFromDetails: () => this.setState({step: this.needsSubjectChoice() ? 'subjects' : 'plan'}),
-      subjectLine: subjectNames.length === 6 ? 'All six subjects' : subjectNames.join(' · '),
+      subjectLine: subjectNames.length === SUBJECTS.length ? 'All ' + SUBJECTS.length + ' subjects' : subjectNames.join(' · '),
       toPayment: () => {
         if(!st.parent.trim()) return this.setState({detailsError:'Please enter the parent or guardian name.'});
         if(!st.phone.trim()) return this.setState({detailsError:'We need a WhatsApp number to send the access link.'});
